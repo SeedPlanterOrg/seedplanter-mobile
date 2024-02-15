@@ -1,1 +1,5 @@
 Backend 
+
+Dependencies:
+Express
+mongoose 
