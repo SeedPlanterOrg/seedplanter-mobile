@@ -1,0 +1,30 @@
+{
+    "name": "cherry",
+    "binomial_name": "new fake plant",
+    "daily_watering": 3,
+    "zone": {
+        "hardy": 60,
+        "seasons": {
+            "annual": null,
+            "perennial": [
+                "10A",
+                "11B"
+            ],
+            "Bennial": null
+        }
+    },
+    "average_height": 5,
+    "spacing": 10,
+    "fertilize": "weekly",
+    "light": 8,
+    "features": [
+        "Has thorns",
+        "Is Ugly"
+    ],
+    "care_level": "easy",
+    "image_urls": [
+        "www.test1",
+        "www.test2",
+        "www.test3"
+    ]
+}
