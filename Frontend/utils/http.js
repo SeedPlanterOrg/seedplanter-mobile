@@ -1,4 +1,4 @@
 
-function addPlant() {
+function getPlant() {
     
 }
