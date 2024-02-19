@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const Plant = require("./Plant");
+const Plant = require("./PlantSchema");
 const uri = process.env.PLANTDB_URL;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
-
-
-async function run() {
+async function build() {
+  
   try {
     console.log("Async running");
     // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
@@ -15,7 +14,7 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
     try {
         const plant = await Plant.create({
-            binomial_name: "Licktis",
+            binomial_name: "plantObj.name",
             name: "cherry",
             daily_watering: 3,
             zone: {
@@ -46,4 +45,6 @@ async function run() {
     await mongoose.disconnect();
   }
 }
-run().catch(console.dir);
+build().catch(console.dir);
+
+module.exports = build;
