@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
+require("dotenv").config();
+
 const port = 3000;
 // default route
 app.get("/", (req, res) => {

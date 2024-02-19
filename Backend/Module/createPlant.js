@@ -4,7 +4,8 @@ const Plant = require("./PlantSchema");
 const uri = process.env.PLANTDB_URL;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
-async function build() {
+
+async function build(plantObj) {
   
   try {
     console.log("Async running");
@@ -12,10 +13,11 @@ async function build() {
     await mongoose.connect(uri, clientOptions);
     await mongoose.connection.db.admin().command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    console.log(plantObj);
     try {
         const plant = await Plant.create({
-            binomial_name: "plantObj.name",
-            name: "cherry",
+            binomial_name: "new world",
+            name: plantObj.name,
             daily_watering: 3,
             zone: {
                 hardy: 60,
@@ -45,6 +47,6 @@ async function build() {
     await mongoose.disconnect();
   }
 }
-build().catch(console.dir);
+//build().catch(console.dir);
 
 module.exports = build;
