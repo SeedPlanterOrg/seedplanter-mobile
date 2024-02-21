@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-require("dotenv").config();
+require('dotenv').config();
 
 const port = 3000;
 // default route
@@ -26,6 +26,12 @@ const plantCatalogRouter = require('./routes/plantCatalog');
 // app.use is being used to link route to path in this case
 // the route /plantCatalog is tied to ./routes/plantCatalog
 app.use('/plantCatalog', plantCatalogRouter);
+
+const userRouter = require('./routes/user');
+app.use('/user', userRouter);
+
+const plantDeckRouter = require('./routes/plantDeck');
+app.use('/plantDeck', plantDeckRouter);
 
 // listens to requests on specified ports
 app.listen(port);

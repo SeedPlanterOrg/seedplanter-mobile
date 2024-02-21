@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 require("dotenv").config();
-const build = require("../Module/createPlant");
+const build = require("../Module/plantCatalogDBC");
 
 
 router.get("/", (req, res) => {
@@ -27,6 +27,12 @@ router.delete("/", (req, res) => {
     console.log("Deleteing item")
     res.status(200).json({message: "deleted"});
 });
+
+router.patch("/", (req, res) => {
+    res.status(200).json({message: "/plantCatalog/patch"});
+    console.log("succes plantCatalog");
+})
+
 router
     .route("/:id")
     .get((req, res) => {
@@ -36,6 +42,14 @@ router
     .post((req, res) => {
         console.log(`Getting user with id ${req.body.id}`);
         res.send(`Posting user with ID: ${req.body.id}`);
+    })
+    .put((req, res) => {
+        res.status(200).json({mesage: "/plantCatalog/put"});
+        console.log("succes plantCatalog");
+    })
+    .patch((req, res) => {
+        res.status(200).json({message: "/plantCatalog/patch"});
+        console.log("succes plantCatalog");
     })
     .delete((req, res) => {
         console.log(`Getting user with id ${req.body.id}`);
