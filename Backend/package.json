@@ -1,0 +1,29 @@
+{
+  "name": "seed-planter-server",
+  "version": "1.0.0",
+  "description": "environment setup for seed planter app's backend",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js",
+    "devStart": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SeedPlanterOrg/seedplanter-mobile.git"
+  },
+  "author": "Daniel Bergeron, Shiviam Patel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SeedPlanterOrg/seedplanter-mobile/issues"
+  },
+  "homepage": "https://github.com/SeedPlanterOrg/seedplanter-mobile#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.4",
+    "express": "^4.18.2",
+    "mongoose": "^8.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
