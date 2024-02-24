@@ -1,7 +1,7 @@
 
 const mongoose = require("mongoose")
 
-const plantSchema = new mongoose.Schema({
+const Plant = new mongoose.Schema({
     binomial_name: {
         type: String,
         required: true,
@@ -54,6 +54,6 @@ const plantSchema = new mongoose.Schema({
 })
 
 // Exports the schema to other files and set are collection to Plants
-module.exports = mongoose.model("Plants", plantSchema);
+module.exports = mongoose.model("Plant", Plant);
 
  
