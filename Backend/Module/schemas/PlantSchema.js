@@ -2,6 +2,9 @@
 const mongoose = require("mongoose")
 
 const Plant = new mongoose.Schema({
+    id: {
+        type: Number
+    },
     binomial_name: {
         type: String,
         required: true,
@@ -50,7 +53,8 @@ const Plant = new mongoose.Schema({
         type: String,
         required: true,
     },
-    image_urls:[String]
+    image_urls:[String],
+    description: String
 })
 
 // Exports the schema to other files and set are collection to Plants

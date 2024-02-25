@@ -4,7 +4,6 @@ const Plant = require("../schemas/PlantSchema");
 const uri = process.env.PLANTDB_URL;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
-
 async function build(plantObj) {
   
   try {
@@ -34,7 +33,10 @@ async function build(plantObj) {
             light: plantObj.light,
             features: plantObj.features,
             care_level: plantObj.care_level,
-            image_urls: plantObj.image_urls});
+            image_urls: plantObj.image_urls,
+            description: plantObj.description
+          });
+            
         await plant.save();
         console.log(plant);
     } catch (e){

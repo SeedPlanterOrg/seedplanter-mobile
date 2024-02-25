@@ -3,9 +3,12 @@ const router = express.Router();
 const mongoose = require("mongoose");
 require("dotenv").config();
 const build = require("../Module/plantCatalog/plantCatalogDBC");
+// Require the fs module to read a JSON file
+const bodyParser = require('body-parser');
 
 const Plant = require("../Module/schemas/PlantSchema");
 const uri = process.env.PLANTDB_URL;
+const plantAPI = process.env.PERENNIALAPI_KEY;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
 router.get("/", async (req, res) => {
@@ -18,7 +21,9 @@ router.get("/", async (req, res) => {
     
     console.log("You are in plantCatalog.js");
     try {
-        const data = await Plant.find();
+        // const data = await Plant.find().limit(1);
+        let numberOfEntries = parseInt(req.query.limit) || 5; 
+        const data = await Plant.aggregate([{$sample: {size: numberOfEntries}}]);
         console.log("Sending Json Data");
         res.status(200).json({data});
     } catch(error) {
@@ -27,7 +32,6 @@ router.get("/", async (req, res) => {
     } finally {
         await mongoose.disconnect();
     }
-
 });
 
 router.post("/", (req, res) => {
@@ -48,9 +52,25 @@ router.delete("/", (req, res) => {
     res.status(200).json({message: "deleted"});
 });
 
-router.patch("/", (req, res) => {
-    res.status(200).json({message: "/plantCatalog/patch"});
+router.patch("/", async (req, res) => {
     console.log("succes plantCatalog");
+    fetch(`${plantAPI}`, {
+        method: 'GET'
+    }).then(res => res.json())
+    .then(data => {
+            const dataArray = Object.values(data); // Convert object properties to array
+            let i = 0; 
+            let object;
+            dataArray[0].forEach(doc => {
+                let entry = doc;
+                // object.id = entry["id"];
+                console.log(entry['id']);
+            });
+            res.status(200).json(dataArray[0]);
+            // Access each plant data here
+            // You can perform any other processing with each plant object here
+    })
+    .catch(error => console.log(error));
 })
 
 router
