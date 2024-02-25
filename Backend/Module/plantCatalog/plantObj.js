@@ -34,3 +34,9 @@ class Seasons {
         this.bennial = bennial;
     }
 }
+
+module.exports = {
+    PlantOBJ,
+    Zone,
+    Seasons
+}

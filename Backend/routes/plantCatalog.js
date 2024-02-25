@@ -9,7 +9,11 @@ const bodyParser = require('body-parser');
 const Plant = require("../Module/schemas/PlantSchema");
 const uri = process.env.PLANTDB_URL;
 const plantAPI = process.env.PERENNIALAPI_KEY;
+const key = process.env.PERENNIALAPI_KEY_RAW;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
+
+// plant objects 
+const { PlantOBJ, Zone, Seasson } = require('../Module/plantCatalog/plantObj');
 
 router.get("/", async (req, res) => {
     try {
@@ -53,24 +57,51 @@ router.delete("/", (req, res) => {
 });
 
 router.patch("/", async (req, res) => {
-    console.log("succes plantCatalog");
-    fetch(`${plantAPI}`, {
-        method: 'GET'
-    }).then(res => res.json())
-    .then(data => {
-            const dataArray = Object.values(data); // Convert object properties to array
-            let i = 0; 
-            let object;
-            dataArray[0].forEach(doc => {
-                let entry = doc;
-                // object.id = entry["id"];
-                console.log(entry['id']);
-            });
-            res.status(200).json(dataArray[0]);
-            // Access each plant data here
-            // You can perform any other processing with each plant object here
-    })
-    .catch(error => console.log(error));
+    console.log("Inside plantCatalog /patch");
+    try {
+        fetch(`${plantAPI}`, {
+            method: 'GET'
+        }).then(res => res.json())
+        .then( data => {
+                const dataArray = Object.values(data); // Convert object properties to array
+
+                // get more plant information
+                let plantDetails;
+                dataArray[0].forEach(entry => {
+                    id = entry["id"];
+                    fetch(`https://perenual.com/api/species/details/${id}?key=${key}&`,{
+                        method: 'GET'
+                    }).then(res => res.json())
+                    .then(details => {
+                        console.log(details);
+                        plantDetails = details;
+                    })
+                    .catch(error => {
+                        throw new Error("Failed to fetch plant details: " + error);
+                    })
+                    console.log(plantDetails);
+                    // const plantObj = new PlantOBJ({
+                    //     id: entry["id"],
+                    //     binomial_name: entry["scientific_name"][0],
+                    //     name: entry["common_name"],
+                    //     daily_watering: entry["watering"],
+
+                    // })
+                    // object.id = entry["id"];
+                    // console.log(entry['id']);
+                });
+                res.status(200).json(dataArray[0]);
+                // Access each plant data here
+                // You can perform any other processing with each plant object here
+        })
+        .catch(error => {
+            throw new Error("Failed to get plant data" + error);
+        });
+    } 
+    catch (error){
+        console.log("PLANTCATALOG PATCH DEBUG: " + error);
+        res.status(500).json(error);
+    }
 })
 
 router

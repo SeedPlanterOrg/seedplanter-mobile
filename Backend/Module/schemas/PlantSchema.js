@@ -14,7 +14,7 @@ const Plant = new mongoose.Schema({
         required: true,
     },
     daily_watering: {
-        type: Number,
+        type: String,
         required: true,
         min: 0,
     },
@@ -59,5 +59,6 @@ const Plant = new mongoose.Schema({
 
 // Exports the schema to other files and set are collection to Plants
 module.exports = mongoose.model("Plant", Plant);
+
 
  
