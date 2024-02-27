@@ -20,10 +20,14 @@ const CustomTabBarButton = ({children, onPress}) => (
         onPress={onPress}
     >
         <View style={{
-            width: 70,
-            height: 70,
-            borderRadius: 35,
-            backgroundColor: '#98FF98'
+            width: 75,
+            height: 75,
+            borderRadius: 50,
+            backgroundColor: '#68b454',
+            shadowColor: '#333',
+            shadowOpacity: 0.3,
+            shadowOffset: { width: 1, height: 1 },
+
         }}>
             {children}
         </View>
@@ -32,16 +36,30 @@ const CustomTabBarButton = ({children, onPress}) => (
 
 const Tabs = () => {
     return(
-        <Tab.Navigator screenOptions={{ tabBarShowLabel: false, }}>
+        <Tab.Navigator 
+            screenOptions={{ 
+                tabBarShowLabel: false,
+                tabBarStyle: {
+                    flex: 1,
+                    position: 'absolute',
+                    height: 70,
+                    borderRadius: 50,
+                    bottom: 10,
+                    elevation: 0,
+                    right: 10,
+                    left: 10,
+                    paddingBottom: 0
+                }
+            }}>
             <Tab.Screen name="My Garden" component={HomeScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center',}}>
-                        <Image source={require('../assets/home.png')}
+                        <Image source={require('../assets/home3.png')}
                             resizeMode="contain"
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#0A6522' : '#000000'
+                                tintColor: focused ? '#68b454' : '#000000'
                             }}
                         />
                     </View>
@@ -51,12 +69,12 @@ const Tabs = () => {
             <Tab.Screen name="Journal" component={JournalScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center',}}>
-                        <Image source={require('../assets/book2.png')}
+                        <Image source={require('../assets/book6.png')}
                             resizeMode="contain"
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#0A6522' : '#000000'
+                                tintColor: focused ? '#68b454' : '#000000'
                             }}
                         />
                     </View>
@@ -65,7 +83,7 @@ const Tabs = () => {
 
             <Tab.Screen name="Plantbot" component={ChatBotScreen} options={{
                 tabBarIcon: ({focused}) => (
-                    <Image source={require('../assets/chat2.png')}
+                    <Image source={require('../assets/chat6.png')}
                         resizeMode="contain"
                         style={{
                             width: 30,
@@ -81,12 +99,12 @@ const Tabs = () => {
             <Tab.Screen name="Search Plants" component={CatalogScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center',}}>
-                        <Image source={require('../assets/search2.png')}
+                        <Image source={require('../assets/search6.png')}
                             resizeMode="contain"
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#0A6522' : '#000000'
+                                tintColor: focused ? '#68b454' : '#000000'
                             }}
                         />
                     </View>
@@ -96,12 +114,12 @@ const Tabs = () => {
             <Tab.Screen name="My Profile" component={ProfileScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center',}}>
-                        <Image source={require('../assets/profile2.png')}
+                        <Image source={require('../assets/profile6.png')}
                             resizeMode="contain"
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#0A6522' : '#000000'
+                                tintColor: focused ? '#68b454' : '#000000'
                             }}
                         />
                     </View>
@@ -113,3 +131,16 @@ const Tabs = () => {
 }
 
 export default Tabs;
+
+const styles = StyleSheet.create({
+    shadowing: {
+        shadowColor: '#68b454',
+        shadowOffset: {
+            width: 10,
+            height: 10,
+        },
+        shadowOpacity: 5,
+        shadowRadius: 5,
+        elevation: 3,
+    }
+});
