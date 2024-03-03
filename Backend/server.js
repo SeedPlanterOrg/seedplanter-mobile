@@ -27,7 +27,7 @@ const plantCatalogRouter = require('./routes/plantCatalog');
 // the route /plantCatalog is tied to ./routes/plantCatalog
 app.use('/plantCatalog', plantCatalogRouter);
 
-const userRouter = require('./routes/user');
+const userRouter = require('./routes/user-routes');
 app.use('/user', userRouter);
 
 const plantDeckRouter = require('./routes/plantDeck');
