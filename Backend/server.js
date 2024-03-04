@@ -4,9 +4,9 @@ const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const DB = process.env.PLANTDB_URL;
-console.log(DB);
-mongoose.connect(DB).then(con => {
+const uri = process.env.PLANTDB_URL;
+console.log(uri);
+mongoose.connect(uri).then(con => {
     console.log(con.connections);
     console.log('DB connection successful!')
 });
@@ -29,7 +29,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 // declares a the router to plantCatalog.js
-const plantCatalogRouter = require('./routes/plantCatalog');
+const plantCatalogRouter = require('./routes/catalog-router');
 
 // app.use is being used to link route to path in this case
 // the route /plantCatalog is tied to ./routes/plantCatalog
@@ -38,7 +38,7 @@ app.use('/plantCatalog', plantCatalogRouter);
 const userRouter = require('./routes/user-routes');
 app.use('/user', userRouter);
 
-const plantDeckRouter = require('./routes/plantDeck');
+const plantDeckRouter = require('./routes/garden-router');
 app.use('/plantDeck', plantDeckRouter);
 
 const chatRouter = require('./routes/chat-routes');

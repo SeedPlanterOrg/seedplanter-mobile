@@ -36,12 +36,6 @@ const userSchema = new mongoose.Schema({
         garden:[{ 
             type: mongoose.Schema.Types.ObjectId, ref: 'UserGarden'
         }],
-        tasks: [{ 
-            type: mongoose.Schema.Types.ObjectId, ref: 'Task'
-        }],
-        journal:[{ 
-            type: mongoose.Schema.Types.ObjectId, ref: 'JournalEntry'
-        }]
 });
 
 
