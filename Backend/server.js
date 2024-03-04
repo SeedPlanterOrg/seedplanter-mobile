@@ -1,7 +1,15 @@
+const mongoose = require("mongoose");
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config();
+
+const uri = process.env.PLANTDB_URL;
+console.log(uri);
+mongoose.connect(uri).then(con => {
+    console.log(con.connections);
+    console.log('DB connection successful!')
+});
 
 const port = 3000;
 // default route
@@ -21,17 +29,20 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 // declares a the router to plantCatalog.js
-const plantCatalogRouter = require('./routes/plantCatalog');
+const plantCatalogRouter = require('./routes/catalog-router');
 
 // app.use is being used to link route to path in this case
 // the route /plantCatalog is tied to ./routes/plantCatalog
 app.use('/plantCatalog', plantCatalogRouter);
 
-const userRouter = require('./routes/user');
+const userRouter = require('./routes/user-routes');
 app.use('/user', userRouter);
 
-const plantDeckRouter = require('./routes/plantDeck');
+const plantDeckRouter = require('./routes/garden-router');
 app.use('/plantDeck', plantDeckRouter);
+
+const chatRouter = require('./routes/chat-routes');
+app.use('/chat-routes', chatRouter);
 
 // listens to requests on specified ports
 app.listen(port);

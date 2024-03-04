@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const Plant = require("./schemas/PlantSchema");
+const Plant = require("../models/plant-schema");
 const uri = process.env.PLANTDB_URL;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
-
 
 async function build(plantObj) {
   
@@ -16,25 +15,20 @@ async function build(plantObj) {
     console.log(plantObj);
     try {
         const plant = await Plant.create({
-            binomial_name: "new world",
+            id: plantObj.id,
+            binomial_name: plantObj.binomial_name,
             name: plantObj.name,
-            daily_watering: 3,
+            daily_watering: plantObj.daily_watering,
             zone: {
-                hardy: 60,
-                seasons:
-                {
-                    annual: null,
-                    perennial: ["10A", "11B"],
-                    Bennial: null 
-                },
+                hardy: plantObj.zone.hardy,
+                seasons: plantObj.zone.seasons
             },
-            average_height: 5,
-            spacing: 10,
-            fertilize: "weekly",
-            light: 8,
-            features: ["Has thorns", "Is Ugly"],
-            care_level: "easy",
-            image_urls: ["www.test1", "www.test2", "www.test3"]});
+            light: plantObj.light,
+            care_level: plantObj.care_level,
+            image_urls: plantObj.image_urls,
+            description: plantObj.description
+          });
+            
         await plant.save();
         console.log(plant);
     } catch (e){
