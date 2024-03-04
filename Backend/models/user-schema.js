@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const Plants  = mongoose.model('Plants');
 
 const userSchema = new mongoose.Schema({
         name:{
@@ -25,18 +26,24 @@ const userSchema = new mongoose.Schema({
         phone:{
             type: string,
             required: false,
-        }, 
+        },
+        points:{
+            type: number,
+        },
+        // garden: [
+
+        // ]
+        garden:[{ 
+            type: mongoose.Schema.Types.ObjectId, ref: 'UserGarden'
+        }],
+        tasks: [{ 
+            type: mongoose.Schema.Types.ObjectId, ref: 'Task'
+        }],
+        journal:[{ 
+            type: mongoose.Schema.Types.ObjectId, ref: 'JournalEntry'
+        }]
 });
 
-
-
-// userSchema.virtual('id').get(function () {
-//     return this._id.toHexString;
-// });
-
-// userSchema.set('toJSON', {
-//     virtuals: true,
-// });
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
