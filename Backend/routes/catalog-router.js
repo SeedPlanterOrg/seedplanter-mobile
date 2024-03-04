@@ -2,17 +2,17 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 require("dotenv").config();
-const build = require("../Module/plantCatalog/plantCatalogDBC");
+const build = require("../utils/plantCatalogDBC");
 const bodyParser = require('body-parser');
 
-const PlantModel = require("../Module/schemas/PlantSchema");
+const PlantModel = require("../models/plant-schema");
 const uri = process.env.PLANTDB_URL;
 const plantAPI = process.env.PERENNIALAPI_KEY;
 const key = process.env.PERENNIALAPI_KEY_RAW;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
 // plant objects 
-const { PlantOBJ, Zone, Seasson } = require('../Module/plantCatalog/plantObj');
+const { PlantOBJ, Zone, Seasson } = require('../utils/plantObj');
 
 router.get("/", async (req, res) => {
     const page = req.query.page;
@@ -49,8 +49,14 @@ router.get("/plant", async (req, res) => {
     console.log("You are in plantCatalog.js");
     try {
         const data = await PlantModel.find({ id: id });
-        console.log("Sending Json Data");
-        res.status(200).json({data});
+        if (!data || data.length === 0) {
+            res.status(500).json({data});
+        } else {
+            console.log('Query succeeded:', data);
+            console.log("Sending Json Data");
+            res.status(200).json({data});
+        }
+        
     } catch(error) {
         console.error("Error fetching data:", error);
         res.status(500).json({message: "Failed to retrieve documents"});

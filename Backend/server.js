@@ -21,16 +21,13 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 // declares a the router to plantCatalog.js
-const plantCatalogRouter = require('./routes/plantCatalog');
+const plantCatalogRouter = require('./routes/catalog-router');
 
 // app.use is being used to link route to path in this case
 // the route /plantCatalog is tied to ./routes/plantCatalog
 app.use('/plantCatalog', plantCatalogRouter);
 
-const userRouter = require('./routes/user');
-app.use('/user', userRouter);
-
-const plantDeckRouter = require('./routes/plantDeck');
+const plantDeckRouter = require('./routes/garden-router');
 app.use('/plantDeck', plantDeckRouter);
 
 // listens to requests on specified ports

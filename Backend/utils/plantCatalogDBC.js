@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const Plant = require("../schemas/PlantSchema");
+const Plant = require("../models/plant-schema");
 const uri = process.env.PLANTDB_URL;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
