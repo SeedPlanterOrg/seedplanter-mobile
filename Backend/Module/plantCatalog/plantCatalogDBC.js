@@ -15,23 +15,15 @@ async function build(plantObj) {
     console.log(plantObj);
     try {
         const plant = await Plant.create({
+            id: plantObj.id,
             binomial_name: plantObj.binomial_name,
             name: plantObj.name,
             daily_watering: plantObj.daily_watering,
             zone: {
                 hardy: plantObj.zone.hardy,
-                seasons:
-                {
-                    annual: plantObj.zone.seasons.annual,
-                    perennial: plantObj.zone.seasons.perennial,
-                    bennial: plantObj.zone.seasons.bennial 
-                },
+                seasons: plantObj.zone.seasons
             },
-            average_height: plantObj.average_height,
-            spacing: plantObj.spacing,
-            fertilize: plantObj.fertilize,
             light: plantObj.light,
-            features: plantObj.features,
             care_level: plantObj.care_level,
             image_urls: plantObj.image_urls,
             description: plantObj.description

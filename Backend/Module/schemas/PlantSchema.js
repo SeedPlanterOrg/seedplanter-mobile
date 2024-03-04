@@ -1,8 +1,11 @@
 
 const mongoose = require("mongoose")
 
-const Plant = new mongoose.Schema({
+const PlantModel = new mongoose.Schema({
     id: {
+        type: Number
+    },
+    page: {
         type: Number
     },
     binomial_name: {
@@ -21,44 +24,25 @@ const Plant = new mongoose.Schema({
     zone: {
         hardy:{
             type: Number,
-            required: true,
-            min: 0,
+            min: 0
         },
-        seasons: {
-            annual: [String],
-            perennial: [String],
-            Bennial: [String],
+        season: {
+            type: String
         },
-    },
-    average_height:{ 
-        type: Number,
-        required: true,
-        min: 0,
-    },
-    spacing: {
-        type: Number,
-        required: true,
-        min: 0,
-    },
-    fertilize: {
-        type: String,
-        required: true,
     },
     light:{
-        type: String,
+        type: [String],
         required: true,
     },
-    features: [String],
     care_level:{ 
-        type: String,
-        required: true,
+        type: String
     },
     image_urls:[String],
     description: String
 })
 
 // Exports the schema to other files and set are collection to Plants
-module.exports = mongoose.model("Plant", Plant);
+module.exports = mongoose.model("PlantModel", PlantModel);
 
 
  
