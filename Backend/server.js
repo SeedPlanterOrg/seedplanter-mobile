@@ -1,7 +1,15 @@
+const mongoose = require("mongoose");
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config();
+
+const DB = process.env.PLANTDB_URL;
+console.log(DB);
+mongoose.connect(DB).then(con => {
+    console.log(con.connections);
+    console.log('DB connection successful!')
+});
 
 const port = 3000;
 // default route
