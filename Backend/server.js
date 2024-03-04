@@ -33,5 +33,8 @@ app.use('/user', userRouter);
 const plantDeckRouter = require('./routes/plantDeck');
 app.use('/plantDeck', plantDeckRouter);
 
+const chatRouter = require('./routes/chat-routes');
+app.use('/chat-routes', chatRouter);
+
 // listens to requests on specified ports
 app.listen(port);
