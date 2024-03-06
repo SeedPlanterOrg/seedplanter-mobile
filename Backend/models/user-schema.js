@@ -19,10 +19,6 @@ const userSchema = new mongoose.Schema({
             required: [true, 'Please provide a password'],
             minlength: 8
         },
-        passwordConfirm: {
-            type: String,
-            required: [true, "Please confirm your password"]
-        },
         phone:{
             type: String,
             required: false,
@@ -32,7 +28,7 @@ const userSchema = new mongoose.Schema({
             required: false
         },
         garden:{ 
-            type: mongoose.Schema.Types.ObjectId, ref: 'UserGarden',
+            type: mongoose.Schema.Types.ObjectId, ref: 'Garden',
             required: false
         },
 });

@@ -4,9 +4,9 @@ const express = require('express');
 require("dotenv").config();
 const router = express.Router();
 const { check } = require('express-validator');
-const usersController = require('../controllers/user-controller');
+const userController = require('../controllers/user-controller');
 
-router.get('/', usersController.getUsers);
+router.get('/', userController.getUsers);
 
 router.post(
   '/signup',
@@ -19,9 +19,9 @@ router.post(
       .isEmail(),
     check('password').isLength({ min: 6 })
   ],
-  usersController.signup
+  userController.signup
 );
 
-router.post('/login', usersController.login);
+router.post('/login', userController.login);
 
 module.exports = router;

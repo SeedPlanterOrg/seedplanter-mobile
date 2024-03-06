@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const express = require('express');
 const AppError = require('./middleware/appError')
 const app = express();
-const globalErrorhandler = require('./controllers/error-controller');
+const globalErrorhandler = require('./middleware/errorHandler');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
@@ -40,11 +40,11 @@ app.use('/plantCatalog', plantCatalogRouter);
 const userRouter = require('./routes/user-routes');
 app.use('/user', userRouter);
 
-const plantDeckRouter = require('./routes/garden-router');
-app.use('/plantDeck', plantDeckRouter);
+const gardenRouter = require('./routes/garden-router');
+app.use('/garden', gardenRouter);
 
 const chatRouter = require('./routes/chat-routes');
-app.use('/chat-routes', chatRouter);
+app.use('/chat', chatRouter);
 
 
 app.all('*', (req, res, next)=> { 
