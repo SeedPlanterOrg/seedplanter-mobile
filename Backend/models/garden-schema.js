@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
+const Plants  = mongoose.model('PlantModel');
+
 
 const userGardenSchema = new mongoose.Schema({
   userId: { 
     type: mongoose.Schema.Types.ObjectId, ref: "User",
     },
   plants: [{ 
-    type: mongoose.Schema.Types.ObjectId, ref: "Plant",
+    type: mongoose.Schema.Types.ObjectId, ref: "Plants",
     waterLevel: {
         type: Number
     },

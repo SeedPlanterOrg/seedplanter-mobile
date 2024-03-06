@@ -1,21 +1,21 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const Plants  = mongoose.model('Plants');
+const Plants  = mongoose.model('PlantModel');
 
 const userSchema = new mongoose.Schema({
         name:{
-            type: string,
+            type: String,
             required: [true, 'Please tell us your name!']
         },
         email:{
-            type: string,
+            type: String,
             required: [true, 'Please provide your email'],
             unique: true,
             lowercase: true,
             validate: [validator.isEmail, 'Please provide a valid email']
         },
         password:{
-            type: string,
+            type: String,
             required: [true, 'Please provide a password'],
             minlength: 8
         },
@@ -24,19 +24,19 @@ const userSchema = new mongoose.Schema({
             required: [true, "Please confirm your password"]
         },
         phone:{
-            type: string,
+            type: String,
             required: false,
         },
         points:{
-            type: number,
+            type: Number,
+            required: false
         },
-        // garden: [
-
-        // ]
-        garden:[{ 
-            type: mongoose.Schema.Types.ObjectId, ref: 'UserGarden'
-        }],
+        garden:{ 
+            type: mongoose.Schema.Types.ObjectId, ref: 'UserGarden',
+            required: false
+        },
 });
+
 
 
 const User = mongoose.model('User', userSchema);

@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 const express = require('express');
+const AppError = require('./middleware/appError')
 const app = express();
+const globalErrorhandler = require('./controllers/error-controller');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const uri = process.env.PLANTDB_URL;
+const uri = process.env.PLANTDB_URL; //connect to mongo
 console.log(uri);
 mongoose.connect(uri).then(con => {
     console.log(con.connections);
@@ -12,14 +14,14 @@ mongoose.connect(uri).then(con => {
 });
 
 const port = 3000;
-// default route
 app.get("/", (req, res) => {
-    console.log("Get request to server: no target route");
-    // sends back a json object
-    res.status(200).json({message: "server pinged"});
+
+    console.log("Get request to server: no target route");// default route
+    res.status(200).json({message: "server pinged"});    // sends back a json object
 });
 
 app.put("/", (req, res) =>{
+
     console.log("Put request to server: no target route");
     res.status(200).json({message: "server pinged"});
 })
@@ -44,5 +46,13 @@ app.use('/plantDeck', plantDeckRouter);
 const chatRouter = require('./routes/chat-routes');
 app.use('/chat-routes', chatRouter);
 
-// listens to requests on specified ports
-app.listen(port);
+
+app.all('*', (req, res, next)=> { 
+    next(new AppError(`Can't find ${req.originalUrl}`, 404)); //throw error if using a non-existant route.
+});
+
+app.use(globalErrorhandler);
+
+
+app.listen(port); // listens to requests on specified ports
+

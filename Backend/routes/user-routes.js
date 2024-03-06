@@ -1,32 +1,27 @@
 // get instance of express & mongoose 
 const express = require('express');
-const router = express.Router();
-const mongoose = require('mongoose');
-
 // setup .env
 require("dotenv").config();
+const router = express.Router();
+const { check } = require('express-validator');
+const usersController = require('../controllers/user-controller');
 
-router 
-    .route("/")
-    .get((req, res) => {
-        res.status(200).json({mesage :"/user/get"});
-        console.log("succes user");
-    })
-    .post((req, res) => {
-        res.status(200).json({message: "/user/post"});
-        console.log("succes user");
-    })
-    .put((req, res) => {
-        res.status(200).json({mesage: "/user/put"});
-        console.log("succes user");
-    })
-    .patch((req, res) => {
-        res.status(200).json({message: "/user/patch"});
-        console.log("succes user");
-    })
-    .delete((req, res) => {
-        res.status(200).json({message: "/user/delete"});
-        console.log("succes user");
-    })
+router.get('/', usersController.getUsers);
+
+router.post(
+  '/signup',
+  [
+    check('name')
+      .not()
+      .isEmpty(),
+    check('email')
+      .normalizeEmail() // Test@test.com => test@test.com
+      .isEmail(),
+    check('password').isLength({ min: 6 })
+  ],
+  usersController.signup
+);
+
+router.post('/login', usersController.login);
 
 module.exports = router;
