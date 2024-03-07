@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 const PlantTile = ({ imageSource, plantName, scientificName }) => {
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity style={styles.card} >
                 <View style={styles.cardContent}>
                     {imageSource && <Image source={imageSource} style={styles.cardImage} />}
                     <View style={styles.textContent}>
@@ -36,9 +36,6 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         width: 165,
         height: 230,
-        marginTop: 10,
-        marginHorizontal: -15,
-        marginVertical: -40,
     },
     cardContent: {
         flexDirection: 'column',

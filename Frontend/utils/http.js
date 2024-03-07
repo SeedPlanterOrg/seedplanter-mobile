@@ -51,5 +51,3 @@ async function findPlantById(id) {
         return null;
     }
 }
-
-getPlantCatalogPage(5)

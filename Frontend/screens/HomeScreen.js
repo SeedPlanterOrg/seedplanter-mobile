@@ -1,18 +1,56 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { FlatList, StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import * as Progress from 'react-native-progress';
 import HomeCard from '../components/HomeCard';
 import PlanterPointContainer from '../components/PlanterPointContainer';
 
+{/* Test Data */}
+const plantData = [
+  {
+    id: 1,
+    imageSource: require('../assets/marigold.jpg'),
+    plantName: "Marigold",
+    scientificName: "Scientific Name",
+    waterLevelProgress: 0.7,
+    nutrientProgress: 0.8
+  },
+  {
+    id: 2,
+    imageSource: require('../assets/lettuce.jpg'),
+    plantName: "Lettuce",
+    scientificName: "Scientific Name",
+    waterLevelProgress: 0.9,
+    nutrientProgress: 0.2
+  },
+  {
+    id: 3,
+    imageSource: require('../assets/strawberry.jpg'),
+    plantName: "Strawberry",
+    scientificName: "Scientific Name",
+    waterLevelProgress: 0.6,
+    nutrientProgress: 0.2
+  }
+];
+
 export default function HomeScreen() {
+  {/* This function defines how each item in the flatlist will be rendered */}
+  const renderItem = ({ item }) => (
+    <HomeCard
+      imageSource={item.imageSource}
+      plantName={item.plantName}
+      scientificName={item.scientificName}
+      waterLevelProgress={item.waterLevelProgress}
+      nutrientProgress={item.nutrientProgress}
+    />
+  );
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4' }}>
       <View style={styles.container}>
-        {/* Wrapped the two objects, ProgressBar and PlanterPointContainer, into a header container */}
+         {/* Wrapped the two objects, ProgressBar and PlanterPointContainer, into a header container */}
         <View style={styles.headerContainer}>
           <View style={styles.gardenHealthMeter}>
             <Text style={styles.healthMeterText}>Garden Health</Text>
-            {/* Progress Bar */}
             <Progress.Bar
               progress={0.6}
               width={200}
@@ -23,46 +61,27 @@ export default function HomeScreen() {
               borderWidth={0}
             />
           </View>
+
           {/* Planter Points */}
           <View style={styles.planterContainer}>
             <PlanterPointContainer points={123} />
           </View>
         </View>
 
+        {/* My Plants Text */}
         <Text style={styles.myPlants}>
           My <Text style={styles.greenText}>Plants</Text>
         </Text>
 
-        {/* Cards are contained here in this scroll view */}
-        {/* You can modify the info as you like, eventually this should just read from the API information */}
-        <ScrollView style={styles.scrollView}>
-          {/* Card 1*/}
-          <HomeCard
-            imageSource={require('../assets/marigold.jpg')}
-            plantName="Marigold"
-            scientificName="Scientific Name"
-            waterLevelProgress={0.7}
-            nutrientProgress={0.8}
-          />
+         {/* Switched over to a flatlist instead of scrollview to optimize for dynamic data */}
+        <FlatList
+          data={plantData}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        />
 
-          {/* Card 2*/}
-          <HomeCard
-            imageSource={require('../assets/lettuce.jpg')}
-            plantName="Lettuce"
-            scientificName="Scientific Name"
-            waterLevelProgress={0.9}
-            nutrientProgress={0.2}
-          />
-
-          {/* Card 3*/}
-          <HomeCard
-            imageSource={require('../assets/strawberry.jpg')}
-            plantName="Strawberry"
-            scientificName="Scientific Name"
-            waterLevelProgress={0.6}
-            nutrientProgress={0.2}
-          />
-        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -86,7 +105,7 @@ const styles = StyleSheet.create({
   healthMeterText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#6ABE6B', // Pastel green color
+    color: '#6ABE6B',
     marginBottom: 10,
   },
   myPlants: {
@@ -95,12 +114,6 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom: 20,
   },
-  // Card Styling
-  scrollView: {
-    flex: 1,
-    width: '100%',
-  },
-  // Green Text
   greenText: {
     color: '#6ABE6B'
   },
@@ -108,9 +121,12 @@ const styles = StyleSheet.create({
   planterContainer: {
     marginLeft: 50,
   },
+  scrollView: {
+    flex: 1,
+    width: '100%',
+    paddingRight: 4,
+    paddingLeft: 4,
+  },
 });
-
-
-
 
 
