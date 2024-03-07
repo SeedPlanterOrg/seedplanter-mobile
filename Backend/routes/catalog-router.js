@@ -26,6 +26,7 @@ router.get("/", async (req, res) => {
     
     console.log("You are in plantCatalog.js");
     try {
+        // sends back a page of plants for frontend 
         const data = await PlantModel.find({ page: page });
         console.log("Sending Json Data");
         res.status(200).json({data});
@@ -83,32 +84,48 @@ router.delete("/", (req, res) => {
     res.status(200).json({message: "deleted"});
 });
 
+// 
 router.patch("/", async (req, res) => {
     console.log("Inside plantCatalog /patch");
     try {
+        // get a new page of plants from perrinual
         const pageNumber = req.query.page;
         const response = await fetch(`https://perenual.com/api/species-list?key=${key}&page=${pageNumber}`, { method: 'GET' });
         const data = await response.json();
         const dataArray = Object.values(data);
-        //console.log(dataArray);
         const plantObjects = [];
+        
+        // connect to our db
         await mongoose.connect(uri, clientOptions);
         await mongoose.connection.db.admin().command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
+        // for every entry in the page we need to pull its details and guide 
         for (const entry of dataArray[0]) {
             
+            // try a fetch if it fails log it and get a new plant 
             try {
                 let image_url = [];
                 const id = entry.id;
                 const detailsResponse = await fetch(`https://perenual.com/api/species/details/${id}?key=${key}`, { method: 'GET' });
                 const details = await detailsResponse.json();
+                let careGuide;
                 if(entry.default_image === null){
                     image_url.push("");
                 } else {
                     image_url.push(entry.default_image.original_url);
                 }
                 const zone = new Zone(details.hardiness.max, entry.cycle);
+                
+                // based off entry details try to get plant-guide
+                let careGuidesURL = details['care-guides'];
+                try{
+                    const careGuideResponse = await fetch(careGuidesURL);
+                    careGuide = await careGuideResponse.json();
+                    
+                } catch (err) {
+                    console.error("Failed to fetch care-guides: " + err);
+                }
 
                 const plantObj = new PlantOBJ({
                     id: entry.id,
@@ -120,7 +137,11 @@ router.patch("/", async (req, res) => {
                     light: entry.sunlight,
                     care_level: details.care_level,
                     image_urls: image_url,
-                    description: details.description
+                    description: details.description,
+                    watering_description: careGuide.data[0].section[0].description,
+                    sunlight_description: careGuide.data[0].section[1].description,
+                    pruning_description: careGuide.data[0].section[2].description,
+                    hardiness_url: details.hardiness_location.full_url
                 });
                 plantObjects.push(plantObj);
             } catch (error) {

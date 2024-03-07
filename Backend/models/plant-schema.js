@@ -38,8 +38,12 @@ const PlantModel = new mongoose.Schema({
         type: String
     },
     image_urls:[String],
-    description: String
-})
+    description: String,
+    watering_description: String,
+    sunlight_description: String,
+    pruning_description: String,
+    hardiness_url: String
+});
 
 // Exports the schema to other files and set are collection to Plants
 module.exports = mongoose.model("PlantModel", PlantModel);
