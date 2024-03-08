@@ -31,7 +31,12 @@ export default function CatalogScreen() {
   useEffect(() => {
       async function fetchPlants() {
           try {
-              const plantsArray = await findPlantById(1);
+              const plantsArray = await getPlantCatalogPage(1);
+              console.log('DEBUGCODE: ' + plantsArray[1].id);
+              console.log('DEBUGCODE: ' + plantsArray[1].name);
+              console.log('DEBUGCODE: ' + plantsArray[1].binomial_name);
+              console.log('DEBUGCODE: ' + plantsArray[1].image_urls[0]);
+              
               setPlantsData(plantsArray);
           } catch (error) {
               console.error('Error fetching plants:', error);
@@ -53,9 +58,11 @@ export default function CatalogScreen() {
                   renderItem={({item}) => (
                       <View>
                           <PlantTile
-                              imageSource={item.image}
+
+                              //imageSource={{ uri: item.image_urls[0] }}
+                              imageSource={item.image_urls && item.image_urls[0] ? { uri: item.image_urls[0] } : require('../resource/flower1.jpg')}
                               plantName={item.name}
-                              scientificName={item.name2}
+                              scientificName={item.binomial_name}
                           />
                       </View>
                   )}

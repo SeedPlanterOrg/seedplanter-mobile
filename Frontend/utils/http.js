@@ -46,25 +46,25 @@ async function findPlantById(id) {
 
 
 
-async function run() {
-    try {
-        const plantsArray = await getPlantCatalogPage(4);
-        const stuff = await plantsArray;
-        //console.log(plantsArray[0]);
-        // You can use plantsArray here
-        return stuff;
-    } catch (error) {
-        console.error("Error: ", error);
-    }
+// async function run() {
+//     try {
+//         const plantsArray = await getPlantCatalogPage(4);
+//         const stuff = await plantsArray;
+//         //console.log(plantsArray[0]);
+//         // You can use plantsArray here
+//         return stuff;
+//     } catch (error) {
+//         console.error("Error: ", error);
+//     }
     
-}
+// }
 
-const gotstuff = run();
-const finaldrive = gotstuff.then((value) => {
-    console.log(value);
-    //return value;
-})
-console.log(finaldrive);
+// const gotstuff = run();
+// const finaldrive = gotstuff.then((value) => {
+//     console.log(value);
+//     //return value;
+// })
+// console.log(finaldrive);
 
 module.exports = {
     getPlantCatalogPage,
