@@ -1,6 +1,8 @@
+// needs to be your ip to run 
+
 async function getPlantCatalogPage(page) {
     try {
-        const response = await fetch(`http://localhost:3000/plantCatalog/?page=${page}`);
+        const response = await fetch(`http://seedplanter-mobile.onrender.com/plantCatalog/?page=${page}`);
         if (!response.ok) {
             throw new Error('Failed to fetch plant catalog');
         }
@@ -8,7 +10,7 @@ async function getPlantCatalogPage(page) {
         const plants = await response.json();
         let plantsArray = Object.values(plants);
         if (!plantsArray[0].length) {
-            const patchResponse = await fetch(`http://localhost:3000/plantCatalog/?page=${page}`, { method: 'PATCH' });
+            const patchResponse = await fetch(`http://seedplanter-mobile.onrender.com/plantCatalog/?page=${page}`, { method: 'PATCH' });
             if (!patchResponse.ok) {
                 throw new Error('Failed to patch plant catalog');
             }
@@ -24,7 +26,7 @@ async function getPlantCatalogPage(page) {
 
 async function findPlantById(id) {
     try{
-        const response = await fetch(`http://localhost:3000/plantCatalog/plant/?id=${id}`, {
+        const response = await fetch(`http://seedplanter-mobile.onrender.com/plantCatalog/plant/?id=${id}`, {
             method:'GET'
         });
 
@@ -43,24 +45,28 @@ async function findPlantById(id) {
 }
 
 
-// driver 
-// async function run() {
-//     try {
-//         const plantsArray = await getPlantCatalogPage(4);
-//         const stuff = await plantsArray;
-//         //console.log(plantsArray[0]);
-//         // You can use plantsArray here
-//         return stuff;
-//     } catch (error) {
-//         console.error("Error: ", error);
-//     }
+
+async function run() {
+    try {
+        const plantsArray = await getPlantCatalogPage(4);
+        const stuff = await plantsArray;
+        //console.log(plantsArray[0]);
+        // You can use plantsArray here
+        return stuff;
+    } catch (error) {
+        console.error("Error: ", error);
+    }
     
-// }
+}
 
-// const gotstuff = run();
-// const finaldrive = gotstuff.then((value) => {
-//     console.log(value);
-//     //return value;
-// })
-// console.log(finaldrive);
+const gotstuff = run();
+const finaldrive = gotstuff.then((value) => {
+    console.log(value);
+    //return value;
+})
+console.log(finaldrive);
 
+module.exports = {
+    getPlantCatalogPage,
+    findPlantById
+};

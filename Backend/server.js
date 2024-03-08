@@ -11,7 +11,8 @@ mongoose.connect(uri).then(con => {
     console.log('DB connection successful!')
 });
 
-const port = 3000;
+const host = '0.0.0.0'; // Or your specific IP address
+const port = 5000; // Use any free por
 // default route
 app.get("/", (req, res) => {
     console.log("Get request to server: no target route");
