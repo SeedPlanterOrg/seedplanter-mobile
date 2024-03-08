@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Animated, AppRegistry, FlatList, TextInput, Modal, ImageBackground } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Progress from 'react-native-progress';
+import  { getPlantCatalogPage, findPlantById} from '../utils/http';
 
 {/* Test Data Replace With data from Database*/ }
 const DATA = [
@@ -32,6 +33,27 @@ export default function CatalogScreen() {
   const [modalImage, setModalImage] =  useState('');
   const [modalSciName, setModalSciName] =  useState('');
   const [modalDescription, setModalDescription] =  useState('');
+  const [plantsData, setPlantsData] = useState([]);
+
+  useEffect(() => {
+    async function fetchPlants() {
+        try {
+            const plantsArray = await getPlantCatalogPage(1);
+            console.log('DEBUGCODE: ' + plantsArray[1].id);
+            console.log('DEBUGCODE: ' + plantsArray[1].name);
+            console.log('DEBUGCODE: ' + plantsArray[1].binomial_name);
+            console.log('DEBUGCODE: ' + plantsArray[1].image_urls[0]);
+            
+            setPlantsData(plantsArray);
+        } catch (error) {
+            console.error('Error fetching plants:', error);
+            // Optionally, handle errors in the UI (like showing an error message)
+        }
+    }
+
+    fetchPlants();
+  }, []);
+
 
   const PlantTile = ({ imageSource, plantName, scientificName, description }) => {
     return (
@@ -56,7 +78,7 @@ export default function CatalogScreen() {
       return (
         <View>
           <PlantTile
-            imageSource={item.image_urls}
+            imageSource={item.image_urls && item.image_urls[0] ? { uri: item.image_urls[0] } : require('../resource/flower1.jpg')}
             plantName={item.name}
             scientificName={item.binomial_name}
             description={item.description}
@@ -91,6 +113,7 @@ export default function CatalogScreen() {
                   <Text style={styles.DescriptionText}>Description</Text>
                 </View>
 
+
                 <View style={styles.descriptionOfPlant}>
                   <Text style={styles.descriptionOfPlant}>{modalDescription}</Text>
                 </View>
@@ -113,6 +136,9 @@ export default function CatalogScreen() {
             scientificName={item.binomial_name}
           />
 
+          {/* Copy Over Modal From Above Here */}
+
+
         </View>
       );
     }
@@ -131,9 +157,10 @@ export default function CatalogScreen() {
         <FlatList
           columnWrapperStyle={{ gap: -30 }}
           contentContainerStyle={{ alignItems: 'center', gap: -30 }}
-          data={DATA}
+          data={plantsData}
           numColumns={2}
-          renderItem={({ item, index }) => (
+          keyExtractor={item => item.id.toString()} // Ensure item.id is a string
+          renderItem={({ item }) => (
             filterData(item)
           )}
         />
@@ -271,7 +298,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 5,
     marginLeft: 20,
+    marginRight: 20,
     color: '#707070',
-    textAlign: 'left',
+    textAlign: 'justify',
+    alignItems: 'center',
   },
 });
