@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "express-validator": "^7.0.1",
-    "uuid": "^9.0.1"
-  }
-}

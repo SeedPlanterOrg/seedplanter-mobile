@@ -1,19 +1,13 @@
 // const uuid = require('uuid/v4');
 const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
-// const HttpError = require('../models/http-error');
+const bcrypt = require('bcryptjs');
 require("../models/user-schema.js"); // register schema
 var User = require('mongoose').model('User'); // load schema
 const AppError = require('../middleware/appError');
+require("dotenv").config();
+const jwt = require('jsonwebtoken');
 
-// const DUMMY_USERS = [
-//   {
-//     id: 'u1',
-//     name: 'Shivam Patel',
-//     email: 'test@test.com',
-//     password: 'test123'
-//   }
-// ];
 
 const getUsers = async (req, res, next) => {
     let users;
@@ -27,6 +21,7 @@ const getUsers = async (req, res, next) => {
     }
     res.json({users: users.map(users => users.toObject({getters: true}))});
 };
+
 
 const signup = async (req, res, next) => {
   const errors = validationResult(req); //validate req.body
@@ -47,12 +42,18 @@ const signup = async (req, res, next) => {
         return next(new AppError ('User exists already, please login instead', 422));
     }
 
+    let hashedPassword;
+    try{
+    hashedPassword = await bcrypt.hash(password, 12);
+    } catch (err) {
+      return next(new AppError('Could not create user, please try again.'));
+    }
+
   const createdUser = new User({
     id: uuidv4(),
     name, // name: name
     email,
-    password,
-    garden,
+    password: hashedPassword,
   });
 
   try {
@@ -61,29 +62,59 @@ const signup = async (req, res, next) => {
     return next(new AppError('Sign Up failed, please try again.'));
   }
 
-  res.status(201).json({user: createdUser.toObject({ getters: true })});
+  let token;
+
+  try{
+    token = jwt.sign({userId: createdUser.id, email: createdUser.email}, 'SECRET123', {expiresIn: '1h'});
+  } catch (err) {
+    return next(new AppError('Sign Up failed, please try again', 500));
+  }
+
+  res.status(201).json({userId: createdUser.id, email: createdUser.email, token: token});
 };
+
+
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  let existingUser
+  let existingUser  
     try {
         existingUser = await User.findOne({email: email})
     }catch {
-        return next(new AppError('Signing up failed, please try again later.', 500));
+        return next(new AppError('Log in failed, please try again later.', 500));
     }
 
-    if (!existingUser || existingUser.password != password) {
-        return next(new AppError ("Invalid credentials, could not log in."));
+    if (!existingUser) {
+        return next(new AppError ("Invalid credentials, could not log in.", 401));
     }
 
-//   const identifiedUser = DUMMY_USERS.find(u => u.email === email);
-//   if (!identifiedUser || identifiedUser.password !== password) {
-//     throw new AppError('Could not identify user, credentials seem to be wrong.', 401);
-//   }
+    let isValidPassword = false;
+    try {
+    isValidPassword = await bcrypt.compare(password, existingUser.password);
+    } catch(err) {
+      return next(new AppError('Could not log you in, please check you credentials and try again.'));
+    }
 
-  res.json({message: 'Logged in!'});
+    if(!isValidPassword){
+      return next(new AppError('Invalid credentials, could not log you in'), 401);
+    }
+
+
+  let token;
+
+  try{
+    token = jwt.sign({userId: existingUser.id, email: existingUser.email}, process.env.JWT_SECRET, {expiresIn: '1h'});
+  } catch (err) {
+    return next(new AppError('Log In failed, please try again', 500));
+  }
+
+  res.json({
+    userId: existingUser.id,
+    email: existingUser.email,
+    token: token
+  });
+
 };
 
 exports.getUsers = getUsers;

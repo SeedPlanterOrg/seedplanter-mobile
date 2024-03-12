@@ -5,14 +5,62 @@ import { useNavigation } from '@react-navigation/native';
 import Tabs from '../navigation/tabs';
 import { TextInput } from 'react-native';
 import { TouchableOpacity } from 'react-native';
+// import { IP, PORT } from "@env"
+// import { useContext } from 'react';
+// import { AuthContext } from '../context/AuthContext';
+// import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ErrorMessage from '../components/ErrorMessage';
 
 export default function LoginScreen() {
   const navigation = useNavigation()
 
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
-  });
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const IP = process.env.EXPO_PUBLIC_IP;
+  const PORT = process.env.EXPO_PUBLIC_PORT;
+  
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch(`${IP}:${PORT}/user/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      // const num = await AsyncStorage.getItem('userId');  
+      if (!response.ok) {
+        setErrorMessage('Invalid credentials, could not log in');
+        throw new Error('Error logging in');
+      }
+
+      console.log(response);
+  
+      const data = await response.json();
+
+      console.log(data);
+  
+      // Store the user ID and token in local storage or in-memory state
+      await AsyncStorage.setItem('userId', data.userId);
+      await AsyncStorage.setItem('token', data.token);
+  
+      // Navigate to the next screen
+      navigation.navigate(Tabs);
+  
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Invalid credentials, could not log in');
+    }
+  };
+  
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4'}}>
@@ -36,8 +84,8 @@ export default function LoginScreen() {
               style={styles.inputControls}
               placeholder="example@example.com"
               placeholderTextColor="#6b7280"
-              value={form.email}
-              onChangeText={email => setForm({ ...form, email})}
+              value={email}
+              onChangeText={text => setEmail(text)}
             />
           </View>
           <View style={styles.input}>
@@ -47,12 +95,13 @@ export default function LoginScreen() {
               style={styles.inputControls}
               placeholder="**********"
               placeholderTextColor="#6b7280"
-              value={form.password}
-              onChangeText={password => setForm({ ...form, password})}
+              value={password}
+              onChangeText={text => setPassword(text)}
             />
           </View>
+          <ErrorMessage message={errorMessage} />
           <View style={styles.formAction}>
-            <TouchableOpacity onPress={() => navigation.navigate(Tabs)} >
+            <TouchableOpacity onPress={handleLogin} >
               <View style={styles.loginButton}>
                 <Text style={styles.buttonTxt}>LOGIN</Text>
               </View>
@@ -62,7 +111,7 @@ export default function LoginScreen() {
           <View style={styles.inline}>
             <Text style={styles.signupLabel}>Don't have an account?</Text>
             <Pressable onPress={() => navigation.navigate("Signup")} >
-                <Text style={styles.signupLabel2}>Sign up</Text>
+                <Text style={styles.signupLabel2}> Sign up</Text>
             </Pressable>
           </View>
 

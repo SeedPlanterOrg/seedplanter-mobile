@@ -2,6 +2,20 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const Plants  = mongoose.model('PlantModel');
 
+const chatSchema = new mongoose.Schema({
+    id: {
+      type: String,
+    },
+    role: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+  });
+
 const userSchema = new mongoose.Schema({
         name:{
             type: String,
@@ -17,7 +31,7 @@ const userSchema = new mongoose.Schema({
         password:{
             type: String,
             required: [true, 'Please provide a password'],
-            minlength: 8
+            minlength: 6
         },
         phone:{
             type: String,
@@ -31,6 +45,7 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId, ref: 'Garden',
             required: false
         },
+        chats: [chatSchema]
 });
 
 

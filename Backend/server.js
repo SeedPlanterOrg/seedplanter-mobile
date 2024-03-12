@@ -13,7 +13,7 @@ mongoose.connect(uri).then(con => {
     console.log('DB connection successful!')
 });
 
-const port = 3000;
+const port = process.env.PORT || 3000; // port number];
 app.get("/", (req, res) => {
 
     console.log("Get request to server: no target route");// default route
@@ -29,6 +29,15 @@ app.put("/", (req, res) =>{
 // allows json to be used in routes 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader(
+        'Access-Control-Allow-headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+    next();
+});
 
 // declares a the router to plantCatalog.js
 const plantCatalogRouter = require('./routes/catalog-router');

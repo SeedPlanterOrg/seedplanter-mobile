@@ -13,6 +13,18 @@ const gardenPlantSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: "Plant"
   },
+  water: {
+    type: Boolean,
+    required: true
+  },
+  fertilize: {
+    type: Boolean,
+    required: true
+  },
+  prune: {
+    type: Boolean,
+    required: true
+  },
   waterLevel: {
     type: Number,
     max: 100
@@ -27,7 +39,7 @@ const gardenPlantSchema = new mongoose.Schema({
   lastFertilizingDate: {
     type: Date
   },
-  journalEntries: [{
+  notes: [{
     type: mongoose.Schema.Types.ObjectId, 
     ref: "JournalEntry"
   }],
@@ -40,18 +52,14 @@ const GardenPlant = mongoose.model("GardenPlant", gardenPlantSchema);
 module.exports = GardenPlant;
 
 const GardenSchema = new mongoose.Schema({
-  gardenId: {
-    type: String,
-    required: true
-  },
   userId: { 
     type: mongoose.Schema.Types.ObjectId, ref: "User",
     },
   plants: [gardenPlantSchema], //array of plants in the users garden
 
-  // tasks: [{  //array of tasks
-  //   type: mongoose.Schema.Types.ObjectId, ref: "Task",
-  //   }],
+  tasks: [{  //array of tasks
+    type: mongoose.Schema.Types.ObjectId, ref: "Task",
+    }],
 
   gardenHealthLevel: [{ //garden health level
     type: Number,
