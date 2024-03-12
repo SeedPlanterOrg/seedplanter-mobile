@@ -8,7 +8,7 @@ const journalEntrySchema = new mongoose.Schema({
   },
   plantId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Plants",
+    ref: "PlantModel",
   },
   date: Date,
   images: {

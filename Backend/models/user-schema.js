@@ -1,42 +1,53 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const Plants  = mongoose.model('Plants');
+const Plants  = mongoose.model('PlantModel');
+
+const chatSchema = new mongoose.Schema({
+    id: {
+      type: String,
+    },
+    role: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+  });
 
 const userSchema = new mongoose.Schema({
         name:{
-            type: string,
+            type: String,
             required: [true, 'Please tell us your name!']
         },
         email:{
-            type: string,
+            type: String,
             required: [true, 'Please provide your email'],
             unique: true,
             lowercase: true,
             validate: [validator.isEmail, 'Please provide a valid email']
         },
         password:{
-            type: string,
-            required: [true, 'Please provide a password'],
-            minlength: 8
-        },
-        passwordConfirm: {
             type: String,
-            required: [true, "Please confirm your password"]
+            required: [true, 'Please provide a password'],
+            minlength: 6
         },
         phone:{
-            type: string,
+            type: String,
             required: false,
         },
         points:{
-            type: number,
+            type: Number,
+            required: false
         },
-        // garden: [
-
-        // ]
-        garden:[{ 
-            type: mongoose.Schema.Types.ObjectId, ref: 'UserGarden'
-        }],
+        garden:{ 
+            type: mongoose.Schema.Types.ObjectId, ref: 'Garden',
+            required: false
+        },
+        chats: [chatSchema]
 });
+
 
 
 const User = mongoose.model('User', userSchema);
