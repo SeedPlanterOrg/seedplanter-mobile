@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, Text, Switch, StyleSheet, Image } from 'react-native';
 //import DatePicker from 'react-native-modern-datepicker';
+import Slider from "@react-native-community/slider"
+
 
 const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource }) => {
+    const [sliderState, setSliderState] = React.useState(0);
 
     // Currently running into issues with DatePicker
 
@@ -22,7 +25,7 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource }) => 
                 <View style={styles.toggleContainer}>
                     <Text style={styles.toggleText}>Notify Me</Text>
                     <Switch
-                    trackColor={{ false: '#767577', true: '#81b0ff' }}
+                    trackColor={{ false: '#767577', true: '#6ABE6B' }}
                     thumbColor={notifyMe ? '#f4f3f4' : '#f4f3f4'}
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleNotifyMe}
@@ -30,6 +33,21 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource }) => 
                     />
                 </View>
             </View>
+
+            <View style={styles.sliderContainer}>
+              <Slider
+                style={styles.slider}
+                value={sliderState}
+                onValueChange={(value) => setSliderState(value)}
+                minimumValue={0}
+                maximumValue={10}
+                minimumTrackTintColor="#6ABE6B"
+                maximumTrackTintColor="#000000"
+                step={1}
+              />
+              <Text style={styles.sliderValue}>{sliderState}</Text>
+            </View>
+
 
             {/*
             <DatePicker 
@@ -72,6 +90,7 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 16,
     marginRight: 10,
+    marginBottom: 6,
   },
   image: {
     width: 30, 
@@ -80,9 +99,29 @@ const styles = StyleSheet.create({
     marginRight: 5, 
   },
   headerContainer: {
-    flexDirection: 'row'
-  }
+    flexDirection: 'row',
+  },
+  sliderContainer: {
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 160,
+    marginTop: 10,
+  },
+  slider: {
+    width: 150,
+    height: 40,
+  },
+  sliderValue: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginLeft: 160,
+    position: 'absolute',
+    left: 0,
+  },
 });
 
+
 export default AddPlantCard;
+
 
