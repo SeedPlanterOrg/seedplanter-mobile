@@ -138,6 +138,21 @@ export default function HomeScreen() {
               <TouchableOpacity style={styles.Backbutton} onPress={closeModal}>
                 <Image style={styles.rightImageSize} source={require('../assets/xout.png')} />
               </TouchableOpacity>
+              
+              {/* Placeholder before I add the add image button functionality */}
+              <View style={styles.imageContainer}>
+                <Image
+                  source={require('../assets/strawberry.jpg')}
+                  style={styles.modalImage}
+                />
+                {/* Plus Button */}
+                <TouchableOpacity style={styles.plusIconContainer}>
+                  <Image
+                    source={require('../assets/plus_icon.png')}
+                    style={styles.plusButton}
+                  />
+                </TouchableOpacity>
+              </View>
 
               {/* AddPlantCard Component for Watering */}
               <AddPlantCard
@@ -243,5 +258,22 @@ const styles = StyleSheet.create({
   rightImageSize: {
     width: 10,
     height: 10,
+  },
+  imageContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+    position: 'relative',
+  },
+  modalImage: {
+    width: 150, 
+    height: 150, 
+    borderRadius: 20,
+  },
+  plusIconContainer: {
+    position: 'absolute',
+    bottom: -10,
+    right: 80,
+    backgroundColor: '#fff',
+    borderRadius: 20,
   },
 });
