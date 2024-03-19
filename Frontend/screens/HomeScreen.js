@@ -46,9 +46,10 @@ const plantData = [
 
 export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [wateringNotify, setWateringNotify] = useState(false); // State for watering toggle
+  const [nutrientsNotify, setNutrientsNotify] = useState(false); // State for nutrients toggle
   const [addType, setAddType] = useState('');
   const [addLocation, setAddLocation] = useState('');
-  const [notifyMe, setNotifyMe] = useState(false);
 
   const renderItem = ({ item }) => (
     <HomeCard
@@ -73,8 +74,12 @@ export default function HomeScreen() {
     closeModal();
   };
 
-  const toggleNotifyMe = () => {
-    setNotifyMe((prevState) => !prevState);
+  const toggleWateringNotify = () => {
+    setWateringNotify((prevState) => !prevState);
+  };
+
+  const toggleNutrientsNotify = () => {
+    setNutrientsNotify((prevState) => !prevState);
   };
 
   return (
@@ -134,21 +139,21 @@ export default function HomeScreen() {
                 <Image style={styles.rightImageSize} source={require('../assets/xout.png')} />
               </TouchableOpacity>
 
-              {/* AddPlantCard Component */}
+              {/* AddPlantCard Component for Watering */}
               <AddPlantCard
-                notifyMe={notifyMe}
-                toggleNotifyMe={toggleNotifyMe}
+                notifyMe={wateringNotify}
+                toggleNotifyMe={toggleWateringNotify}
                 headerText="Watering"
                 imageSource={require('../assets/rain.png')}
               />
 
+              {/* AddPlantCard Component for Nutrients */}
               <AddPlantCard
-                notifyMe={notifyMe}
-                toggleNotifyMe={toggleNotifyMe}
+                notifyMe={nutrientsNotify}
+                toggleNotifyMe={toggleNutrientsNotify}
                 headerText="Nutrients"
                 imageSource={require('../assets/leaf.png')}
               />
-
 
               <Button title="Add Plant" onPress={handleAddPlant} />
 
