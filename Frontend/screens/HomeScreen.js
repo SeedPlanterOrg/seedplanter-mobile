@@ -83,7 +83,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
       <View style={styles.container}>
         {/* Wrapped the two objects, ProgressBar and PlanterPointContainer, into a header container */}
         <View style={styles.headerContainer}>
@@ -93,7 +93,7 @@ export default function HomeScreen() {
               progress={0.6}
               width={200}
               height={39}
-              borderRadius={10}
+              borderRadius={20}
               color="#6ABE6B"
               unfilledColor="#D7EED8"
               borderWidth={0}
@@ -142,7 +142,7 @@ export default function HomeScreen() {
               {/* Placeholder before I add the add image button functionality */}
               <View style={styles.imageContainer}>
                 <Image
-                  source={require('../assets/strawberry.jpg')}
+                  source={require('../assets/lightgray.svg')}
                   style={styles.modalImage}
                 />
                 {/* Plus Button */}
@@ -223,6 +223,8 @@ const styles = StyleSheet.create({
   plusButtonContainer: {
     marginLeft: 5,
     marginTop: 30,
+    backgroundColor: '#C9FFC9',
+    borderRadius: 20,
   },
   plusButton: {
     width: 40,
@@ -268,12 +270,15 @@ const styles = StyleSheet.create({
     width: 150, 
     height: 150, 
     borderRadius: 20,
+    borderWidth: 3, 
+    borderColor: '#6ABE6B', 
+    backgroundColor: 'transparent', 
   },
   plusIconContainer: {
     position: 'absolute',
     bottom: -10,
     right: 80,
-    backgroundColor: '#fff',
+    backgroundColor: '#C9FFC9',
     borderRadius: 20,
   },
 });

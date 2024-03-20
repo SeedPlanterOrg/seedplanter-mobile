@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, Switch, StyleSheet, Image } from 'react-native';
-//import DatePicker from 'react-native-modern-datepicker';
-import Slider from "@react-native-community/slider"
-
+import Slider from "@react-native-community/slider";
 
 const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource }) => {
     const [sliderState, setSliderState] = React.useState(0);
@@ -19,7 +17,6 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource }) => 
     return (
         <View style={styles.cardContainer}>
             <View style={styles.headerContainer} >
-                {/* Render the image if imageSource is provided */}
                 {imageSource && <Image source={imageSource} style={styles.image} />}
                 <Text style={styles.cardText}>{headerText}</Text>
                 <View style={styles.toggleContainer}>
@@ -48,6 +45,11 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource }) => 
               <Text style={styles.sliderValue}>{sliderState}</Text>
             </View>
 
+            {/* Date container, currently not implmented */}
+            <View style={styles.dateContainer}>
+              <Text>Last _____ date: </Text>
+              <Text> 2023.02.14 </Text>
+            </View>
 
             {/*
             <DatePicker 
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     borderRadius: 10,
     elevation: 3,
-    backgroundColor: '#fcfafa',
+    backgroundColor: '#fff',
     shadowOffset: { width: 1, height: 1 },
     shadowColor: '#333',
     shadowOpacity: 0.3,
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginHorizontal: -5,
     marginBottom: 5,
-    shadowRadius: 2,
+    shadowRadius: 3,
     alignItems: 'center', 
   },
   cardText: {
@@ -118,6 +120,11 @@ const styles = StyleSheet.create({
     marginLeft: 160,
     position: 'absolute',
     left: 0,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    marginRight: 100,
+    marginTop: 30,
   },
 });
 
