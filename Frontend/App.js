@@ -16,7 +16,7 @@ const App = () => {
       <Stack.Navigator initialRouteName="Welcome" 
           screenOptions={{
             headerBackVisible: false,
-            headerShown: false
+            headerShown: false,
           }}
       >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
