@@ -2,6 +2,7 @@
 
 async function getPlantCatalogPage(page) {
     try {
+
         const response = await fetch(`${EXPO_PUBLIC_DEPLOYMENT}/plantCatalog/?page=${page}`);
         if (!response.ok) {
             throw new Error('Failed to fetch plant catalog');
@@ -10,6 +11,7 @@ async function getPlantCatalogPage(page) {
         const plants = await response.json();
         let plantsArray = Object.values(plants);
         if (!plantsArray[0].length) {
+
             const patchResponse = await fetch(`${EXPO_PUBLIC_DEPLOYMENT}/plantCatalog/?page=${page}`, { method: 'PATCH' });
             if (!patchResponse.ok) {
                 throw new Error('Failed to patch plant catalog');
@@ -46,6 +48,8 @@ async function findPlantById(id) {
 
 
 
+// driver 
+
 // async function run() {
 //     try {
 //         const plantsArray = await getPlantCatalogPage(4);
@@ -70,3 +74,4 @@ module.exports = {
     getPlantCatalogPage,
     findPlantById
 };
+

@@ -2,17 +2,112 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, SafeAreaView, Image, Touchable, Pressable, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import ErrorMessage from '../components/ErrorMessage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Tabs from '../navigation/tabs';
+// import {IP, PORT} from "@env"
 
 export default function SignupScreen() {
     const navigation = useNavigation()
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [nameError, setNameError] = useState(null);
+    const [emailError, setEmailError] = useState(null);
+    const [passwordError, setPasswordError] = useState(null);
+    const [confirmPasswordError, setConfirmPasswordError] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const IP = process.env.EXPO_PUBLIC_IP;
+    const PORT = process.env.EXPO_PUBLIC_PORT;
 
-    const [form, setForm] = useState({
-        userName: '',
-        email: '',
-        password: '',
-        password2: '',
-    });
+    const handleSubmit = async () => {
+      setNameError(null);
+      setEmailError(null);
+      setPasswordError(null);
+      setConfirmPasswordError(null);
+      setErrorMessage(null);
+    
+      if (name === "") {
+        setNameError("Please tell us your name!");
+        return;
+      }
+    
+      if (email === "") {
+        setEmailError("Email is required");
+        return;
+      }
+      if (!re.test(email) ) {
+        setEmailError("Email is not valid");
+        return;
+      }
+      if (password === "") {
+        setPasswordError("Password is required");
+        return;
+      }
+      if (confirmPassword === "") {
+        setConfirmPasswordError("Confirm password is required");
+        return;
+      }
+      if (password.length < 6 || confirmPassword.length < 6) { 
+        setPasswordError("Password must be at least 6 characters long");
+        setConfirmPasswordError("Password must be at least 6 characters long");
+        return;
+      }
+      if (password !== confirmPassword) {
+        setConfirmPasswordError("Please make sure the passwords match");
+        setPasswordError("Please make sure the passwords match");
+        return;
+      }
+    
+      try {
+        const response = await fetch(`${IP}:${PORT}/user/signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            password: password,
+          }),
+        });
+        
+        console.log('response', response);
+
+        // const data = await response.json();
+        // const text = await data.text(); 
+
+        if (!response.ok) {
+          console.log('Response not OK');
+          const text = await response.text();
+          console.log('Response text:', text);
+          return;
+        }
+
+        const data = await response.json();
+        console.log('Data:', data);
+  
+        // Store the user ID and token in local storage or in-memory state
+        await AsyncStorage.setItem('userId', data.userId);
+        await AsyncStorage.setItem('token', data.token);
+
+        const storedUserId = await AsyncStorage.getItem('userId');
+        const storedToken = await AsyncStorage.getItem('token');
+        console.log('Stored user ID:', storedUserId);
+        console.log('Stored token:', storedToken); 
+        // Navigate to the next screen
+        navigation.navigate(Tabs);
+    
+      } catch (error) {
+        // setErrorMessage(responseBody.message);
+        console.log(error);
+      }
+    };
+
+
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4'}}>
@@ -30,16 +125,17 @@ export default function SignupScreen() {
                 <View style={styles.form}>
 
                     <View style={styles.input}>
-                        <Text style={styles.inputLabel}>Username</Text>
+                        <Text style={styles.inputLabel}>Name</Text>
                             <TextInput
                                 autoCapitalize="none"
                                 autoCorrect={false}
                                 style={styles.inputControls}
-                                placeholder="Username"
+                                placeholder="Name"
                                 placeholderTextColor="#6b7280"
-                                value={form.userName}
-                                onChangeText={userName => setForm({ ...form, userName})}
+                                value={name}
+                                onChangeText={setName}
                             />
+                        <ErrorMessage message={nameError} />
                     </View>
 
                     <View style={styles.input}>
@@ -51,9 +147,10 @@ export default function SignupScreen() {
                                 style={styles.inputControls}
                                 placeholder="example@example.com"
                                 placeholderTextColor="#6b7280"
-                                value={form.email}
-                                onChangeText={email => setForm({ ...form, email})}
+                                value={email}
+                                onChangeText={setEmail}
                             />
+                          <ErrorMessage message={emailError} />
                     </View>
 
                     <View style={styles.input}>
@@ -63,9 +160,10 @@ export default function SignupScreen() {
                                 style={styles.inputControls}
                                 placeholder="**********"
                                 placeholderTextColor="#6b7280"
-                                value={form.password}
-                                onChangeText={password => setForm({ ...form, password})}
+                                value={password}
+                                onChangeText={setPassword}
                             />
+                            <ErrorMessage message={confirmPasswordError} />
                     </View>
 
                     <View style={styles.input}>
@@ -75,13 +173,16 @@ export default function SignupScreen() {
                                 style={styles.inputControls}
                                 placeholder="**********"
                                 placeholderTextColor="#6b7280"
-                                value={form.password2}
-                                onChangeText={password2 => setForm({ ...form, password2})}
+                                value={confirmPassword}
+                                onChangeText={setConfirmPassword}
                             />
+                        <ErrorMessage message={confirmPasswordError} />
+
                     </View>
+                    <ErrorMessage message={errorMessage} />
 
                     <View style={styles.formAction}>
-                        <TouchableOpacity onPress={() => navigation.navigate(Tabs)} >
+                        <TouchableOpacity onPress={handleSubmit} >
                          <View style={styles.loginButton}>
                             <Text style={styles.buttonTxt}>REGISTER NOW</Text>
                          </View>
@@ -91,7 +192,7 @@ export default function SignupScreen() {
                     <View style={styles.inline}>
                         <Text style={styles.signupLabel}>Already have an account?</Text>
                         <Pressable onPress={() => navigation.navigate("Login")} >
-                         <Text style={styles.signupLabel2}>Login</Text>
+                         <Text style={styles.signupLabel2}> Login</Text>
                         </Pressable>
                     </View>
                 </View>
