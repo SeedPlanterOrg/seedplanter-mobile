@@ -1,11 +1,17 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Modal, Button } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, nutrientProgress }) => {
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!modalVisible);
+    };
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={toggleModal}>
                 <View style={styles.cardContent}>
                     {imageSource && <Image source={imageSource} style={styles.cardImage} />}
                     <View style={styles.textContent}>
@@ -44,6 +50,60 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                     </View>
                 </View>
             </TouchableOpacity>
+            {/* Additional information about the plant provided through modal */}
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={toggleModal}>
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Image source={imageSource} style={styles.modalImage} />
+                        <Text style={styles.modalTitleText}>{plantName}</Text>
+                        <Text style={styles.modalSubText}>{scientificName}</Text>
+                        
+                        {/* Small Note: To make the showsText property work, I had to manually adjust the Circle.js file
+                        in the react-native-progress folder in node_modules. There was a bug in the library where this would
+                        only display 0% no matter what you did.
+                        
+                        It solved by changing
+                        {formatText(progressValue)}
+
+                        in  Circle.js (node_modules\react-native-progress\Circle.js) to
+
+                        {progress ? formatText(progress._value) : this.forceUpdate()} 
+                        */}
+                        
+                        <View style={styles.progressContainer}>
+                            <Progress.Circle
+                                size={80}
+                                thickness={8}
+                                progress={waterLevelProgress}
+                                color='#7EC8E3'
+                                borderWidth={0}
+                                unfilledColor='#DFF1F8'
+                                strokeCap='round'
+                                showsText='true'
+                            />
+                            <Progress.Circle
+                                size={80}
+                                thickness={8}
+                                progress={nutrientProgress}
+                                color='#6ABE6B'
+                                borderWidth={0}
+                                unfilledColor='#D7EED8'
+                                strokeCap='round'
+                                showsText='true'
+                            />
+                        </View>
+                        <Text style={styles.progressText}>Water</Text>
+                        <Text style={styles.progressText}>Nutrient</Text>
+
+                        <Button title="Close" onPress={toggleModal} />
+
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 }
@@ -121,7 +181,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     nutrients: {
-        color: 'green',
+        color: '#6ABE6B',
         fontSize: 14,
     },
 
@@ -132,6 +192,50 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         top: 18,
         left: 18,
+    },
+
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        paddingTop: 20,
+        paddingBottom: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        height: 735,
+        width: 375,
+        borderRadius: 20,
+        elevation: 20,
+    },
+    modalImage: {
+        width: 200,
+        height: 200,
+        borderRadius: 10,
+        marginBottom: 10,
+    },
+    modalTitleText: {
+        fontSize: 30,
+        marginBottom: 1,
+        fontWeight: 'bold',
+        color: '#6ABE6B',
+    },
+    modalSubText: {
+        fontSize: 15,
+        marginBottom: 10,
+        fontWeight: 'bold',
+        color: '#888'
+    },
+    progressContainer: {
+        marginBottom: 10,
+        flexDirection: 'row',
+    },
+    progressText: {
+        fontSize: 14,
+        marginTop: 5,
     },
 });
 

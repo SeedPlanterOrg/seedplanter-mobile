@@ -16,40 +16,38 @@ import HomeCard from '../components/HomeCard';
 import PlanterPointContainer from '../components/PlanterPointContainer';
 import AddPlantCard from '../components/AddPlantCard';
 
-// Test Data
-const plantData = [
-  {
-    id: 1,
-    imageSource: require('../assets/marigold.jpg'),
-    plantName: 'Marigold',
-    scientificName: 'Scientific Name',
-    waterLevelProgress: 0.7,
-    nutrientProgress: 0.8,
-  },
-  {
-    id: 2,
-    imageSource: require('../assets/lettuce.jpg'),
-    plantName: 'Lettuce',
-    scientificName: 'Scientific Name',
-    waterLevelProgress: 0.9,
-    nutrientProgress: 0.2,
-  },
-  {
-    id: 3,
-    imageSource: require('../assets/strawberry.jpg'),
-    plantName: 'Strawberry',
-    scientificName: 'Scientific Name',
-    waterLevelProgress: 0.6,
-    nutrientProgress: 0.2,
-  },
-];
-
 export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [wateringNotify, setWateringNotify] = useState(false); // State for watering toggle
   const [nutrientsNotify, setNutrientsNotify] = useState(false); // State for nutrients toggle
-  const [addType, setAddType] = useState('');
-  const [addLocation, setAddLocation] = useState('');
+  const [plantData, setPlantData] = useState([
+    {
+      id: 1,
+      imageSource: require('../assets/marigold.jpg'),
+      plantName: 'Marigold',
+      scientificName: 'Scientific Name',
+      waterLevelProgress: 0.7,
+      nutrientProgress: 0.8,
+    },
+    {
+      id: 2,
+      imageSource: require('../assets/lettuce.jpg'),
+      plantName: 'Lettuce',
+      scientificName: 'Scientific Name',
+      waterLevelProgress: 0.9,
+      nutrientProgress: 0.2,
+    },
+    {
+      id: 3,
+      imageSource: require('../assets/strawberry.jpg'),
+      plantName: 'Strawberry',
+      scientificName: 'Scientific Name',
+      waterLevelProgress: 0.6,
+      nutrientProgress: 0.2,
+    },
+    // This can be replaced with API later
+  ]);
+
 
   const renderItem = ({ item }) => (
     <HomeCard
@@ -70,7 +68,16 @@ export default function HomeScreen() {
   };
 
   const handleAddPlant = () => {
-    // adding logic later
+    // Add new plant data to the state
+    const newPlantData = [...plantData, {
+      id: plantData.length + 1,
+      imageSource: require('../assets/lettuce.jpg'), 
+      plantName: 'New Plant',
+      scientificName: 'Scientific Name', 
+      waterLevelProgress: 0.5, 
+      nutrientProgress: 0.5, 
+    }];
+    setPlantData(newPlantData);
     closeModal();
   };
 
