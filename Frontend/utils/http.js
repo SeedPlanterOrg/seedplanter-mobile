@@ -1,9 +1,10 @@
 // needs to be your ip to run 
+const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
 
 async function getPlantCatalogPage(page) {
     try {
 
-        const response = await fetch(`${EXPO_PUBLIC_DEPLOYMENT}/plantCatalog/?page=${page}`);
+        const response = await fetch(`${DEPLOYMENT}/plantCatalog/?page=${page}`);
         if (!response.ok) {
             throw new Error('Failed to fetch plant catalog');
         }
@@ -12,7 +13,7 @@ async function getPlantCatalogPage(page) {
         let plantsArray = Object.values(plants);
         if (!plantsArray[0].length) {
 
-            const patchResponse = await fetch(`${EXPO_PUBLIC_DEPLOYMENT}/plantCatalog/?page=${page}`, { method: 'PATCH' });
+            const patchResponse = await fetch(`${DEPLOYMENT}/plantCatalog/?page=${page}`, { method: 'PATCH' });
             if (!patchResponse.ok) {
                 throw new Error('Failed to patch plant catalog');
             }
@@ -28,7 +29,7 @@ async function getPlantCatalogPage(page) {
 
 async function findPlantById(id) {
     try{
-        const response = await fetch(`${EXPO_PUBLIC_DEPLOYMENT}/plantCatalog/plant/?id=${id}`, {
+        const response = await fetch(`${DEPLOYMENT}/plantCatalog/plant/?id=${id}`, {
             method:'GET'
         });
 
