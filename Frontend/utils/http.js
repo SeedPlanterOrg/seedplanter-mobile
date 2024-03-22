@@ -1,4 +1,5 @@
 // needs to be your ip to run 
+const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
 
 async function getPlantCatalogPage(page) {
     try {

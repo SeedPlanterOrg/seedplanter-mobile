@@ -3,22 +3,25 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const authenticate = require('../middleware/authenticate')
-const gardenController = require ('../controllers/garden-controller');
+const { getGardenByUserId, createGarden, 
+    addPlant } = require ('../controllers/garden-controller');
 
 // setup .env
 require("dotenv").config();
 
-router.use(authenticate); // makes routes accessible by only the user
+const GardenModel = require("../models/garden-schema");
 
+
+
+
+//router.use(authenticate); // makes routes accessible by only the user
+router.post('/create_garden', createGarden);
+router.put('/add_plant', addPlant);
 router 
     .route("/")
     .get((req, res) => {
         res.status(200).json({mesage :"/garden/get"});
         console.log("succes user");
-    })
-    .post((req, res) => {
-        res.status(200).json({message: "/garden/post"});
-        // console.log("succes plantDeck");
     })
     .put((req, res) => {
         res.status(200).json({mesage: "/garden/put"});
