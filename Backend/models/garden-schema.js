@@ -47,7 +47,11 @@ const gardenPlantSchema = new mongoose.Schema({
   }],
   imagesUrls: [{
     type: String
-  }]
+  }],
+  plantDetails: {
+    type: Object,
+    required: true
+  },
 });
 
 const GardenPlantModel = mongoose.model("GardenPlantModel", gardenPlantSchema);

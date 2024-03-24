@@ -98,18 +98,58 @@ let DUMMY_GARDENS = [
 //   res.json({ garden: garden .map(garden => garden.toObject({ getters: true })) });
 // };
 
-const createGarden = async (req, res, next) => {
+// const getGardenById
+
+const getGardenByUserId = async (req, res, next) => {
+  console.log("Getting garden");
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(
       new AppError('Invalid inputs passed, please check your data.', 422)
     );
   }
+  try {
+    await mongoose.connect(uri, clientOptions);
+    const garden = await GardenModel.find({userId: req.query.userId});
+    
+    if(!garden) {
+      return res.status(404).json({ message: "Garden not found" });
+    } 
+
+    let gardenPlantList = [];
+    const gardenPlantIdList = garden[0].plants; 
+    for(let i = 0; i < gardenPlantIdList.length; i++){
+      const gardenPlant = await GardenPlantModel.findById(gardenPlantIdList[i]).lean(); 
+      if (gardenPlant) {
+        gardenPlantList.push(gardenPlant);
+      }
+    }
+    res.status(200).json({
+      garden: garden,
+      gardenPlants: gardenPlantList});
+  } catch (err) {
+    console.log(`Failed to get_garden ${err}`);
+    return next(new AppError('Fetching garden failed, please try again later', 500));
+  }
+
+}
+
+const createGarden = async (req, res, next) => {
+  
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new AppError('Invalid inputs passed, please check your data.', 422)
+    );
+  }
+
   await mongoose.connect(uri, clientOptions);
   const userId = req.body.id;
   let newGardenId = userId.toString();
   newGardenId += '1';
+
   console.log(userId);
+  
   try {
     const createdGarden = await GardenModel.create({
       userId: userId,
@@ -123,35 +163,40 @@ const createGarden = async (req, res, next) => {
     res.status(201).json({message: "Garden Created"});
   
   } catch (err) {
-    return next(new AppError('Fetching garden failed, please try again later', 500));
+    return next(new AppError('Creating garden failed, please try again later', 500));
   }
 };
 
-const addPlant = (async (req, res, next) => {
-  const userId = req.body.id;
+const addPlant = async (req, res, next) => {
+  console.log(req.body);
+  
+  const userId = req.body.gardenPlant.id;
+  const plantId = req.body.gardenPlant.plantId;
+
+  const catalogPlant = await PlantModel.find({id: plantId});
   try {
       
       const newGardenPlant = await GardenPlantModel.create({
       gardenId: userId,
-      plantId: req.body.plantId, 
-      water: req.body.water,
-      fertilize: req.body.fertilize,
-      prune: req.body.prune,
-      waterLevel: req.body.waterLevel,
-      lastWateringDate: req.body.date,
-      fertilizerLevel: req.body.fertilizerLevel,
-      lastFertilizingDate: req.body.lastFertilizingDate,
-      notes: [req.body.notes],
-      imagesUrls: req.body.imagesUrls,
+      plantId: plantId, 
+      water: req.body.gardenPlant.water,
+      fertilize: req.body.gardenPlant.fertilize,
+      prune: req.body.gardenPlant.prune,
+      waterLevel: req.body.gardenPlant.waterLevel,
+      lastWateringDate: req.body.gardenPlant.date,
+      fertilizerLevel: req.body.gardenPlant.fertilizerLevel,
+      lastFertilizingDate: req.body.gardenPlant.lastFertilizingDate,
+      notes: [req.body.gardenPlant.notes],
+      imagesUrls: req.body.gardenPlant.imagesUrls,
+      plantDetails: catalogPlant[0],
     });
     //newGardenPlant.save();
     console.log(`New Garden Plant Saved: ${newGardenPlant}`);
-    
-    const updateGarden = await GardenModel.findById(req.body._id);
+    const updateGarden = await GardenModel.findById(req.body.gardenPlant._id);
     if (!updateGarden) {
       return res.status(404).json({ message: "Garden not found" });
     }
-    
+
     updateGarden.plants.push(newGardenPlant._id);
     await updateGarden.save();
 
@@ -159,9 +204,10 @@ const addPlant = (async (req, res, next) => {
     res.status(200).json({ message: "Plant added to garden successfully" });
 
   } catch (err) {
-    return next(new AppError('Fetching garden failed, please try again later', 500));
+    console.log(err);
+    return next(new AppError('Add plant failed, please try again later', 500));
   }
-});
+};
 // const deleteGarden = async (req, res, next) => {
 //   const placeId = req.params.pid;
 
