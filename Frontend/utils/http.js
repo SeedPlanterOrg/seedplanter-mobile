@@ -4,7 +4,7 @@ const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
 async function getPlantCatalogPage(page) {
     try {
 
-        const response = await fetch(`${DEPLOYMENT}plantCatalog/?page=${page}`);
+        const response = await fetch(`${DEPLOYMENT}/plantCatalog/?page=${page}`);
         if (!response.ok) {
             throw new Error('Failed to fetch plant catalog');
         }
@@ -13,7 +13,7 @@ async function getPlantCatalogPage(page) {
         let plantsArray = Object.values(plants);
         if (!plantsArray[0].length) {
 
-            const patchResponse = await fetch(`${DEPLOYMENT}plantCatalog/?page=${page}`, { method: 'PATCH' });
+            const patchResponse = await fetch(`${DEPLOYMENT}/plantCatalog/?page=${page}`, { method: 'PATCH' });
             if (!patchResponse.ok) {
                 throw new Error('Failed to patch plant catalog');
             }
@@ -29,7 +29,7 @@ async function getPlantCatalogPage(page) {
 
 async function findPlantById(id) {
     try{
-        const response = await fetch(`${DEPLOYMENT}plantCatalog/plant/?id=${id}`, {
+        const response = await fetch(`${DEPLOYMENT}/plantCatalog/plant/?id=${id}`, {
             method:'GET'
         });
 
@@ -49,7 +49,7 @@ async function findPlantById(id) {
 
 async function getGarden(id) {
     // ${EXPO_PUBLIC_DEPLOYMENT} or http://localhost:3000/
-    const url = new URL(`${DEPLOYMENT}garden/get_garden`);
+    const url = new URL(`${DEPLOYMENT}/garden/get_garden`);
 
     // If you have parameters to send, append them to the URL
     const params = {
@@ -78,7 +78,7 @@ async function getGarden(id) {
 
 async function addPlant(gardenPlant) {
     // ${EXPO_PUBLIC_DEPLOYMENT} or http://localhost:3000/
-    const url = new URL(`${DEPLOYMENT}garden/add_plant`);
+    const url = new URL(`${DEPLOYMENT}/garden/add_plant`);
     console.log(gardenPlant);
     fetch(url, {
         method: 'PUT', // GET method
@@ -104,7 +104,7 @@ async function addPlant(gardenPlant) {
 
 async function createGarden(userId) {
     // ${EXPO_PUBLIC_DEPLOYMENT} or http://localhost:3000/
-    const url = new URL(`${DEPLOYMENT}garden/create_garden`);
+    const url = new URL(`${DEPLOYMENT}/garden/create_garden`);
     console.log(userId);
     fetch(url, {
         method: 'POST', // GET method
