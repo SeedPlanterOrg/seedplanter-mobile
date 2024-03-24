@@ -2,35 +2,48 @@ const { OpenAI } = require('openai');
 const AppError = require('../../middleware/appError');
 require("dotenv").config({ path: '../../.env' })
 
-
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
     // organization: process.env.OPENAI_ORG_KEY,
     assistantId: process.env.OPENAI_ASSISTANT_ID
-    });
+});
 
+const systemMessages = [
+    {"role": "system", "content": "You are a helpful gardening assistant that has extensive knowledge about plants"},
+    {"role": "system", "content": "Specifically, you will give information about watering schedule, amount of sunlight, nutrient schedule, and pruning schedule for a plant if asked for information about a plant"},
+    {"role": "system", "content": "You will also provide information about the plant's common name, scientific name, and a brief description of the plant if asked for information about a plant"},
+    {"role": "system", "content": "Constraints: You will not provide information that is not related to gardening or plants. When asked multiple questions, only answer the last question that was asked, but take into account the context of the last questions"},
+];
+
+const conversations = new Map();
 
 const sendMessage = async (req, res, next) => {
-
+    const userId = req.body.userId;
     const message = req.body.message;
+    const startConversation = req.body.startConversation;
 
-    console.log(message);
-    let completion;
+    messages = conversations.get(userId) || [];
+    if (!startConversation && messages.length === 0) {
+        messages = [...systemMessages];
+    }
+
+    // let messages = !startConversation ? [...systemMessages] : [];
+    messages.push({"role": "user", "content": message });
+
     try {
-        completion = await openai.chat.completions.create({
+        const completion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
-            messages: [
-                {"role": "system", "content": "You are a helpful gardening assistant that has extensive knowledge about plants"},
-                {"role": "system", "content": "Specifically, you will give information about watering schedule, amount of sunlight, nutrient schedule, and pruning schedule for a plant if asked for information about a plant"},
-                {"role": "system", "content": "You will also provide information about the plant's common name, scientific name, and a brief description of the plant if asked for information about a plant"},
-                {"role": "system", "content": "Constraints: You will not provide information that is not related to gardening or plants"},
-                {"role": "user", "content": message },
-            ]
+            messages: messages
         });
-        console.log(completion);
-        res.json({completion: completion, status: 200});
-    } catch (error) {  
-        return next(new AppError("Error in sending message", 500));
+
+        conversations.set(userId, messages);
+
+        // Send the completion back to the client
+        res.json({ completion: completion });
+    } catch (error) {
+        // Handle the error
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while creating the chat completion' });
     }
 }
 
