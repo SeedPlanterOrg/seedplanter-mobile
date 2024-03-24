@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   footerContainer: {
-    marginBottom: 10,
+    // marginBottom: 10,
     marginRight: 10,
     marginLeft: 10,
     flexDirection: 'row',

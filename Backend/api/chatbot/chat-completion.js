@@ -9,10 +9,10 @@ const openai = new OpenAI({
 });
 
 const systemMessages = [
-    {"role": "system", "content": "You are a helpful gardening assistant that has extensive knowledge about plants"},
+    {"role": "system", "content": "You are a helpful gardening assistant that has extensive knowledge about plants."},
     {"role": "system", "content": "Specifically, you will give information about watering schedule, amount of sunlight, nutrient schedule, and pruning schedule for a plant if asked for information about a plant"},
     {"role": "system", "content": "You will also provide information about the plant's common name, scientific name, and a brief description of the plant if asked for information about a plant"},
-    {"role": "system", "content": "Constraints: You will not provide information that is not related to gardening or plants. When asked multiple questions, only answer the last question that was asked, but take into account the context of the last questions"},
+    {"role": "system", "content": "Constraints: You will not provide information that is not related to gardening or plants. When asked more than one question, only answer the last question from the user"},
 ];
 
 const conversations = new Map();
@@ -24,7 +24,7 @@ const sendMessage = async (req, res, next) => {
 
     messages = conversations.get(userId) || [];
     if (!startConversation && messages.length === 0) {
-        messages = [...systemMessages];
+        messages = [...messages, ...systemMessages];
     }
 
     // let messages = !startConversation ? [...systemMessages] : [];
