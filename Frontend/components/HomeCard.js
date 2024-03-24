@@ -75,6 +75,11 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                         */}
                         
                         <View style={styles.progressContainer}>
+                            <View style={styles.progressItem}>
+                                <Text style={[styles.progressText, { color: '#7EC8E3' }]}>Water</Text>
+                                <Text style={[styles.progressSubText, { color: '#7EC8E3' }]}>Level</Text>
+                            </View>
+
                             <Progress.Circle
                                 size={80}
                                 thickness={8}
@@ -83,8 +88,14 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                                 borderWidth={0}
                                 unfilledColor='#DFF1F8'
                                 strokeCap='round'
-                                showsText='true'
+                                showsText={true}
+                                style={{ marginLeft: 20, marginRight: 20 }}
                             />
+                            <View style={styles.progressItem}>
+                                <Text style={[styles.progressText, { color: '#6ABE6B' }]}>Nutrient</Text>
+                                <Text style={[styles.progressSubText, { color: '#6ABE6B' }]}>Level</Text>
+                            </View>
+
                             <Progress.Circle
                                 size={80}
                                 thickness={8}
@@ -93,13 +104,17 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                                 borderWidth={0}
                                 unfilledColor='#D7EED8'
                                 strokeCap='round'
-                                showsText='true'
+                                showsText={true}
+                                style={{ marginLeft: 20, marginRight: 20 }}
                             />
                         </View>
-                        <Text style={styles.progressText}>Water</Text>
-                        <Text style={styles.progressText}>Nutrient</Text>
-
-                        <Button title="Close" onPress={toggleModal} />
+                        
+                        {/* Close Button */}
+                        <View style={styles.closeButtonContainer}>
+                            <TouchableOpacity onPress={toggleModal}>
+                            <Text style={styles.closeButtonText}>Close</Text>
+                            </TouchableOpacity>
+                        </View>
 
                     </View>
                 </View>
@@ -184,7 +199,6 @@ const styles = StyleSheet.create({
         color: '#6ABE6B',
         fontSize: 14,
     },
-
     // Style for the circular progress bars inside of the cards 
     innerCircle: {
         position: 'absolute',
@@ -193,7 +207,6 @@ const styles = StyleSheet.create({
         top: 18,
         left: 18,
     },
-
     modalContainer: {
         flex: 1,
         backgroundColor: 'rgba(0,0,0,0.5)',
@@ -230,13 +243,36 @@ const styles = StyleSheet.create({
         color: '#888'
     },
     progressContainer: {
-        marginBottom: 10,
         flexDirection: 'row',
+        justifyContent: 'center', 
+        alignItems: 'center',
+        marginTop: 10, 
+    },
+    progressItem: {
+        alignItems: 'center',
     },
     progressText: {
         fontSize: 14,
-        marginTop: 5,
+        fontWeight: 'bold',
+        textAlign: 'center', 
+    },    
+    progressSubText: {
+        fontSize: 14,
+        fontWeight: 'bold',
     },
+    closeButtonContainer: {
+        marginTop: 50,
+        backgroundColor: '#6ABE6B', 
+        borderRadius: 20,
+        width: 150, 
+        marginLeft: 190, 
+      },
+      closeButtonText: {
+        fontSize: 18,
+        color: '#FFF',
+        textAlign: 'center',
+        paddingVertical: 10,
+      }, 
 });
 
 export default HomeCard;
