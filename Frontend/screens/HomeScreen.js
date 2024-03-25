@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     width: 150, 
     height: 150, 
     borderRadius: 20,
-    borderWidth: 3, 
+    borderWidth: 2, 
     borderColor: '#6ABE6B', 
     backgroundColor: 'transparent', 
   },
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   addButtonContainer: {
-    marginTop: 50,
+    marginTop: 20,
     backgroundColor: '#6ABE6B', 
     borderRadius: 20,
     width: 150, 

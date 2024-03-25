@@ -1,17 +1,17 @@
 import React from 'react';
+import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
 import { View, Text, Switch, StyleSheet, Image } from 'react-native';
 import Slider from "@react-native-community/slider";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource }) => {
     const [sliderState, setSliderState] = React.useState(0);
+    const [date, setDate] = useState(new Date()); 
 
-    // Currently running into issues with DatePicker
-
-    //const [date, setDate] = useState(false)
-
-    //function handleChange (propDate) {
-    //    setDate(propDate)
-    //}
+    const onChange = (e, selectedDate) => {
+        setDate(selectedDate);
+    }
 
 
     return (
@@ -47,17 +47,15 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource }) => 
 
             {/* Date container, currently not implmented */}
             <View style={styles.dateContainer}>
-              <Text>Last _____ date: </Text>
-              <Text> 2023.02.14 </Text>
+              <Text style={styles.dateText}>Last watering date </Text>
+              <DateTimePicker
+                value={date}
+                mode={"date"}
+                is24Hour={true}
+                onChange={onChange}
+              />
+              <StatusBar style="auto" />
             </View>
-
-            {/*
-            <DatePicker 
-                mode='calendar'
-                selected={date}
-                onDateChange={handleChange}
-            />
-            */}
 
         </View>
     );
@@ -81,8 +79,8 @@ const styles = StyleSheet.create({
   cardText: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
     marginLeft: 5, 
+    marginTop: 5,
   },
   toggleContainer: {
     flexDirection: 'row',
@@ -92,16 +90,17 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 16,
     marginRight: 10,
-    marginBottom: 6,
+    color: '#888',
   },
   image: {
     width: 30, 
     height: 30, 
-    resizeMode: 'contain', 
     marginRight: 5, 
+    marginTop: 1, 
   },
   headerContainer: {
     flexDirection: 'row',
+    marginTop: 5, 
   },
   sliderContainer: {
     position: 'relative',
@@ -123,8 +122,13 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     flexDirection: 'row',
-    marginRight: 100,
     marginTop: 30,
+  },
+  dateText: {
+    fontSize: 16,
+    color: '#888',
+    marginBottom: 10,
+    marginTop: 10,
   },
 });
 
