@@ -245,23 +245,39 @@ export default function HomeScreen() {
                 </TouchableOpacity>
               </View>
 
-
-              {/* AddPlantCard Component for Watering */}
-              <AddPlantCard
-                notifyMe={wateringNotify}
-                toggleNotifyMe={toggleWateringNotify}
-                headerText="Watering"
-                imageSource={require('../assets/rain.png')}
-                lastDateText="watering"
-              />
-
-              {/* AddPlantCard Component for Nutrients */}
-              <AddPlantCard
-                notifyMe={nutrientsNotify}
-                toggleNotifyMe={toggleNutrientsNotify}
-                headerText="Nutrients"
-                imageSource={require('../assets/leaf.png')}
-                lastDateText="feeding"
+              {/* FlatList for both AddPlantCard components */}
+              <FlatList
+                data={[
+                  {
+                    id: 1,
+                    headerText: 'Watering',
+                    imageSource: require('../assets/rain.png'),
+                    lastDateText: 'watering',
+                    notifyMe: wateringNotify,
+                    toggleNotifyMe: toggleWateringNotify,
+                  },
+                  {
+                    id: 2,
+                    headerText: 'Nutrients',
+                    imageSource: require('../assets/leaf.png'),
+                    lastDateText: 'feeding',
+                    notifyMe: nutrientsNotify,
+                    toggleNotifyMe: toggleNutrientsNotify,
+                  },
+                ]}
+                renderItem={({ item }) => (
+                  <View style={styles.addPlantCardContainer}>
+                    <AddPlantCard
+                      headerText={item.headerText}
+                      imageSource={item.imageSource}
+                      lastDateText={item.lastDateText}
+                      notifyMe={item.notifyMe}
+                      toggleNotifyMe={item.toggleNotifyMe}
+                    />
+                  </View>
+                )}
+                keyExtractor={(item) => item.id.toString()}
+                showsVerticalScrollIndicator={false}
               />
 
               {/* Add Plant Button */}
@@ -379,7 +395,7 @@ const styles = StyleSheet.create({
     height: 150, 
     borderRadius: 20,
     borderWidth: 2, 
-    borderColor: '#6ABE6B', 
+    borderColor: '#D7EED8', 
     backgroundColor: 'transparent', 
   },
   plusIconContainer: {
@@ -398,6 +414,7 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     fontSize: 18,
+    fontWeight: 'bold',
     color: '#FFF',
     textAlign: 'center',
     paddingVertical: 10,
@@ -408,8 +425,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    height: 250,
-    width: 375,
+    height: 270,
+    width: 270,
     borderRadius: 20,
     elevation: 20,
     justifyContent: 'center', 
@@ -432,5 +449,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#C9FFC9',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  addPlantCardContainer: {
+    marginHorizontal:6, 
   },
 });
