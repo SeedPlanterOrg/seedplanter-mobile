@@ -21,6 +21,7 @@ export default function HomeScreen() {
   // States
   const [customPlantModalVisible, setCustomPlantModalVisible] = useState(false);
   const [addOptionsModalVisible, setAddOptionsModalVisible] = useState(false);
+  const [progressValue, setProgressValue] = useState(0.57);
   const [wateringNotify, setWateringNotify] = useState(false); 
   const [nutrientsNotify, setNutrientsNotify] = useState(false); 
   const [image, setImage] = useState('');
@@ -143,7 +144,7 @@ export default function HomeScreen() {
           <View style={styles.gardenHealthMeter}>
             <Text style={styles.healthMeterText}>Garden Health</Text>
             <Progress.Bar
-              progress={0.6}
+              progress={progressValue}
               width={200}
               height={39}
               borderRadius={20}
@@ -151,6 +152,7 @@ export default function HomeScreen() {
               unfilledColor="#D7EED8"
               borderWidth={0}
             />
+            <Text style={styles.progressValueText}>{`${Math.round(progressValue * 100)}%`}</Text>
           </View>
 
           {/* Planter Points */}
@@ -298,6 +300,15 @@ const styles = StyleSheet.create({
     color: '#6ABE6B',
     marginBottom: 10,
   },
+  progressValueText: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -80 }, { translateY: 7 }], // Adjust this translate value as needed
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },  
   myPlants: {
     fontSize: 23,
     fontWeight: 'bold',

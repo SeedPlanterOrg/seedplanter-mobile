@@ -25,7 +25,7 @@ const CustomTabBarButton = ({children, onPress}) => (
             borderRadius: 50,
             backgroundColor: '#68b454',
             shadowColor: '#333',
-            shadowOpacity: 0.3,
+            shadowOpacity: 0.4,
             shadowOffset: { width: 1, height: 1 },
 
         }}>
@@ -48,7 +48,10 @@ const Tabs = () => {
                     elevation: 0,
                     right: 10,
                     left: 10,
-                    paddingBottom: 0
+                    paddingBottom: 0,
+                    shadowColor: '#333',
+                    shadowOpacity: 0.4,
+                    shadowOffset: { width: 1, height: 1 },
                 }
             }}>
             <Tab.Screen name="My Garden" component={HomeScreen} options={{
