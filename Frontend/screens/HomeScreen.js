@@ -347,13 +347,14 @@ const styles = StyleSheet.create({
   plusButtonContainer: {
     marginLeft: 5,
     marginTop: 30,
-    backgroundColor: '#C9FFC9',
+    backgroundColor: '#6ABE6B',
     borderRadius: 20,
   },
   plusButton: {
     width: 40,
     height: 40,
     resizeMode: 'contain',
+    tintColor: '#fff',
   },
   ModalView: {
     flex: 1,
@@ -387,15 +388,15 @@ const styles = StyleSheet.create({
     width: 150, 
     height: 150, 
     borderRadius: 20,
-    borderWidth: 2, 
-    borderColor: '#D7EED8', 
+    borderWidth: 1.5, 
+    borderColor: '#6ABE6B', 
     backgroundColor: 'transparent', 
   },
   plusIconContainer: {
     position: 'absolute',
     bottom: -10,
     right: 80,
-    backgroundColor: '#C9FFC9',
+    backgroundColor: '#6ABE6B',
     borderRadius: 20,
   },
   addButtonContainer: {
