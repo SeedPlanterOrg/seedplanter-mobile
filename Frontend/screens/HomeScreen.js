@@ -250,6 +250,7 @@ export default function HomeScreen() {
                 toggleNotifyMe={toggleWateringNotify}
                 headerText="Watering"
                 imageSource={require('../assets/rain.png')}
+                lastDateText="watering"
               />
 
               {/* AddPlantCard Component for Nutrients */}
@@ -258,6 +259,7 @@ export default function HomeScreen() {
                 toggleNotifyMe={toggleNutrientsNotify}
                 headerText="Nutrients"
                 imageSource={require('../assets/leaf.png')}
+                lastDateText="feeding"
               />
 
               {/* Add Plant Button */}
