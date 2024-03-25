@@ -192,6 +192,11 @@ export default function HomeScreen() {
           <View style={styles.ModalView}>
             <View style={styles.selectModalContainer}>
 
+              {/* Backbutton */}
+              <View style={styles.Backbutton}>
+                <Button title="Close" color="#000000" alignItems="left" onPress={closeAddOptionsModal}></Button>
+              </View>
+
               <View style={styles.selectModalButton}>
               <TouchableOpacity onPress={() => handleAddOptionSelection('Custom')}>
                     <Text style={styles.addButtonText}>Add Custom Plant</Text>
@@ -204,9 +209,6 @@ export default function HomeScreen() {
                   </TouchableOpacity>
               </View>
 
-              <TouchableOpacity style={styles.selectModalBackButton} onPress={closeAddOptionsModal}>
-                <Image style={styles.rightImageSize} source={require('../assets/xout.png')} />
-              </TouchableOpacity>
 
             </View>
           </View>
@@ -215,78 +217,76 @@ export default function HomeScreen() {
 
         {/* CustomPlantModal */}
         <Modal
-          animationType="fade"
-          transparent={true}
+          animationType="slide"
+          presentationStyle='pageSheet'
           visible={customPlantModalVisible}
           onRequestClose={closeCustomPlantModal}>
-          <View style={styles.ModalView}>
-            <View style={styles.customPlantModalContainer}>
-              <TouchableOpacity style={styles.Backbutton} onPress={closeCustomPlantModal}>
-                <Image style={styles.rightImageSize} source={require('../assets/xout.png')} />
+          <View style={styles.customPlantModalContainer}>
+            {/* Backbutton */}
+            <View style={styles.Backbutton}>
+              <Button title="Close" color="#000000" alignItems="left" onPress={closeCustomPlantModal}></Button>
+            </View>
+
+            {/* Image Selector */}
+            <View style={styles.imageContainer}>
+              {image ? (
+                <Image source={{ uri: image }} style={styles.modalImage} /> // Image selected, set to user image
+              ) : (
+                <Image 
+                  source={require('../assets/lightgray.svg')} // Else set the image to the default
+                  style={styles.modalImage} 
+                />
+              )}
+
+              {/* Plus Button */}
+              <TouchableOpacity style={styles.plusIconContainer} onPress={handleImagePickerPress}>
+                <Image
+                  source={require('../assets/plus_icon.png')}
+                  style={styles.plusButton}
+                />
               </TouchableOpacity>
+            </View>
 
-              {/* Image Selector */}
-              <View style={styles.imageContainer}>
-                {image ? (
-                  <Image source={{ uri: image }} style={styles.modalImage} /> // Image selected, set to user image
-                ) : (
-                  <Image 
-                    source={require('../assets/lightgray.svg')} // Else set the image to the default
-                    style={styles.modalImage} 
+            {/* FlatList for both AddPlantCard components */}
+            <FlatList
+              data={[
+                {
+                  id: 1,
+                  headerText: 'Watering',
+                  imageSource: require('../assets/rain.png'),
+                  lastDateText: 'watering',
+                  notifyMe: wateringNotify,
+                  toggleNotifyMe: toggleWateringNotify,
+                },
+                {
+                  id: 2,
+                  headerText: 'Nutrients',
+                  imageSource: require('../assets/leaf.png'),
+                  lastDateText: 'feeding',
+                  notifyMe: nutrientsNotify,
+                  toggleNotifyMe: toggleNutrientsNotify,
+                },
+              ]}
+              renderItem={({ item }) => (
+                <View style={styles.addPlantCardContainer}>
+                  <AddPlantCard
+                    headerText={item.headerText}
+                    imageSource={item.imageSource}
+                    lastDateText={item.lastDateText}
+                    notifyMe={item.notifyMe}
+                    toggleNotifyMe={item.toggleNotifyMe}
                   />
-                )}
+                </View>
+              )}
+              keyExtractor={(item) => item.id.toString()}
+              showsVerticalScrollIndicator={false}
+            />
 
-                {/* Plus Button */}
-                <TouchableOpacity style={styles.plusIconContainer} onPress={handleImagePickerPress}>
-                  <Image
-                    source={require('../assets/plus_icon.png')}
-                    style={styles.plusButton}
-                  />
-                </TouchableOpacity>
-              </View>
-
-              {/* FlatList for both AddPlantCard components */}
-              <FlatList
-                data={[
-                  {
-                    id: 1,
-                    headerText: 'Watering',
-                    imageSource: require('../assets/rain.png'),
-                    lastDateText: 'watering',
-                    notifyMe: wateringNotify,
-                    toggleNotifyMe: toggleWateringNotify,
-                  },
-                  {
-                    id: 2,
-                    headerText: 'Nutrients',
-                    imageSource: require('../assets/leaf.png'),
-                    lastDateText: 'feeding',
-                    notifyMe: nutrientsNotify,
-                    toggleNotifyMe: toggleNutrientsNotify,
-                  },
-                ]}
-                renderItem={({ item }) => (
-                  <View style={styles.addPlantCardContainer}>
-                    <AddPlantCard
-                      headerText={item.headerText}
-                      imageSource={item.imageSource}
-                      lastDateText={item.lastDateText}
-                      notifyMe={item.notifyMe}
-                      toggleNotifyMe={item.toggleNotifyMe}
-                    />
-                  </View>
-                )}
-                keyExtractor={(item) => item.id.toString()}
-                showsVerticalScrollIndicator={false}
-              />
-
-              {/* Add Plant Button */}
-              <View style={styles.addButtonContainer}>
-                <TouchableOpacity onPress={handleAddPlant}>
-                  <Text style={styles.addButtonText}>Add Plant</Text>
-                </TouchableOpacity>
-              </View>
-
+            {/* Add Plant Button */}
+            <View style={styles.addButtonContainer}>
+              <TouchableOpacity onPress={handleAddPlant}>
+                <Text style={styles.addButtonText}>Add Plant</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -357,29 +357,22 @@ const styles = StyleSheet.create({
   },
   ModalView: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   customPlantModalContainer: {
     backgroundColor: '#fff',
     paddingTop: 20,
-    paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    height: 735,
-    width: 375,
+    height: 760,
     borderRadius: 20,
     elevation: 20,
   }, 
   Backbutton: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    backgroundColor: '#C9FFC9',
+    alignItems: 'left',
     marginBottom: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   rightImageSize: {
     width: 10,
@@ -429,12 +422,12 @@ const styles = StyleSheet.create({
     width: 270,
     borderRadius: 20,
     elevation: 20,
-    justifyContent: 'center', 
-    alignItems: 'center', 
   },
   selectModalButton: {
     marginTop: 15, 
     marginBottom: 15, 
+    marginLeft: 15, 
+    marginRight: 15, 
     backgroundColor: '#6ABE6B',
     borderRadius: 20,
     width: 200,

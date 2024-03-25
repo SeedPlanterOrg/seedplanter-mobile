@@ -52,76 +52,73 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
             </TouchableOpacity>
             {/* Additional information about the plant provided through modal */}
             <Modal
-                animationType="fade"
-                transparent={true}
+                animationType="slide"
+                presentationStyle='pageSheet'
+                transparent={false}
                 visible={modalVisible}
                 onRequestClose={toggleModal}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Image source={imageSource} style={styles.modalImage} />
-                        <Text style={styles.modalTitleText}>{plantName}</Text>
-                        <Text style={styles.modalSubText}>{scientificName}</Text>
-                        
-                        {/* Small Note: To make the showsText property work, I had to manually adjust the Circle.js file
-                        in the react-native-progress folder in node_modules. There was a bug in the library where this would
-                        only display 0% no matter what you did.
-                        
-                        It solved by changing
-                        {formatText(progressValue)}
-
-                        in  Circle.js (node_modules\react-native-progress\Circle.js) to
-
-                        {progress ? formatText(progress._value) : this.forceUpdate()} 
-                        */}
-                        
-                        <View style={styles.progressContainer}>
-                            <View style={styles.progressItem}>
-                                <Text style={[styles.progressText, { color: '#7EC8E3' }]}>Water</Text>
-                                <Text style={[styles.progressSubText, { color: '#7EC8E3' }]}>Level</Text>
-                            </View>
-
-                            <Progress.Circle
-                                size={80}
-                                thickness={8}
-                                progress={waterLevelProgress}
-                                color='#7EC8E3'
-                                borderWidth={0}
-                                unfilledColor='#DFF1F8'
-                                strokeCap='round'
-                                showsText={true}
-                                style={{ marginLeft: 20, marginRight: 20 }}
-                            />
-                            <View style={styles.progressItem}>
-                                <Text style={[styles.progressText, { color: '#6ABE6B' }]}>Nutrient</Text>
-                                <Text style={[styles.progressSubText, { color: '#6ABE6B' }]}>Level</Text>
-                            </View>
-
-                            <Progress.Circle
-                                size={80}
-                                thickness={8}
-                                progress={nutrientProgress}
-                                color='#6ABE6B'
-                                borderWidth={0}
-                                unfilledColor='#D7EED8'
-                                strokeCap='round'
-                                showsText={true}
-                                style={{ marginLeft: 20, marginRight: 20 }}
-                            />
-                        </View>
-                        
-                        {/* Close Button */}
-                        <View style={styles.closeButtonContainer}>
-                            <TouchableOpacity onPress={toggleModal}>
-                            <Text style={styles.closeButtonText}>Close</Text>
-                            </TouchableOpacity>
-                        </View>
-                        
-                        {/* Delete Button */}
-                        <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
-                            <Image source={require('../assets/trashbin.png')} style={styles.deleteIcon} />
-                        </TouchableOpacity>
-                        
+                <View style={styles.modalContent}>
+                    {/* Backbutton */}
+                    <View style={styles.Backbutton}>
+                        <Button title="Close" color="#000000" alignItems="left" onPress={() => setModalVisible(false)}></Button>
                     </View>
+
+                    <Image source={imageSource} style={styles.modalImage} />
+                    <Text style={styles.modalTitleText}>{plantName}</Text>
+                    <Text style={styles.modalSubText}>{scientificName}</Text>
+                    
+                    {/* Small Note: To make the showsText property work, I had to manually adjust the Circle.js file
+                    in the react-native-progress folder in node_modules. There was a bug in the library where this would
+                    only display 0% no matter what you did.
+                    
+                    It solved by changing
+                    {formatText(progressValue)}
+
+                    in  Circle.js (node_modules\react-native-progress\Circle.js) to
+
+                    {progress ? formatText(progress._value) : this.forceUpdate()} 
+                    */}
+                    
+                    <View style={styles.progressContainer}>
+                        <View style={styles.progressItem}>
+                            <Text style={[styles.progressText, { color: '#7EC8E3' }]}>Water</Text>
+                            <Text style={[styles.progressSubText, { color: '#7EC8E3' }]}>Level</Text>
+                        </View>
+
+                        <Progress.Circle
+                            size={80}
+                            thickness={8}
+                            progress={waterLevelProgress}
+                            color='#7EC8E3'
+                            borderWidth={0}
+                            unfilledColor='#DFF1F8'
+                            strokeCap='round'
+                            showsText={true}
+                            style={{ marginLeft: 20, marginRight: 20 }}
+                        />
+                        <View style={styles.progressItem}>
+                            <Text style={[styles.progressText, { color: '#6ABE6B' }]}>Nutrient</Text>
+                            <Text style={[styles.progressSubText, { color: '#6ABE6B' }]}>Level</Text>
+                        </View>
+
+                        <Progress.Circle
+                            size={80}
+                            thickness={8}
+                            progress={nutrientProgress}
+                            color='#6ABE6B'
+                            borderWidth={0}
+                            unfilledColor='#D7EED8'
+                            strokeCap='round'
+                            showsText={true}
+                            style={{ marginLeft: 20, marginRight: 20 }}
+                        />
+                    </View>
+                    
+                    {/* Delete Button */}
+                    <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
+                        <Image source={require('../assets/trashbin.png')} style={styles.deleteIcon} />
+                    </TouchableOpacity>
+                    
                 </View>
             </Modal>
         </View>
@@ -212,20 +209,12 @@ const styles = StyleSheet.create({
         top: 18,
         left: 18,
     },
-    modalContainer: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     modalContent: {
         backgroundColor: '#fff',
         paddingTop: 20,
         paddingBottom: 20,
         paddingLeft: 20,
         paddingRight: 20,
-        height: 735,
-        width: 375,
         borderRadius: 20,
         elevation: 20,
     },
@@ -267,29 +256,20 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
     },
-    closeButtonContainer: {
-        marginTop: 50,
-        backgroundColor: '#6ABE6B', 
-        borderRadius: 20,
-        width: 150, 
-        marginLeft: 190, 
+    Backbutton: {
+        alignItems: 'left',
+        marginBottom: 10,
       },
-      closeButtonText: {
-        fontSize: 18,
-        color: '#FFF',
-        textAlign: 'center',
-        paddingVertical: 10,
-      }, 
-      deleteButton: {
+    deleteButton: {
         position: 'absolute',
         top: 10,
         right: 10,
-      },
-      deleteIcon: {
+    },
+    deleteIcon: {
         width: 30,
         height: 30,
         resizeMode: 'contain',
-      },
+    },
 });
 
 export default HomeCard;

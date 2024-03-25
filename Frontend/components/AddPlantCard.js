@@ -87,12 +87,11 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource, lastD
 
 const styles = StyleSheet.create({
     cardContainer: {
-        borderRadius: 10,
+        borderRadius: 20,
         elevation: 3,
         backgroundColor: '#fff',
         padding: 20,
         marginTop: 5,
-        marginHorizontal: -5,
         marginBottom: 5,
         alignItems: 'center',
         paddingBottom: 30, 
