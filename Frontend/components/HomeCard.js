@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Modal, Button } from 'react-native';
 import * as Progress from 'react-native-progress';
 
-const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, nutrientProgress }) => {
+const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, nutrientProgress, onDelete }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => {
@@ -115,7 +115,12 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                             <Text style={styles.closeButtonText}>Close</Text>
                             </TouchableOpacity>
                         </View>
-
+                        
+                        {/* Delete Button */}
+                        <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
+                            <Image source={require('../assets/trashbin.png')} style={styles.deleteIcon} />
+                        </TouchableOpacity>
+                        
                     </View>
                 </View>
             </Modal>
@@ -228,8 +233,10 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         borderRadius: 10,
-        marginBottom: 10,
-    },
+        marginBottom: 30,
+        marginTop: 30,
+        alignSelf: 'center', 
+    },    
     modalTitleText: {
         fontSize: 30,
         marginBottom: 1,
@@ -273,6 +280,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingVertical: 10,
       }, 
+      deleteButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+      },
+      deleteIcon: {
+        width: 30,
+        height: 30,
+        resizeMode: 'contain',
+      },
 });
 
 export default HomeCard;

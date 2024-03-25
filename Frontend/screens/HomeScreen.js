@@ -93,6 +93,7 @@ export default function HomeScreen() {
       scientificName={item.scientificName}
       waterLevelProgress={item.waterLevelProgress}
       nutrientProgress={item.nutrientProgress}
+      onDelete={() => deletePlant(item.id)} 
     />
   );
   
@@ -118,7 +119,14 @@ export default function HomeScreen() {
     setPlantData(newPlantData);
     closeCustomPlantModal();
   };
-  
+
+  // Function to delete a plant card 
+  const deletePlant = (id) => {
+    console.log("Deleting plant with ID:", id); // Log a message
+    const updatedPlantData = plantData.filter(item => item.id !== id);
+    setPlantData(updatedPlantData);
+  };
+
   // Toggle Functions
   const toggleWateringNotify = () => {
     setWateringNotify((prevState) => !prevState);
