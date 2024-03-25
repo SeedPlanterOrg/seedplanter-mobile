@@ -42,6 +42,8 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource, lastD
                     step={1}
                 />
                 <Text style={styles.sliderValue}>{sliderState}</Text>
+                <Text style={styles.sliderText}>times</Text>
+                <Text style={styles.sliderDropDownText}>weekly</Text>
             </View>
 
             {/* Date container, currently not implemented */}
@@ -105,29 +107,42 @@ const styles = StyleSheet.create({
         position: 'relative',
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight: 160,
-        marginTop: 10,
+        marginTop: 30,
+        marginRight: 45,
     },
     slider: {
-        width: 150,
+        width: 130,
         height: 40,
+        marginLeft: 10, 
+        marginRight: 10, 
     },
     sliderValue: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        marginLeft: 160,
         position: 'absolute',
-        left: 0,
+        top: 5,
+        right: 106,
+        fontSize: 23,
+        fontWeight: 'bold',
+    },
+    sliderText: {
+        fontSize: 15,
+        marginLeft: 30, 
+        marginRight: 10, 
+    },
+    sliderDropDownText: {
+        fontSize: 15,
     },
     dateContainer: {
         flexDirection: 'row',
         marginTop: 30,
+        marginRight: 5,
+        marginLeft: 180,
     },
     dateText: {
+        position: 'absolute',
         fontSize: 16,
         color: '#888',
-        marginBottom: 10,
-        marginTop: 10,
+        right: 175, 
+        top: 10, 
     },
 });
 

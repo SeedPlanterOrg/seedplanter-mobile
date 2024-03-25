@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: [{ translateX: -80 }, { translateY: 7 }], // Adjust this translate value as needed
+    transform: [{ translateX: -80 }, { translateY: 7 }], 
     fontSize: 16,
     fontWeight: 'bold',
     color: '#FFF',
