@@ -1,6 +1,6 @@
 // needs to be your ip to run 
-const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
-
+const DEPLOYMENT = process.env.EXPO_PUBLIC_IP;
+const PORT = process.env.EXPO_PUBLIC_PORT;
 async function getPlantCatalogPage(page) {
     try {
 
@@ -56,23 +56,22 @@ async function getGarden(id) {
         userId: id, // Example parameter
     };
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+        });
 
-    fetch(url, {
-        method: 'GET', // GET method
-    })
-    .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json(); // Assuming the response is JSON
-    })
-    .then(responseData => {
-        // Process the response data
-        console.log(responseData);
-    })
-    .catch(error => {
+
+        const responseData = await response.json();
+        return responseData; // Return the fetched data
+
+    } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
-    });
+        throw error; // Rethrow the error for the caller to handle
+    }
 
 }
 
@@ -146,17 +145,17 @@ async function createGarden(userId) {
 //     }
 //     run();
 
-// async function run() {
-//     try {
-//         let id = "65efc324a82682e507e38ebc";
-//         const plantsArray = await getGarden(id);
-//         console.log(plantsArray);
-//         // You can use plantsArray here
-//     } catch (error) {
-//         console.error("Error: ", error);
-//     }
-// }
-// run();
+async function run() {
+    try {
+        let id = "65efc324a82682e507e38ebc";
+        const plantsArray = await getGarden(id);
+        console.log(plantsArray);
+        // You can use plantsArray here
+    } catch (error) {
+        console.error("Error: ", error);
+    }
+}
+run();
 // async function run() {
 //         try {
 //             let object = {
@@ -208,6 +207,7 @@ module.exports = {
     getPlantCatalogPage,
     findPlantById, 
     getGarden,
-    addPlant
+    addPlant,
+    createGarden
 };
 

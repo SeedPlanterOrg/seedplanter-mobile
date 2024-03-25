@@ -25,7 +25,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(`${IP}:${PORT}/user/login`, {
+      const response = await fetch(`${IP}/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,6 @@ export default function LoginScreen() {
           password: password,
         }),
       });
-
       // const num = await AsyncStorage.getItem('userId');  
       if (!response.ok) {
         setErrorMessage('Invalid credentials, could not log in');

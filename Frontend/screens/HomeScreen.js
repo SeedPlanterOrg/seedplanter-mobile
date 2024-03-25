@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -15,43 +15,112 @@ import * as Progress from 'react-native-progress';
 import HomeCard from '../components/HomeCard';
 import PlanterPointContainer from '../components/PlanterPointContainer';
 import AddPlantCard from '../components/AddPlantCard';
+import {
+  getPlantCatalogPage,
+  findPlantById, 
+  getGarden,
+  addPlant,
+  createGarden
+} from '../utils/http'
 
 export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [wateringNotify, setWateringNotify] = useState(false); // State for watering toggle
   const [nutrientsNotify, setNutrientsNotify] = useState(false); // State for nutrients toggle
-  const [plantData, setPlantData] = useState([
-    {
-      id: 1,
-      imageSource: require('../assets/marigold.jpg'),
-      plantName: 'Marigold',
-      scientificName: 'Scientific Name',
-      waterLevelProgress: 0.7,
-      nutrientProgress: 0.8,
-    },
-    {
-      id: 2,
-      imageSource: require('../assets/lettuce.jpg'),
-      plantName: 'Lettuce',
-      scientificName: 'Scientific Name',
-      waterLevelProgress: 0.9,
-      nutrientProgress: 0.2,
-    },
-    {
-      id: 3,
-      imageSource: require('../assets/strawberry.jpg'),
-      plantName: 'Strawberry',
-      scientificName: 'Scientific Name',
-      waterLevelProgress: 0.6,
-      nutrientProgress: 0.2,
-    },
-    // This can be replaced with API later
-  ]);
+  // const [plantData, setPlantData] = useState([
+  //   {
+  //     id: 1,
+  //     imageSource: require('../assets/marigold.jpg'),
+  //     plantName: 'Marigold',
+  //     scientificName: 'Scientific Name',
+  //     waterLevelProgress: 0.7,
+  //     nutrientProgress: 0.8,
+  //   },
+  //   {
+  //     id: 2,
+  //     imageSource: require('../assets/lettuce.jpg'),
+  //     plantName: 'Lettuce',
+  //     scientificName: 'Scientific Name',
+  //     waterLevelProgress: 0.9,
+  //     nutrientProgress: 0.2,
+  //   },
+  //   {
+  //     id: 3,
+  //     imageSource: require('../assets/strawberry.jpg'),
+  //     plantName: 'Strawberry',
+  //     scientificName: 'Scientific Name',
+  //     waterLevelProgress: 0.6,
+  //     nutrientProgress: 0.2,
+  //   },
+  //   //This can be replaced with API later
+  // ]);
+  
+  const [plantData, setPlantData] = useState([]);
+
+  useEffect(() => {
+    async function fetchPlants() {
+        try {
+            const data = await getGarden('65efc324a82682e507e38ebc');
+            // console.log('DEBUGCODE_HOME_SCREEN: ' + data);
+            let displayData = [];
+            // console.log('DEBUGCODE_HOME_SCREEN: ---------------------------------------------------------------------');
+            // console.log('DEBUGCODE_HOME_SCREEN: ' + JSON.stringify(data.gardenPlants));
+            // console.log('DEBUGCODE_HOME_SCREEN: ---------------------------------------------------------------------');
+            let plants = data.gardenPlants;
+            let image;
+            data.gardenPlants.forEach(plant => {
+              console.log("Plant ID:", plant._id);
+              console.log("Garden ID:", plant.gardenId);
+              //console.log("Plant Details:", plant.plantDetails);
+          
+              // If plantDetails is an array, iterate over it as well
+              if(Array.isArray(plant.plantDetails)){
+                  plant.plantDetails.forEach(detail => {
+                      console.log("Detail ID:", detail._id);
+                      console.log("Detail Name:", detail.name);
+                      console.log("Detail Name:", detail.binomial_name);
+                      console.log("Detail Name:", detail.image_urls[0]);
+                      // Access other properties as needed
+                  });
+              }
+              if (plant.plantDetails && plant.plantDetails.image_urls != null) {
+                image = plant.plantDetails.image_urls[0];
+            }
+            newPlant = {
+                id: plant.plantId.toString(), // CHANGE WHEN DATABASE IS FIXED
+                // id: `default-${Math.random()}`,
+                imageSource: image,
+                plantName: plant.plantDetails.name,
+                scientificName: plant.plantDetails.binomial_name,
+                waterLevelProgress: 0.6,
+                nutrientProgress: 0.2,
+                  //     id: 3,
+  //     imageSource: require('../assets/strawberry.jpg'),
+  //     plantName: 'Strawberry',
+  //     scientificName: 'Scientific Name',
+  //     waterLevelProgress: 0.6,
+  //     nutrientProgress: 0.2,
+            }
+            displayData.push(newPlant);
+              console.log(displayData);
+          });
+            
+              
+            // console.log(displayData);
+            setPlantData(displayData);
+        } catch (error) {
+            console.error('Error fetching plants:', error);
+            // Optionally, handle errors in the UI (like showing an error message)
+        }
+    }
+
+    fetchPlants();
+  }, []);
 
 
   const renderItem = ({ item }) => (
     <HomeCard
-      imageSource={item.imageSource}
+      imageSource={{ uri: item.imageSource }} 
       plantName={item.plantName}
       scientificName={item.scientificName}
       waterLevelProgress={item.waterLevelProgress}
