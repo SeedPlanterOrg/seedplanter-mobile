@@ -1,30 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Animated, AppRegistry, FlatList, TextInput, Modal, ImageBackground } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Animated, AppRegistry, FlatList, TextInput, Modal, ImageBackground, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Progress from 'react-native-progress';
-import  { getPlantCatalogPage, findPlantById} from '../utils/http';
-
-{/* Test Data Replace With data from Database*/ }
-const DATA = [
-  {
-    image_urls: require('../assets/marigold.jpg'),
-    name: "Marigold",
-    binomial_name: "Tagetes",
-    description: "This plant is know for licking balls",
-  },
-  {
-    image_urls: require('../assets/lettuce.jpg'),
-    name: "Lettuce",
-    binomial_name: "Lactuca sativa",
-    description: "This plant is know for being smelly",
-  },
-  {
-    image_urls: require('../assets/strawberry.jpg'),
-    name: "Strawberries",
-    binomial_name: "Fragaria x ananassa",
-    description: "This plant is know for poop",
-  },
-];
+import { MaterialCommunityIcons, FontAwesome6, Feather } from '@expo/vector-icons';
+import { getPlantCatalogPage, findPlantById } from '../utils/http';
 
 export default function CatalogScreen() {
   const [userInput, setUserInput] = useState("");
@@ -33,6 +12,16 @@ export default function CatalogScreen() {
   const [modalImage, setModalImage] =  useState('');
   const [modalSciName, setModalSciName] =  useState('');
   const [modalDescription, setModalDescription] =  useState('');
+  const [modalCare, setModalCare] =  useState('');
+  const [modalWater, setModalWater] =  useState('');
+  const [modalWaterDes, setModalWaterDes] =  useState('');
+  const [modalSun, setModalSun] =  useState('');
+  const [modalSunDes, setModalSunDes] =  useState('');
+  const [modalPrunDes, setModalPrunDes] =  useState('');
+  const [modalZone, setModalZone] =  useState('');
+  const [modalImgHardi, setModalImgHardi] =  useState('');
+  const [modalID, setModalID] =  useState('');
+
   const [plantsData, setPlantsData] = useState([]);
 
   useEffect(() => {
@@ -42,7 +31,10 @@ export default function CatalogScreen() {
             console.log('DEBUGCODE: ' + plantsArray[1].id);
             console.log('DEBUGCODE: ' + plantsArray[1].name);
             console.log('DEBUGCODE: ' + plantsArray[1].binomial_name);
+            console.log('DEBUGCODE: ' + plantsArray[1].zone.hardy);
+            console.log('DEBUGCODE: ' + plantsArray[1].light[0]);
             console.log('DEBUGCODE: ' + plantsArray[1].image_urls[0]);
+            console.log('DEBUGCODE: ' + plantsArray[1].hardiness_url);
             
             setPlantsData(plantsArray);
         } catch (error) {
@@ -55,11 +47,27 @@ export default function CatalogScreen() {
   }, []);
 
 
-  const PlantTile = ({ imageSource, plantName, scientificName, description }) => {
+  const PlantTile = ({ imageSource, plantName, scientificName, description, care, water, WaterDes, Sun, SunDes, PrunDes, Zone, ImgHardi, ID }) => {
     return (
         <View style={styles.container}>
+          
             <TouchableOpacity style={styles.card} 
-              onPress={() => {setModalVisible(true), setModalName(plantName), setModalImage(imageSource), setModalSciName(scientificName), setModalDescription(description)}}
+              onPress={() => {
+                setModalVisible(true), 
+                setModalName(plantName), 
+                setModalImage(imageSource), 
+                setModalSciName(scientificName), 
+                setModalDescription(description),
+                setModalCare(care),
+                setModalWater(water),
+                setModalWaterDes(WaterDes),
+                setModalSun(Sun),
+                setModalSunDes(SunDes),
+                setModalPrunDes(PrunDes),
+                setModalZone(Zone),
+                setModalImgHardi(ImgHardi),
+                setModalID(ID)
+              }}
             >
                 <View style={styles.cardContent}>
                     {imageSource && <Image source={imageSource} style={styles.cardImage} />}
@@ -82,6 +90,15 @@ export default function CatalogScreen() {
             plantName={item.name}
             scientificName={item.binomial_name}
             description={item.description}
+            care={item.care_level}
+            water={item.daily_watering}
+            WaterDes={item.watering_description}
+            Sun={item.light[0]}
+            SunDes={item.sunlight_description}
+            PrunDes={item.pruning_description}
+            Zone={item.zone.hardy}
+            ImgHardi={item.hardiness_url}
+            ID={item.id}
           />
 
         <Modal
@@ -91,53 +108,96 @@ export default function CatalogScreen() {
         >
           <View style={styles.ModalView}>
             <View style={styles.ModalContainer}>
-
-              <TouchableOpacity style={styles.Backbutton} onPress={() => setModalVisible(false)}>
-                <Image style={styles.rightImageSize} source={require('../assets/xout.png')}/>
-              </TouchableOpacity>
-
+              <View style={styles.Backbutton}>
+                <Button title="Close" color="#000000" alignItems="left" onPress={() => setModalVisible(false)}></Button>
+              </View>
               <ScrollView>
                 <View style={styles.centerItems}>
                   <Image source={modalImage} style={styles.modalImageSizing}/>
                 </View>
-
                 <View style={styles.RightText}>
                   <Text style={styles.RightText}>{modalName}</Text>
                 </View>
-
                 <View style={styles.sciNameText}>
                   <Text style={styles.sciNameText}>{modalSciName}</Text>
                 </View>
-
-                <View style={styles.DescriptionText}>
-                  <Text style={styles.DescriptionText}>Description</Text>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={styles.cardGrey}>
+                    <Text style={styles.DescriptionText}>Description</Text>
+                    <Text style={styles.descriptionOfPlant2}>{modalDescription}</Text>
+                  </View>
+                </View>
+                <View style={{ justifyContent: 'center', flexDirection: 'row', }} >
+                  <View style={styles.card3}>
+                    <Text style={styles.cardText2}>{modalCare}</Text>
+                    <FontAwesome6 name="plant-wilt" size={30} color="#6ABE6B" />
+                    <Text style={styles.cardText3}>Care Level</Text>
+                 </View>
+                  <View style={styles.card7}>
+                    <Text style={styles.cardText2}>{modalWater}</Text>
+                    <MaterialCommunityIcons name="water" size={30} color="#7EC8E3" />
+                    <Text style={styles.cardText3}>Daily Watering</Text>
+                  </View>
+                </View>
+                <View style={{ justifyContent: 'center', flexDirection: 'row', }} >
+                  <View style={styles.card9}>
+                    <Text style={styles.cardText2}>{modalSun}</Text>
+                    <Feather name="sun" size={30} color="#ffd061" />
+                    <Text style={styles.cardText3}>Sun</Text>
+                  </View>
+                  <View style={styles.card10}>
+                    <Text style={styles.cardText2}>{modalZone}</Text>
+                    <Feather name="map" size={30} color="#ff7878" />
+                    <Text style={styles.cardText3}>Hardy Zone</Text>
+                  </View>
+                </View>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={styles.card4}>
+                    <Text style={styles.DescriptionText4}>Pruning Description</Text>
+                    <Text style={styles.descriptionOfPlant2}>{modalPrunDes}</Text>
+                  </View>
+                </View>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={styles.cardBlue}>
+                    <Text style={styles.DescriptionText2}>Watering Description</Text>
+                    <Text style={styles.descriptionOfPlant2}>{modalWaterDes}</Text>
+                  </View>
+                </View>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={styles.cardYellow}>
+                    <Text style={styles.DescriptionText3}>Sunlight Description</Text>
+                    <Text style={styles.descriptionOfPlant2}>{modalSunDes}</Text>
+                  </View>
                 </View>
 
 
-                <View style={styles.descriptionOfPlant}>
-                  <Text style={styles.descriptionOfPlant}>{modalDescription}</Text>
+
+                {/* Fix Hardiness Map */}
+
+                <View>
+                  <Image style={styles.rightImageSize2} source={{uri: modalImgHardi}}/>
                 </View>
 
+
+                {/* add onPress for the adding to catalog */}
+
+                <View style={{ alignSelf: "flex-end", justifyContent: 'center' }}>
+                  <TouchableOpacity style={styles.addbutton}>
+                    <Text style={styles.plantAdd}>Add Plant</Text>
+                  </TouchableOpacity>
+                </View>
               </ScrollView>
             </View>
           </View>
         </Modal> 
-
         </View>
       );
     }
 
-    if (item.name.toLowerCase().includes(userInput.toLowerCase()) || item.name2.toLowerCase().includes(userInput.toLowerCase())) {
+    if (item.name.toLowerCase().includes(userInput.toLowerCase()) || item.binomial_name.toLowerCase().includes(userInput.toLowerCase())) {
       return (
         <View>
-          <PlantTile
-            imageSource={item.image_urls}
-            plantName={item.name}
-            scientificName={item.binomial_name}
-          />
-
-          {/* Copy Over Modal From Above Here */}
-
+          
 
         </View>
       );
@@ -204,7 +264,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    borderRadius: 15,
+    borderRadius: 25,
     elevation: 3,
     backgroundColor: '#fcfafa',
     shadowOffset: { width: 1, height: 1 },
@@ -215,7 +275,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     shadowRadius: 2,
     width: 165,
-    height: 230,
+    height: 265,
   },
   cardContent: {
     flexDirection: 'column',
@@ -230,7 +290,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   modalImageSizing: {
-    width: 300,
+    width: 325,
     height: 250,
     padding: 10,
     resizeMode: 'cover',
@@ -241,30 +301,47 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   plantName: {
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: 'bold',
     marginBottom: 5,
     marginTop: 15,
+    textAlign: 'center',
   },
   scientificName: {
-    fontSize: 12,
+    fontSize: 10,
     color: '#888',
-    marginBottom: 2,
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   Backbutton: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    backgroundColor: '#C9FFC9',
+    alignItems: 'left',
+    marginBottom: 10,
+  },
+  addbutton: {
+    width: 150,
+    borderRadius: 20,
+    backgroundColor: '#6ABE6B',
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  rightImageSize2: {
+    width: 40,
+    height: 40,
+  },
+  plantAdd: {
+    fontWeight: 'bold',
+    color: '#fff',
+    fontSize: 18,
+    paddingVertical: 10,
   },
   RightText: {
     justifyContent: 'center',
     fontSize: 30,
     marginTop: 10,
-    marginLeft: 20,
+    marginLeft: 10,
     fontWeight: 'bold',
     color: '#68b454',
     textAlign: 'left',
@@ -278,15 +355,44 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 20,
     marginTop: 5,
-    marginLeft: 20,
+    marginLeft: 10,
     color: '#A8A8A8',
     textAlign: 'left',
   },
   DescriptionText: {
+    fontSize: 20,
+    marginLeft: 10,
+    color: '#000000',
+    fontWeight: 'normal',
+    textAlign: 'left',
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  DescriptionText2: {
     justifyContent: 'center',
     fontSize: 20,
-    marginLeft: 20,
-    color: '#000000',
+    marginLeft: 10,
+    color: '#7EC8E3',
+    fontWeight: 'normal',
+    textAlign: 'left',
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  DescriptionText3: {
+    justifyContent: 'center',
+    fontSize: 20,
+    marginLeft: 10,
+    color: '#ffd061',
+    fontWeight: 'normal',
+    textAlign: 'left',
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  DescriptionText4: {
+    justifyContent: 'center',
+    fontSize: 20,
+    marginLeft: 10,
+    color: '#6ABE6B',
     fontWeight: 'normal',
     textAlign: 'left',
     fontWeight: 'bold',
@@ -297,10 +403,196 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 20,
     marginTop: 5,
-    marginLeft: 20,
-    marginRight: 20,
+    marginLeft: 10,
+    marginRight: 10,
     color: '#707070',
     textAlign: 'justify',
     alignItems: 'center',
+  },
+  descriptionOfPlant2: {
+    justifyContent: 'center',
+    fontSize: 13,
+    marginBottom: 20,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    color: '#707070',
+    textAlign: 'justify',
+    alignItems: 'center',
+  },
+  card3: {
+    borderRadius: 100,
+    elevation: 3,
+    backgroundColor: '#f2f7fc',
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.2,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowRadius: 2,
+    width: 125,
+    height: 125,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 20,
+    borderColor: "#6ABE6B",
+    borderWidth: 3
+  },
+  card7: {
+    borderRadius: 100,
+    elevation: 3,
+    backgroundColor: '#f2f7fc',
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.2,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowRadius: 2,
+    width: 125,
+    height: 125,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 20,
+    borderColor: "#7EC8E3",
+    borderWidth: 3
+  },
+  card9: {
+    borderRadius: 100,
+    elevation: 3,
+    backgroundColor: '#f2f7fc',
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.2,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowRadius: 2,
+    width: 125,
+    height: 125,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 20,
+    borderColor: "#ffd061",
+    borderWidth: 3
+  },
+  card10: {
+    borderRadius: 100,
+    elevation: 3,
+    backgroundColor: '#f2f7fc',
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.2,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowRadius: 2,
+    width: 125,
+    height: 125,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 20,
+    borderColor: "#ff7878",
+    borderWidth: 3
+  },
+  cardText2: {
+    justifyContent: 'center',
+    fontSize: 16,
+    color: '#000000',
+    textAlign: 'center',
+    alignItems: 'center',
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  cardText3: {
+    justifyContent: 'center',
+    fontSize: 8,
+    color: '#707070',
+    textAlign: 'center',
+    alignItems: 'center',
+    fontWeight: 'bold',
+    marginTop: 5,
+  },
+  cardText4: {
+    justifyContent: 'center',
+    fontSize: 12,
+    color: '#000000',
+    textAlign: 'center',
+    alignItems: 'center',
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  card4: {
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: '#f2f7fc',
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.2,
+    padding: 20,
+    justifyContent: 'center',
+    shadowRadius: 2,
+    width: 325,
+    height: 400,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 25,
+    borderColor: "#6ABE6B",
+    borderWidth: 3
+  },
+  cardBlue: {
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: '#f2f7fc',
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.2,
+    padding: 20,
+    justifyContent: 'center',
+    shadowRadius: 2,
+    width: 325,
+    height: 400,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 25,
+    borderColor: "#7EC8E3",
+    borderWidth: 3
+  },
+  cardYellow: {
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: '#f2f7fc',
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.2,
+    padding: 20,
+    justifyContent: 'center',
+    shadowRadius: 2,
+    width: 325,
+    height: 400,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 25,
+    borderColor: "#ffd061",
+    borderWidth: 3
+  },
+  cardGrey: {
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: '#f2f7fc',
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.2,
+    padding: 20,
+    justifyContent: 'center',
+    shadowRadius: 2,
+    width: 325,
+    height: 430,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 25,
+    borderColor: "#707070",
+    borderWidth: 3
   },
 });
