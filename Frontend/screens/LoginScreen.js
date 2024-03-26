@@ -11,6 +11,12 @@ import { TouchableOpacity } from 'react-native';
 // import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorMessage from '../components/ErrorMessage';
+let link = process.env.EXPO_PUBLIC_IP
+const env = process.env.NODE_ENV;
+
+if(env == "production"){
+  link = process.env.EXPO_PUBLIC_DEPLOYMENT
+}
 
 export default function LoginScreen() {
   const navigation = useNavigation()
@@ -19,13 +25,13 @@ export default function LoginScreen() {
   const [password, setPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const IP = process.env.EXPO_PUBLIC_IP;
-  const PORT = process.env.EXPO_PUBLIC_PORT;
+  // const IP = process.env.EXPO_PUBLIC_IP;
+  // const PORT = process.env.EXPO_PUBLIC_PORT;
   
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(`${IP}/user/login`, {
+      const response = await fetch(`${link}/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

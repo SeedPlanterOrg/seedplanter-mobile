@@ -15,6 +15,7 @@ import * as Progress from 'react-native-progress';
 import HomeCard from '../components/HomeCard';
 import PlanterPointContainer from '../components/PlanterPointContainer';
 import AddPlantCard from '../components/AddPlantCard';
+import * as ImagePicker from 'expo-image-picker';
 import {
   getPlantCatalogPage,
   findPlantById, 
@@ -24,9 +25,13 @@ import {
 } from '../utils/http'
 
 export default function HomeScreen() {
+  const [customPlantModalVisible, setCustomPlantModalVisible] = useState(false);
+  const [addOptionsModalVisible, setAddOptionsModalVisible] = useState(false);
+  const [progressValue, setProgressValue] = useState(0.57);
+  const [wateringNotify, setWateringNotify] = useState(false); 
+  const [nutrientsNotify, setNutrientsNotify] = useState(false); 
+  const [image, setImage] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [wateringNotify, setWateringNotify] = useState(false); // State for watering toggle
-  const [nutrientsNotify, setNutrientsNotify] = useState(false); // State for nutrients toggle
   // const [plantData, setPlantData] = useState([
   //   {
   //     id: 1,
@@ -120,6 +125,40 @@ export default function HomeScreen() {
   }, []);
 
 
+  // Function to handle both the custom and catalog option from the AddOptionsModal
+  const handleAddOptionSelection = (option) => {
+    if (option === 'Catalog') {
+      // Placeholder function for adding from catalog
+      console.log('Add from Catalog selected');
+    } else if (option === 'Custom') {
+      openCustomPlantModal();
+    }
+    // Close the add options after option is selected
+    setAddOptionsModalVisible(false);
+  };
+
+  // Functions to open and close the AddOptionsModal
+  const openAddOptionsModal = () => {
+    setAddOptionsModalVisible(true);
+  };
+  const closeAddOptionsModal = () => {
+    setAddOptionsModalVisible(false);
+  };
+
+  // This functions handles image selection 
+  const handleImagePickerPress = async() => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All, 
+      allowsEditing: true, 
+      aspect: [1,1], 
+      quality: 1, 
+    })
+    if(!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  }
+
+  // This function defines how the homecard will be rendered
   const renderItem = ({ item }) => (
     <HomeCard
       imageSource={{ uri: item.imageSource }} 
@@ -127,35 +166,44 @@ export default function HomeScreen() {
       scientificName={item.scientificName}
       waterLevelProgress={item.waterLevelProgress}
       nutrientProgress={item.nutrientProgress}
+      onDelete={() => deletePlant(item.id)} 
     />
   );
-
-  const openModal = () => {
-    setModalVisible(true);
+  
+  // Functions to open and close the add CustomPlantModal
+  const openCustomPlantModal = () => {
+    setCustomPlantModalVisible(true);
+  };
+  const closeCustomPlantModal = () => {
+    setCustomPlantModalVisible(false);
   };
 
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
+  // Adds custom plant card to homescreen
   const handleAddPlant = () => {
-    // Add new plant data to the state
+    setImage(''); // Reset the displayed image in the CustomPlantModel
     const newPlantData = [...plantData, {
       id: plantData.length + 1,
-      imageSource: require('../assets/lettuce.jpg'), 
+      imageSource: image ? { uri: image } : require('../assets/lettuce.jpg'), // Set to the user-selected image if available, otherwise use 'lettuce.jpg'
       plantName: 'New Plant',
       scientificName: 'Scientific Name', 
       waterLevelProgress: 0.5, 
       nutrientProgress: 0.5, 
     }];
     setPlantData(newPlantData);
-    closeModal();
+    closeCustomPlantModal();
   };
 
+  // Function to delete a plant card 
+  const deletePlant = (id) => {
+    console.log("Deleting plant with ID:", id); // Log a message
+    const updatedPlantData = plantData.filter(item => item.id !== id);
+    setPlantData(updatedPlantData);
+  };
+
+  // Toggle Functions
   const toggleWateringNotify = () => {
     setWateringNotify((prevState) => !prevState);
   };
-
   const toggleNutrientsNotify = () => {
     setNutrientsNotify((prevState) => !prevState);
   };
@@ -168,7 +216,7 @@ export default function HomeScreen() {
           <View style={styles.gardenHealthMeter}>
             <Text style={styles.healthMeterText}>Garden Health</Text>
             <Progress.Bar
-              progress={0.6}
+              progress={progressValue}
               width={200}
               height={39}
               borderRadius={20}
@@ -176,6 +224,7 @@ export default function HomeScreen() {
               unfilledColor="#D7EED8"
               borderWidth={0}
             />
+            <Text style={styles.progressValueText}>{`${Math.round(progressValue * 100)}%`}</Text>
           </View>
 
           {/* Planter Points */}
@@ -184,7 +233,7 @@ export default function HomeScreen() {
           </View>
 
           {/* Plus Button */}
-          <TouchableOpacity style={styles.plusButtonContainer} onPress={openModal}>
+          <TouchableOpacity style={styles.plusButtonContainer} onPress={openAddOptionsModal}>
             <Image
               source={require('../assets/plus_icon.png')}
               style={styles.plusButton}
@@ -197,6 +246,7 @@ export default function HomeScreen() {
           My <Text style={styles.greenText}>Plants</Text>
         </Text>
 
+        {/* Cards */}
         <FlatList
           data={plantData}
           renderItem={renderItem}
@@ -205,51 +255,110 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
         />
 
-        {/* Modal Miniscreen */}
+        {/* AddOptionsModal */}
         <Modal
           animationType="fade"
           transparent={true}
-          visible={modalVisible}
-          onRequestClose={closeModal}>
-          <View style={styles.modalView}>
-            <View style={styles.ModalContainer}>
-              <TouchableOpacity style={styles.Backbutton} onPress={closeModal}>
-                <Image style={styles.rightImageSize} source={require('../assets/xout.png')} />
-              </TouchableOpacity>
-              
-              {/* Placeholder before I add the add image button functionality */}
-              <View style={styles.imageContainer}>
-                <Image
-                  source={require('../assets/lightgray.svg')}
-                  style={styles.modalImage}
-                />
-                {/* Plus Button */}
-                <TouchableOpacity style={styles.plusIconContainer}>
-                  <Image
-                    source={require('../assets/plus_icon.png')}
-                    style={styles.plusButton}
-                  />
-                </TouchableOpacity>
+          visible={addOptionsModalVisible}
+          onRequestClose={() => setAddOptionsModalVisible(false)}>
+          <View style={styles.ModalView}>
+            <View style={styles.selectModalContainer}>
+
+              {/* Backbutton */}
+              <View style={styles.Backbutton}>
+                <Button title="Close" color="#000000" alignItems="left" onPress={closeAddOptionsModal}></Button>
               </View>
 
-              {/* AddPlantCard Component for Watering */}
-              <AddPlantCard
-                notifyMe={wateringNotify}
-                toggleNotifyMe={toggleWateringNotify}
-                headerText="Watering"
-                imageSource={require('../assets/rain.png')}
-              />
+              <View style={styles.selectModalButton}>
+              <TouchableOpacity onPress={() => handleAddOptionSelection('Custom')}>
+                    <Text style={styles.addButtonText}>Add Custom Plant</Text>
+                  </TouchableOpacity>
+              </View>
 
-              {/* AddPlantCard Component for Nutrients */}
-              <AddPlantCard
-                notifyMe={nutrientsNotify}
-                toggleNotifyMe={toggleNutrientsNotify}
-                headerText="Nutrients"
-                imageSource={require('../assets/leaf.png')}
-              />
+              <View style={styles.selectModalButton}>
+              <TouchableOpacity onPress={() => handleAddOptionSelection('Catalog')}>
+                    <Text style={styles.addButtonText}>Add from Catalog</Text>
+                  </TouchableOpacity>
+              </View>
 
-              <Button title="Add Plant" onPress={handleAddPlant} />
 
+            </View>
+          </View>
+        </Modal>
+
+
+        {/* CustomPlantModal */}
+        <Modal
+          animationType="slide"
+          presentationStyle='pageSheet'
+          visible={customPlantModalVisible}
+          onRequestClose={closeCustomPlantModal}>
+          <View style={styles.customPlantModalContainer}>
+            {/* Backbutton */}
+            <View style={styles.Backbutton}>
+              <Button title="Close" color="#000000" alignItems="left" onPress={closeCustomPlantModal}></Button>
+            </View>
+
+            {/* Image Selector */}
+            <View style={styles.imageContainer}>
+              {image ? (
+                <Image source={{ uri: image }} style={styles.modalImage} /> // Image selected, set to user image
+              ) : (
+                <Image 
+                  source={require('../assets/lightgray.svg')} // Else set the image to the default
+                  style={styles.modalImage} 
+                />
+              )}
+
+              {/* Plus Button */}
+              <TouchableOpacity style={styles.plusIconContainer} onPress={handleImagePickerPress}>
+                <Image
+                  source={require('../assets/plus_icon.png')}
+                  style={styles.plusButton}
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/* FlatList for both AddPlantCard components */}
+            <FlatList
+              data={[
+                {
+                  id: 1,
+                  headerText: 'Watering',
+                  imageSource: require('../assets/rain.png'),
+                  lastDateText: 'watering',
+                  notifyMe: wateringNotify,
+                  toggleNotifyMe: toggleWateringNotify,
+                },
+                {
+                  id: 2,
+                  headerText: 'Nutrients',
+                  imageSource: require('../assets/leaf.png'),
+                  lastDateText: 'feeding',
+                  notifyMe: nutrientsNotify,
+                  toggleNotifyMe: toggleNutrientsNotify,
+                },
+              ]}
+              renderItem={({ item }) => (
+                <View style={styles.addPlantCardContainer}>
+                  <AddPlantCard
+                    headerText={item.headerText}
+                    imageSource={item.imageSource}
+                    lastDateText={item.lastDateText}
+                    notifyMe={item.notifyMe}
+                    toggleNotifyMe={item.toggleNotifyMe}
+                  />
+                </View>
+              )}
+              keyExtractor={(item) => item.id.toString()}
+              showsVerticalScrollIndicator={false}
+            />
+
+            {/* Add Plant Button */}
+            <View style={styles.addButtonContainer}>
+              <TouchableOpacity onPress={handleAddPlant}>
+                <Text style={styles.addButtonText}>Add Plant</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -279,6 +388,15 @@ const styles = StyleSheet.create({
     color: '#6ABE6B',
     marginBottom: 10,
   },
+  progressValueText: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -80 }, { translateY: 7 }], 
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },  
   myPlants: {
     fontSize: 23,
     fontWeight: 'bold',
@@ -301,39 +419,33 @@ const styles = StyleSheet.create({
   plusButtonContainer: {
     marginLeft: 5,
     marginTop: 30,
-    backgroundColor: '#C9FFC9',
+    backgroundColor: '#6ABE6B',
     borderRadius: 20,
   },
   plusButton: {
     width: 40,
     height: 40,
     resizeMode: 'contain',
+    tintColor: '#fff',
   },
-  modalView: {
+  ModalView: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  ModalContainer: {
+  customPlantModalContainer: {
     backgroundColor: '#fff',
     paddingTop: 20,
-    paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    height: 735,
-    width: 375,
+    height: 760,
     borderRadius: 20,
     elevation: 20,
   }, 
   Backbutton: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    backgroundColor: '#C9FFC9',
+    alignItems: 'left',
     marginBottom: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   rightImageSize: {
     width: 10,
@@ -348,7 +460,7 @@ const styles = StyleSheet.create({
     width: 150, 
     height: 150, 
     borderRadius: 20,
-    borderWidth: 3, 
+    borderWidth: 1.5, 
     borderColor: '#6ABE6B', 
     backgroundColor: 'transparent', 
   },
@@ -356,7 +468,55 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -10,
     right: 80,
-    backgroundColor: '#C9FFC9',
+    backgroundColor: '#6ABE6B',
     borderRadius: 20,
+  },
+  addButtonContainer: {
+    marginTop: 20,
+    backgroundColor: '#6ABE6B', 
+    borderRadius: 20,
+    width: 150, 
+    marginLeft: 190, 
+  },
+  addButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFF',
+    textAlign: 'center',
+    paddingVertical: 10,
+  },  
+  selectModalContainer: {
+    backgroundColor: '#fff',
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    height: 270,
+    width: 270,
+    borderRadius: 20,
+    elevation: 20,
+  },
+  selectModalButton: {
+    marginTop: 15, 
+    marginBottom: 15, 
+    marginLeft: 15, 
+    marginRight: 15, 
+    backgroundColor: '#6ABE6B',
+    borderRadius: 20,
+    width: 200,
+  },
+  selectModalBackButton: {
+    position: 'absolute', 
+    top: 20, 
+    left: 20, 
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    backgroundColor: '#C9FFC9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addPlantCardContainer: {
+    marginHorizontal:6, 
   },
 });
