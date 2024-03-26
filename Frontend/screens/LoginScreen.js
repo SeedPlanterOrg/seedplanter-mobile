@@ -3,8 +3,10 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, SafeAreaView, Image, Touchable, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Tabs from '../navigation/tabs';
-import { TextInput } from 'react-native';
+import { TextInput, Appearance, useColorScheme} from 'react-native';
 import { TouchableOpacity } from 'react-native';
+import { darkTheme, lightTheme } from '../App';
+import { ThemeProvider } from 'styled-components/native';
 // import { IP, PORT } from "@env"
 // import { useContext } from 'react';
 // import { AuthContext } from '../context/AuthContext';
@@ -12,11 +14,13 @@ import { TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorMessage from '../components/ErrorMessage';
 let link = process.env.EXPO_PUBLIC_IP
-const env = process.env.NODE_ENV;
+const env = process.env.EXPO_PUBLIC_ENV;
 
-if(env == "production"){
-  link = process.env.EXPO_PUBLIC_DEPLOYMENT
+if(env === "production"){
+  link = process.env.EXPO_PUBLIC_DEPLOYMENT;
 }
+
+console.log(`Link: ${link}`);
 
 export default function LoginScreen() {
   const navigation = useNavigation()
@@ -24,6 +28,32 @@ export default function LoginScreen() {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  // const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+
+//   const Container = styled.View`
+//   flex: 1;
+//   background-color: ${(props) => props.theme.background};
+//   padding: 16px;
+// `;
+
+// const StyledText = styled.Text`
+// color: ${(props) => props.theme.text};
+// `;
+
+//   const Input = styled.TextInput`
+//     height: 40px;
+//     border: 1px solid ${(props) => props.theme.borderColor};
+//     margin-bottom: 10px;
+//     color: ${(props) => props.theme.text};
+//   `;
+
+//   const ErrorText = styled.Text`
+//     color: red;
+//     margin-bottom: 10px;
+//   `;
+
 
   // const IP = process.env.EXPO_PUBLIC_IP;
   // const PORT = process.env.EXPO_PUBLIC_PORT;
@@ -68,7 +98,8 @@ export default function LoginScreen() {
   
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4'}}>
+    <ThemeProvider theme={theme}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Image 
@@ -76,12 +107,12 @@ export default function LoginScreen() {
             style={styles.headerImg}
             alt="logo"
           />
-          <Text style={styles.title}>Sign in to SeedPlanter</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Sign in to SeedPlanter</Text>
           <Text style={styles.subtitle}>Get access to your plants now</Text>
         </View>
         <View style={styles.form}>
           <View style={styles.input}>
-            <Text style={styles.inputLabel}>Email address</Text>
+            <Text style={[styles.inputLabel, {color: theme.text}]}>Email address</Text>
             <TextInput
               autoCapitalize="none"
               autoCorrect={false}
@@ -94,7 +125,7 @@ export default function LoginScreen() {
             />
           </View>
           <View style={styles.input}>
-            <Text style={styles.inputLabel}>Password</Text>
+            <Text style={[styles.inputLabel, {color: theme.text}]}>Password</Text>
             <TextInput
               secureTextEntry
               style={styles.inputControls}
@@ -114,9 +145,9 @@ export default function LoginScreen() {
           </View>
 
           <View style={styles.inline}>
-            <Text style={styles.signupLabel}>Don't have an account?</Text>
+            <Text style={[styles.signupLabel, {color: theme.text}]}>Don't have an account?</Text>
             <Pressable onPress={() => navigation.navigate("Signup")} >
-                <Text style={styles.signupLabel2}> Sign up</Text>
+                <Text style={[styles.signupLabel, {color: theme.text}]}> Sign up</Text>
             </Pressable>
           </View>
 
@@ -125,6 +156,7 @@ export default function LoginScreen() {
         <StatusBar style="auto" />
       </View>
     </SafeAreaView>
+    </ThemeProvider>
   );
 }
 

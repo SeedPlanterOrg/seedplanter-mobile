@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Modal, Button } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Modal, Button, useColorScheme } from 'react-native';
 import * as Progress from 'react-native-progress';
+import { darkTheme, lightTheme } from '../App';
+import { styled, ThemeProvider } from 'styled-components/native';
 
 const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, nutrientProgress, onDelete }) => {
     const [modalVisible, setModalVisible] = useState(false);
+    const colorScheme = useColorScheme();
+    const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     };
 
     return (
+        <ThemeProvider theme={theme}>
         <View style={styles.container}>
-            <TouchableOpacity style={styles.card} onPress={toggleModal}>
+            <TouchableOpacity style={[styles.card, {backgroundColor: theme.gardenCard}]} onPress={toggleModal}>
                 <View style={styles.cardContent}>
                     {imageSource && <Image source={imageSource} style={styles.cardImage} />}
-                    <View style={styles.textContent}>
-                        <Text style={styles.plantName}>{plantName}</Text>
+                    <View style={[styles.textContent, {color: theme.text}]}>
+                        <Text style={[styles.plantName, {color: theme.text}]}>{plantName}</Text>
                         <Text style={styles.scientificName}>{scientificName}</Text>
 
                         {/* Dummy progress circle for Water Level */}
@@ -122,6 +127,7 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                 </View>
             </Modal>
         </View>
+        </ThemeProvider>
     );
 }
 

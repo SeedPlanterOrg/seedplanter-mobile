@@ -10,6 +10,7 @@ import {
   Modal,
   TextInput,
   Button,
+  useColorScheme
 } from 'react-native';
 import * as Progress from 'react-native-progress';
 import HomeCard from '../components/HomeCard';
@@ -23,6 +24,8 @@ import {
   addPlant,
   createGarden
 } from '../utils/http'
+import { darkTheme, lightTheme } from '../App';
+import { styled, ThemeProvider } from 'styled-components/native';
 
 export default function HomeScreen() {
   const [customPlantModalVisible, setCustomPlantModalVisible] = useState(false);
@@ -32,6 +35,8 @@ export default function HomeScreen() {
   const [nutrientsNotify, setNutrientsNotify] = useState(false); 
   const [image, setImage] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
   // const [plantData, setPlantData] = useState([
   //   {
   //     id: 1,
@@ -209,7 +214,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
+    <SafeAreaView style={[{ flex: 1, backgroundColor: '#FFF' }, {backgroundColor: theme.gardenBackground}]}>
       <View style={styles.container}>
         {/* Wrapped the two objects, ProgressBar and PlanterPointContainer, into a header container */}
         <View style={styles.headerContainer}>
@@ -236,13 +241,13 @@ export default function HomeScreen() {
           <TouchableOpacity style={styles.plusButtonContainer} onPress={openAddOptionsModal}>
             <Image
               source={require('../assets/plus_icon.png')}
-              style={styles.plusButton}
+              style={[styles.plusButton, {tintColor: theme.background}]}
             />
           </TouchableOpacity>
         </View>
 
         {/* My Plants Text */}
-        <Text style={styles.myPlants}>
+        <Text style={[styles.myPlants, {color: theme.text}]}>
           My <Text style={styles.greenText}>Plants</Text>
         </Text>
 

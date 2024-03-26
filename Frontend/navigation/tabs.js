@@ -1,12 +1,14 @@
 import * as React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, useColorScheme} from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import JournalScreen from '../screens/JournalScreen';
 import CatalogScreen from '../screens/CatalogScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ChatBotScreen from '../screens/ChatBotScreen';
 import { DefaultTheme } from '@react-navigation/native';
+import { darkTheme, lightTheme } from '../App';
+import { styled, ThemeProvider } from 'styled-components/native';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,12 +37,16 @@ const CustomTabBarButton = ({children, onPress}) => (
 );
 
 const Tabs = () => {
+    const colorScheme = useColorScheme();
+    const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+
     return(
         <Tab.Navigator 
             screenOptions={{ 
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     flex: 1,
+                    backgroundColor: theme.navbar,
                     position: 'absolute',
                     height: 70,
                     borderRadius: 50,
@@ -50,6 +56,7 @@ const Tabs = () => {
                     left: 10,
                     paddingBottom: 0,
                     shadowColor: '#333',
+                    shadowColor: theme.navbar,
                     shadowOpacity: 0.4,
                     shadowOffset: { width: 1, height: 1 },
                 }
@@ -62,7 +69,7 @@ const Tabs = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#68b454' : '#000000'
+                                tintColor: focused ? '#68b454' : theme.text
                             }}
                         />
                     </View>
@@ -77,7 +84,7 @@ const Tabs = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#68b454' : '#000000'
+                                tintColor: focused ? '#68b454' : theme.text
                             }}
                         />
                     </View>
@@ -107,7 +114,7 @@ const Tabs = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#68b454' : '#000000'
+                                tintColor: focused ? '#68b454' : theme.text
                             }}
                         />
                     </View>
@@ -122,7 +129,7 @@ const Tabs = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#68b454' : '#000000'
+                                tintColor: focused ? '#68b454' : theme.text
                             }}
                         />
                     </View>

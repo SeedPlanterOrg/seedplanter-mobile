@@ -24,10 +24,10 @@ export default function SignupScreen() {
 
   let link = process.env.EXPO_PUBLIC_IP
 
-    const env = process.env.NODE_ENV;
+    const env = process.env.EXPO_PUBLIC_ENV;
 
-    if(env == "production"){
-      link = process.env.EXPO_PUBLIC_DEPLOYMENT
+    if(env === "production"){
+      link = process.env.EXPO_PUBLIC_DEPLOYMENT;
     }
 
     const handleSubmit = async () => {

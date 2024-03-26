@@ -1,8 +1,8 @@
 // needs to be your ip to run 
-const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
+// const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
 // const PORT = process.env.EXPO_PUBLIC_PORT;
 let link = process.env.EXPO_PUBLIC_IP
-const env = process.env.NODE_ENV;
+const env = process.env.EXPO_PUBLIC_ENV;
 
 if(env == "production"){
   link = process.env.EXPO_PUBLIC_DEPLOYMENT
