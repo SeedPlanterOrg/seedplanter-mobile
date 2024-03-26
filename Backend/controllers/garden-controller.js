@@ -1,12 +1,16 @@
 const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
-
+const mongoose = require("mongoose");
 // const HttpError = require('../models/http-error');
 // const getCoordsForAddress = require('../util/location');
-const Garden = require('../models/garden-schema');
+const {GardenModel, GardenPlantModel} = require('../models/garden-schema');
+const PlantModel = require('../models/plant-schema');
 // const tasks = require('../models/tasks-schema');
 const AppError = require('../middleware/appError');
 const Task = require('../models/tasks-schema');
+
+const uri = process.env.PLANTDB_URL;
+const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
 let DUMMY_GARDENS = [
     {
@@ -55,46 +59,83 @@ let DUMMY_GARDENS = [
     }
   ];
 
-const getGardenById = async (req, res, next) => {
-  const gardenId = req.params.gardenId; // { uid: 'v1' }
+// const getGardenById = async (req, res, next) => {
+//   const gardenId = req.body.gardenId; // { uid: 'v1' }
 
-  let garden;
-  try {
-    place = await Garden.findById(gardenId); //find garden by uid
-  } catch (err) {
-    return next('Something went wrong, could not find a garden.',500);
-  }
+//   let garden;
+//   try {
+//     place = await GardenModel.findById(gardenId); //find garden by uid
+//   } catch (err) {
+//     return next('Something went wrong, could not find a garden.',500);
+//   }
 
-  if (!garden) {
-    return next(new AppError('Could not find a garden for the provided id.', 404));
-  }
+//   if (!garden) {
+//     return next(new AppError('Could not find a garden for the provided id.', 404));
+//   }
 
-  res.json({ garden: garden.toObject({ getters: true }) }); // => { place } => { place: place }
-};
+//   res.json({ garden: garden.toObject({ getters: true }) }); // => { place } => { place: place }
+// };
 
 // function getPlaceById() { ... }
 // const getPlaceById = function() { ... }
 
-const getGardenByUserId = async (req, res, next) => {
-  const userId = req.params.userId;
+// const getGardenByUserId = async (req, res, next) => {
+//   const userId = req.body.userId;
 
-  let garden;
+//   let garden;
+//   try {
+//     garden = await GardenModel.find({ userId: userId });
+//   } catch (err) {
+//     return next(new AppError('Fetching garden failed, please try again later', 500));
+//   }
+
+//   if (!garden || garden.length === 0) {
+//     return next(
+//       new AppError('Could not find garden for the provided user id.', 404)
+//     );
+//   }
+
+//   res.json({ garden: garden .map(garden => garden.toObject({ getters: true })) });
+// };
+
+// const getGardenById
+
+const getGardenByUserId = async (req, res, next) => {
+  console.log("Getting garden");
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new AppError('Invalid inputs passed, please check your data.', 422)
+    );
+  }
   try {
-    garden = await Garden.find({ userId: userId });
+    await mongoose.connect(uri, clientOptions);
+    const garden = await GardenModel.find({userId: req.query.userId});
+    
+    if(!garden) {
+      return res.status(404).json({ message: "Garden not found" });
+    } 
+
+    let gardenPlantList = [];
+    const gardenPlantIdList = garden[0].plants; 
+    for(let i = 0; i < gardenPlantIdList.length; i++){
+      const gardenPlant = await GardenPlantModel.findById(gardenPlantIdList[i]).lean(); 
+      if (gardenPlant) {
+        gardenPlantList.push(gardenPlant);
+      }
+    }
+    res.status(200).json({
+      garden: garden,
+      gardenPlants: gardenPlantList});
   } catch (err) {
+    console.log(`Failed to get_garden ${err}`);
     return next(new AppError('Fetching garden failed, please try again later', 500));
   }
 
-  if (!garden || garden.length === 0) {
-    return next(
-      new AppError('Could not find garden for the provided user id.', 404)
-    );
-  }
-
-  res.json({ garden: garden .map(garden => garden.toObject({ getters: true })) });
-};
+}
 
 const createGarden = async (req, res, next) => {
+  
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(
@@ -102,37 +143,71 @@ const createGarden = async (req, res, next) => {
     );
   }
 
-  const { userId, plants } = req.body;
+  await mongoose.connect(uri, clientOptions);
+  const userId = req.body.id;
+  let newGardenId = userId.toString();
+  newGardenId += '1';
 
-  let gardenPlants = [];
+  console.log(userId);
+  
   try {
-    for (let plantId of plants) {
-      const plant = await PlantModel.findById(plantId);
-      if (!plant) {
-        return next(new AppError(`No plant found with id: ${plantId}`, 404));
-      }
-      gardenPlants.push(plant);
-    }
-  } catch (error) {
-    return next(new AppError('Fetching plants failed, please try again later', 500));
-  }
-
-  const createdGarden = new Garden({
-    userId,
-    plants: gardenPlants,
-    tasks: [],
-    gardenHealthLevel: 0 // initial garden health level
-  });
-
-  try {
+    const createdGarden = await GardenModel.create({
+      userId: userId,
+      gardenId: newGardenId,
+      plants: [],
+      tasks: [],
+      gardenHealthLevel: 100 // initial garden health level
+    });
+    
     await createdGarden.save();
+    res.status(201).json({message: "Garden Created"});
+  
   } catch (err) {
-    return next(new AppError('Creating garden failed, please try again.', 500));
+    return next(new AppError('Creating garden failed, please try again later', 500));
   }
-
-  res.status(201).json({ garden: createdGarden });
 };
 
+const addPlant = async (req, res, next) => {
+  console.log(req.body);
+  
+  const userId = req.body.gardenPlant.id;
+  const plantId = req.body.gardenPlant.plantId;
+
+  const catalogPlant = await PlantModel.find({id: plantId});
+  try {
+      
+      const newGardenPlant = await GardenPlantModel.create({
+      gardenId: userId,
+      plantId: plantId, 
+      water: req.body.gardenPlant.water,
+      fertilize: req.body.gardenPlant.fertilize,
+      prune: req.body.gardenPlant.prune,
+      waterLevel: req.body.gardenPlant.waterLevel,
+      lastWateringDate: req.body.gardenPlant.date,
+      fertilizerLevel: req.body.gardenPlant.fertilizerLevel,
+      lastFertilizingDate: req.body.gardenPlant.lastFertilizingDate,
+      notes: [req.body.gardenPlant.notes],
+      imagesUrls: req.body.gardenPlant.imagesUrls,
+      plantDetails: catalogPlant[0],
+    });
+    //newGardenPlant.save();
+    console.log(`New Garden Plant Saved: ${newGardenPlant}`);
+    const updateGarden = await GardenModel.findById(req.body.gardenPlant._id);
+    if (!updateGarden) {
+      return res.status(404).json({ message: "Garden not found" });
+    }
+
+    updateGarden.plants.push(newGardenPlant._id);
+    await updateGarden.save();
+
+    console.log(`Garden updated with new plant: ${newGardenPlant.plantId}`);
+    res.status(200).json({ message: "Plant added to garden successfully" });
+
+  } catch (err) {
+    console.log(err);
+    return next(new AppError('Add plant failed, please try again later', 500));
+  }
+};
 // const deleteGarden = async (req, res, next) => {
 //   const placeId = req.params.pid;
 
@@ -160,7 +235,9 @@ const createGarden = async (req, res, next) => {
 //   res.status(200).json({ message: 'Deleted place.' });
 // };
 
-exports.getGardenByUserId = getGardenByUserId;
-exports.createGarden = createGarden;
+module.exports = { 
+  getGardenByUserId,
+  createGarden, 
+  addPlant };
 // exports.updateGarden = updateGarden;
 // exports.deleteGarden = deleteGarden;

@@ -7,11 +7,11 @@ const User = mongoose.model('User');
 const gardenPlantSchema = new mongoose.Schema({
   gardenId: {
     type: String,
-    required: true
+    required: true,
   },
   plantId: {
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: "Plant"
+    type: Number, 
+    required: true
   },
   water: {
     type: Boolean,
@@ -40,34 +40,48 @@ const gardenPlantSchema = new mongoose.Schema({
     type: Date
   },
   notes: [{
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: "JournalEntry"
+    // for now 
+    //type: mongoose.Schema.Types.ObjectId, 
+    //ref: "JournalEntry"
+    type: String // delete me once journal is up
   }],
   imagesUrls: [{
     type: String
-  }]
+  }],
+  plantDetails: {
+    type: Object,
+    required: true
+  },
 });
 
-const GardenPlant = mongoose.model("GardenPlant", gardenPlantSchema);
-module.exports = GardenPlant;
+const GardenPlantModel = mongoose.model("GardenPlantModel", gardenPlantSchema);
+
 
 const GardenSchema = new mongoose.Schema({
   userId: { 
     type: mongoose.Schema.Types.ObjectId, ref: "User",
     },
-  plants: [gardenPlantSchema], //array of plants in the users garden
-
+  gardenId: {
+    type: String,
+    required: true,
+  },
+  plants: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "GardenPlantModel"}], //array of plants in the users garden
   tasks: [{  //array of tasks
     type: mongoose.Schema.Types.ObjectId, ref: "Task",
     }],
 
-  gardenHealthLevel: [{ //garden health level
+  gardenHealthLevel: { //garden health level
     type: Number,
     max: 100
-  }]
+  }
 
 });
 
-const Garden = mongoose.model("Garden", GardenSchema);
+const GardenModel = mongoose.model("GardenModel", GardenSchema);
 
-module.exports = Garden;
+module.exports = { 
+  GardenModel,
+  GardenPlantModel
+};
