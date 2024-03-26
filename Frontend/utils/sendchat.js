@@ -4,7 +4,7 @@ async function sendMessage(message, messages, startConversation) {
     // const IP = process.env.EXPO_PUBLIC_IP;
     // const PORT = process.env.EXPO_PUBLIC_PORT;
 
-    const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
+    const DEPLOYMENT = process.env.EXPO_PUBLIC_IP;
     
     // console.log(`IP: ${IP}, PORT: ${PORT}`); 
     const userId = await AsyncStorage.getItem('userId');
