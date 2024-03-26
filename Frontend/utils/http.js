@@ -1,6 +1,7 @@
 // needs to be your ip to run 
 const DEPLOYMENT = process.env.EXPO_PUBLIC_IP;
-const PORT = process.env.EXPO_PUBLIC_PORT;
+// const PORT = process.env.EXPO_PUBLIC_PORT;
+
 async function getPlantCatalogPage(page) {
     try {
 
@@ -145,17 +146,17 @@ async function createGarden(userId) {
 //     }
 //     run();
 
-async function run() {
-    try {
-        let id = "65efc324a82682e507e38ebc";
-        const plantsArray = await getGarden(id);
-        console.log(plantsArray);
-        // You can use plantsArray here
-    } catch (error) {
-        console.error("Error: ", error);
-    }
-}
-run();
+// async function run() {
+//     try {
+//         let id = "65efc324a82682e507e38ebc";
+//         const plantsArray = await getGarden(id);
+//         console.log(plantsArray);
+//         // You can use plantsArray here
+//     } catch (error) {
+//         console.error("Error: ", error);
+//     }
+// }
+// run();
 // async function run() {
 //         try {
 //             let object = {
