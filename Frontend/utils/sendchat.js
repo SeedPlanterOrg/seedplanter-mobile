@@ -4,12 +4,17 @@ async function sendMessage(message, messages, startConversation) {
     // const IP = process.env.EXPO_PUBLIC_IP;
     // const PORT = process.env.EXPO_PUBLIC_PORT;
 
-    const DEPLOYMENT = process.env.EXPO_PUBLIC_IP;
+    let link = process.env.EXPO_PUBLIC_IP
+    const env = process.env.NODE_ENV;
+
+    if(env == "production"){
+      link = process.env.EXPO_PUBLIC_DEPLOYMENT
+    }
     
     // console.log(`IP: ${IP}, PORT: ${PORT}`); 
     const userId = await AsyncStorage.getItem('userId');
 
-    const response = await fetch(`${DEPLOYMENT}/chat/sendmessage`, {
+    const response = await fetch(`${link}/chat/sendmessage`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
