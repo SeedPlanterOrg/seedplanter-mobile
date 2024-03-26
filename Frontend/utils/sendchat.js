@@ -6,7 +6,7 @@ async function sendMessage(message, messages, startConversation) {
 
     const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
     
-    console.log(`IP: ${IP}, PORT: ${PORT}`);
+    // console.log(`IP: ${IP}, PORT: ${PORT}`); 
     const userId = await AsyncStorage.getItem('userId');
 
     const response = await fetch(`${DEPLOYMENT}/chat/sendmessage`, {
