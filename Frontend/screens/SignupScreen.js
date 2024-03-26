@@ -22,6 +22,14 @@ export default function SignupScreen() {
     const IP = process.env.EXPO_PUBLIC_IP;
     //const PORT = process.env.EXPO_PUBLIC_PORT;
 
+  let link = process.env.EXPO_PUBLIC_IP
+
+    const env = process.env.NODE_ENV;
+
+    if(env == "production"){
+      link = process.env.EXPO_PUBLIC_DEPLOYMENT
+    }
+
     const handleSubmit = async () => {
       setNameError(null);
       setEmailError(null);
@@ -62,7 +70,7 @@ export default function SignupScreen() {
       }
     
       try {
-        const response = await fetch(`${IP}/user/signup`, {
+        const response = await fetch(`${link}/user/signup`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
