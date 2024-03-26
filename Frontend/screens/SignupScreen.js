@@ -20,7 +20,7 @@ export default function SignupScreen() {
     const [errorMessage, setErrorMessage] = useState(null);
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const IP = process.env.EXPO_PUBLIC_IP;
-    const PORT = process.env.EXPO_PUBLIC_PORT;
+    //const PORT = process.env.EXPO_PUBLIC_PORT;
 
     const handleSubmit = async () => {
       setNameError(null);
@@ -62,7 +62,7 @@ export default function SignupScreen() {
       }
     
       try {
-        const response = await fetch(`${IP}:${PORT}/user/signup`, {
+        const response = await fetch(`${IP}/user/signup`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
