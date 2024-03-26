@@ -1,5 +1,5 @@
 // needs to be your ip to run 
-const DEPLOYMENT = process.env.EXPO_PUBLIC_IP;
+const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
 // const PORT = process.env.EXPO_PUBLIC_PORT;
 
 async function getPlantCatalogPage(page) {
