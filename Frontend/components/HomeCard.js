@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Modal, Button } from 'react-native';
 import * as Progress from 'react-native-progress';
 
-const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, nutrientProgress }) => {
+const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, nutrientProgress, onDelete }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => {
@@ -52,56 +52,73 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
             </TouchableOpacity>
             {/* Additional information about the plant provided through modal */}
             <Modal
-                animationType="fade"
-                transparent={true}
+                animationType="slide"
+                presentationStyle='pageSheet'
+                transparent={false}
                 visible={modalVisible}
                 onRequestClose={toggleModal}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Image source={imageSource} style={styles.modalImage} />
-                        <Text style={styles.modalTitleText}>{plantName}</Text>
-                        <Text style={styles.modalSubText}>{scientificName}</Text>
-                        
-                        {/* Small Note: To make the showsText property work, I had to manually adjust the Circle.js file
-                        in the react-native-progress folder in node_modules. There was a bug in the library where this would
-                        only display 0% no matter what you did.
-                        
-                        It solved by changing
-                        {formatText(progressValue)}
-
-                        in  Circle.js (node_modules\react-native-progress\Circle.js) to
-
-                        {progress ? formatText(progress._value) : this.forceUpdate()} 
-                        */}
-                        
-                        <View style={styles.progressContainer}>
-                            <Progress.Circle
-                                size={80}
-                                thickness={8}
-                                progress={waterLevelProgress}
-                                color='#7EC8E3'
-                                borderWidth={0}
-                                unfilledColor='#DFF1F8'
-                                strokeCap='round'
-                                showsText='true'
-                            />
-                            <Progress.Circle
-                                size={80}
-                                thickness={8}
-                                progress={nutrientProgress}
-                                color='#6ABE6B'
-                                borderWidth={0}
-                                unfilledColor='#D7EED8'
-                                strokeCap='round'
-                                showsText='true'
-                            />
-                        </View>
-                        <Text style={styles.progressText}>Water</Text>
-                        <Text style={styles.progressText}>Nutrient</Text>
-
-                        <Button title="Close" onPress={toggleModal} />
-
+                <View style={styles.modalContent}>
+                    {/* Backbutton */}
+                    <View style={styles.Backbutton}>
+                        <Button title="Close" color="#000000" alignItems="left" onPress={() => setModalVisible(false)}></Button>
                     </View>
+
+                    <Image source={imageSource} style={styles.modalImage} />
+                    <Text style={styles.modalTitleText}>{plantName}</Text>
+                    <Text style={styles.modalSubText}>{scientificName}</Text>
+                    
+                    {/* Small Note: To make the showsText property work, I had to manually adjust the Circle.js file
+                    in the react-native-progress folder in node_modules. There was a bug in the library where this would
+                    only display 0% no matter what you did.
+                    
+                    It solved by changing
+                    {formatText(progressValue)}
+
+                    in  Circle.js (node_modules\react-native-progress\Circle.js) to
+
+                    {progress ? formatText(progress._value) : this.forceUpdate()} 
+                    */}
+                    
+                    <View style={styles.progressContainer}>
+                        <View style={styles.progressItem}>
+                            <Text style={[styles.progressText, { color: '#7EC8E3' }]}>Water</Text>
+                            <Text style={[styles.progressSubText, { color: '#7EC8E3' }]}>Level</Text>
+                        </View>
+
+                        <Progress.Circle
+                            size={80}
+                            thickness={8}
+                            progress={waterLevelProgress}
+                            color='#7EC8E3'
+                            borderWidth={0}
+                            unfilledColor='#DFF1F8'
+                            strokeCap='round'
+                            showsText={true}
+                            style={{ marginLeft: 20, marginRight: 20 }}
+                        />
+                        <View style={styles.progressItem}>
+                            <Text style={[styles.progressText, { color: '#6ABE6B' }]}>Nutrient</Text>
+                            <Text style={[styles.progressSubText, { color: '#6ABE6B' }]}>Level</Text>
+                        </View>
+
+                        <Progress.Circle
+                            size={80}
+                            thickness={8}
+                            progress={nutrientProgress}
+                            color='#6ABE6B'
+                            borderWidth={0}
+                            unfilledColor='#D7EED8'
+                            strokeCap='round'
+                            showsText={true}
+                            style={{ marginLeft: 20, marginRight: 20 }}
+                        />
+                    </View>
+                    
+                    {/* Delete Button */}
+                    <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
+                        <Image source={require('../assets/trashbin.png')} style={styles.deleteIcon} />
+                    </TouchableOpacity>
+                    
                 </View>
             </Modal>
         </View>
@@ -184,7 +201,6 @@ const styles = StyleSheet.create({
         color: '#6ABE6B',
         fontSize: 14,
     },
-
     // Style for the circular progress bars inside of the cards 
     innerCircle: {
         position: 'absolute',
@@ -193,21 +209,12 @@ const styles = StyleSheet.create({
         top: 18,
         left: 18,
     },
-
-    modalContainer: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     modalContent: {
         backgroundColor: '#fff',
         paddingTop: 20,
         paddingBottom: 20,
         paddingLeft: 20,
         paddingRight: 20,
-        height: 735,
-        width: 375,
         borderRadius: 20,
         elevation: 20,
     },
@@ -215,8 +222,10 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         borderRadius: 10,
-        marginBottom: 10,
-    },
+        marginBottom: 30,
+        marginTop: 30,
+        alignSelf: 'center', 
+    },    
     modalTitleText: {
         fontSize: 30,
         marginBottom: 1,
@@ -230,12 +239,36 @@ const styles = StyleSheet.create({
         color: '#888'
     },
     progressContainer: {
-        marginBottom: 10,
         flexDirection: 'row',
+        justifyContent: 'center', 
+        alignItems: 'center',
+        marginTop: 10, 
+    },
+    progressItem: {
+        alignItems: 'center',
     },
     progressText: {
         fontSize: 14,
-        marginTop: 5,
+        fontWeight: 'bold',
+        textAlign: 'center', 
+    },    
+    progressSubText: {
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    Backbutton: {
+        alignItems: 'left',
+        marginBottom: 10,
+      },
+    deleteButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+    },
+    deleteIcon: {
+        width: 30,
+        height: 30,
+        resizeMode: 'contain',
     },
 });
 
