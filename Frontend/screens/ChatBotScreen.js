@@ -7,6 +7,7 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { GiftedChat, InputToolbar, Composer, Bubble, Send } from 'react-native-gifted-chat'
 import { sendMessage } from '../utils/sendchat'; 
 import logo from '../assets/LogoActiveGreen.png';
+// import { Markdown } from 'react-native-markdown-display';
 
 
 export default function ChatBotScreen() {
@@ -99,13 +100,30 @@ export default function ChatBotScreen() {
 
 const renderSendButton = (props) => {
   return(
-  <Send {...props}>
-    <View style={{ marginBottom: 5 }}>
-      <FontAwesome name="send" size={24} color="#68b454" />
-    </View>
+    <Send {...props}>
+      <View style={{ 
+        marginBottom: 0,
+        borderWidth: 0, 
+        width: 34, 
+        height: 34,
+        borderRadius: 24,
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#68b454' 
+      }}>
+        <FontAwesome name="send" size={18} color="white" />
+      </View>
   </Send>
   );
 };
+// const renderMessageText = (props) => {
+//   const { currentMessage } = props;
+//   return (
+//     <View>
+//       <Markdown>{currentMessage.text}</Markdown>
+//     </View>
+//   );
+// };
 
 
   const renderBubble = (props) => {

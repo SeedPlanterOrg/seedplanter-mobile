@@ -1,12 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 async function sendMessage(message, messages, startConversation) {
-    const IP = process.env.EXPO_PUBLIC_IP;
-    const PORT = process.env.EXPO_PUBLIC_PORT;
+    // const IP = process.env.EXPO_PUBLIC_IP;
+    // const PORT = process.env.EXPO_PUBLIC_PORT;
+
+    const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
+    
     console.log(`IP: ${IP}, PORT: ${PORT}`);
     const userId = await AsyncStorage.getItem('userId');
 
-    const response = await fetch(`${IP}:${PORT}/chat/sendmessage`, {
+    const response = await fetch(`${DEPLOYMENT}/chat/sendmessage`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
