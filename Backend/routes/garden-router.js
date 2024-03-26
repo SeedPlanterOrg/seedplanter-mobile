@@ -14,7 +14,7 @@ const GardenModel = require("../models/garden-schema");
 
 
 
-router.use(authenticate); // makes routes accessible by only the user
+// router.use(authenticate); // makes routes accessible by only the user
 router.post('/create_garden', createGarden);
 router.put('/add_plant', addPlant);
 router.get('/get_garden', getGardenByUserId);

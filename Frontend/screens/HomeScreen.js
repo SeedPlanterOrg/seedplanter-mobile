@@ -86,14 +86,16 @@ export default function HomeScreen() {
               if (plant.plantDetails && plant.plantDetails.image_urls != null) {
                 image = plant.plantDetails.image_urls[0];
             }
+            let waterRatio = plant.waterLevel / 10;
+            let nutrients = plant.fertilizerLevel / 10;
             newPlant = {
                 id: plant.plantId.toString(), // CHANGE WHEN DATABASE IS FIXED
                 // id: `default-${Math.random()}`,
                 imageSource: image,
                 plantName: plant.plantDetails.name,
                 scientificName: plant.plantDetails.binomial_name,
-                waterLevelProgress: 0.6,
-                nutrientProgress: 0.2,
+                waterLevelProgress: waterRatio,
+                nutrientProgress: nutrients,
                   //     id: 3,
   //     imageSource: require('../assets/strawberry.jpg'),
   //     plantName: 'Strawberry',
