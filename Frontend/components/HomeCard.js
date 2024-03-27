@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Modal, Button, useColorScheme } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { darkTheme, lightTheme } from '../App';
-import { styled, ThemeProvider } from 'styled-components/native';
 
 const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, nutrientProgress, onDelete }) => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -14,7 +13,6 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
     };
 
     return (
-        <ThemeProvider theme={theme}>
         <View style={styles.container}>
             <TouchableOpacity style={[styles.card, {backgroundColor: theme.gardenCard}]} onPress={toggleModal}>
                 <View style={styles.cardContent}>
@@ -67,8 +65,8 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                     <View style={styles.Backbutton}>
                         <Button title="Close" color="#000000" alignItems="left" onPress={() => setModalVisible(false)}></Button>
                     </View>
-
-                    <Image source={imageSource} style={styles.modalImage} />
+                    
+                    {imageSource && <Image source={imageSource} style={styles.modalImage} />}
                     <Text style={styles.modalTitleText}>{plantName}</Text>
                     <Text style={styles.modalSubText}>{scientificName}</Text>
                     
@@ -127,7 +125,6 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                 </View>
             </Modal>
         </View>
-        </ThemeProvider>
     );
 }
 

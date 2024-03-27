@@ -188,7 +188,7 @@ export default function HomeScreen() {
     setImage(''); // Reset the displayed image in the CustomPlantModel
     const newPlantData = [...plantData, {
       id: plantData.length + 1,
-      imageSource: image ? { uri: image } : require('../assets/lettuce.jpg'), // Set to the user-selected image if available, otherwise use 'lettuce.jpg'
+      imageSource: image ? image : require('../assets/lettuce.jpg'),
       plantName: 'New Plant',
       scientificName: 'Scientific Name', 
       waterLevelProgress: 0.5, 
