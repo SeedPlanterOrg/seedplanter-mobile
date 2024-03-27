@@ -153,31 +153,26 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 90,
     },
-
-    // Card Styling
     scrollView: {
         flex: 1,
         width: '100%',
     },
-
-    // Actual Card Styling 
     card: {
         borderRadius: 10,
         elevation: 3,
         backgroundColor: '#fff',
-        padding: 20,
+        padding: 15,
         alignItems: 'center',
         justifyContent: 'center',
     },
     cardContent: {
         flexDirection: 'row',
-        alignItems: 'center',
     },
     cardImage: {
-        width: 100,
-        height: 125,
+        width: 125,
+        height: 150,
         borderRadius: 10,
-        marginRight: 10,
+        marginRight: 20,
         resizeMode: 'cover',
     },
     textContent: {
@@ -186,12 +181,12 @@ const styles = StyleSheet.create({
     plantName: {
         fontSize: 16,
         fontWeight: 'bold',
-        marginBottom: 5,
     },
     scientificName: {
-        fontSize: 12,
+        fontSize: 14,
         color: '#888',
         marginBottom: 10,
+        marginTop: 5,
     },
     waterLevel: {
         color: '#7EC8E3',
