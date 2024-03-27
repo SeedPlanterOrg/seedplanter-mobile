@@ -169,13 +169,15 @@ const createGarden = async (req, res, next) => {
 
 const addPlant = async (req, res, next) => {
   console.log(req.body);
-  
+  await mongoose.connect(uri, clientOptions);
   const userId = req.body.gardenPlant.id;
   const plantId = req.body.gardenPlant.plantId;
-
+  
+  // get static plant
   const catalogPlant = await PlantModel.find({id: plantId});
+
   try {
-      
+      // create new garden plant 
       const newGardenPlant = await GardenPlantModel.create({
       gardenId: userId,
       plantId: plantId, 
@@ -187,16 +189,17 @@ const addPlant = async (req, res, next) => {
       fertilizerLevel: req.body.gardenPlant.fertilizerLevel,
       lastFertilizingDate: req.body.gardenPlant.lastFertilizingDate,
       notes: [req.body.gardenPlant.notes],
-      imagesUrls: req.body.gardenPlant.imagesUrls,
+      imagesUrls: catalogPlant[0].image_urls,
       plantDetails: catalogPlant[0],
     });
-    //newGardenPlant.save();
+
+    // find the garden by the user id they are the same
     console.log(`New Garden Plant Saved: ${newGardenPlant}`);
     const updateGarden = await GardenModel.findById(req.body.gardenPlant._id);
     if (!updateGarden) {
       return res.status(404).json({ message: "Garden not found" });
     }
-
+    //
     updateGarden.plants.push(newGardenPlant._id);
     await updateGarden.save();
 
