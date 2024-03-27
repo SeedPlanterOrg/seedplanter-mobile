@@ -12,6 +12,7 @@ import {
   Button,
   useColorScheme
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Progress from 'react-native-progress';
 import HomeCard from '../components/HomeCard';
 import PlanterPointContainer from '../components/PlanterPointContainer';
@@ -26,6 +27,8 @@ import {
 } from '../utils/http'
 import { darkTheme, lightTheme } from '../App';
 import { styled, ThemeProvider } from 'styled-components/native';
+import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 export default function HomeScreen() {
   const [customPlantModalVisible, setCustomPlantModalVisible] = useState(false);
@@ -65,69 +68,70 @@ export default function HomeScreen() {
   //   //This can be replaced with API later
   // ]);
   
+
+
+  // let user = '65efc324a82682e507e38ebc';
   const [plantData, setPlantData] = useState([]);
-
+  const isFocused = useIsFocused();
   useEffect(() => {
-    async function fetchPlants() {
-        try {
-            const data = await getGarden('65efc324a82682e507e38ebc');
-            // console.log('DEBUGCODE_HOME_SCREEN: ' + data);
-            let displayData = [];
-            // console.log('DEBUGCODE_HOME_SCREEN: ---------------------------------------------------------------------');
-            // console.log('DEBUGCODE_HOME_SCREEN: ' + JSON.stringify(data.gardenPlants));
-            // console.log('DEBUGCODE_HOME_SCREEN: ---------------------------------------------------------------------');
-            let plants = data.gardenPlants;
-            let image;
-            data.gardenPlants.forEach(plant => {
-              console.log("Plant ID:", plant._id);
-              console.log("Garden ID:", plant.gardenId);
-              //console.log("Plant Details:", plant.plantDetails);
-          
-              // If plantDetails is an array, iterate over it as well
-              if(Array.isArray(plant.plantDetails)){
-                  plant.plantDetails.forEach(detail => {
-                      console.log("Detail ID:", detail._id);
-                      console.log("Detail Name:", detail.name);
-                      console.log("Detail Name:", detail.binomial_name);
-                      console.log("Detail Name:", detail.image_urls[0]);
-                      // Access other properties as needed
-                  });
-              }
-              if (plant.plantDetails && plant.plantDetails.image_urls != null) {
-                image = plant.plantDetails.image_urls[0];
-            }
-            let waterRatio = plant.waterLevel / 10;
-            let nutrients = plant.fertilizerLevel / 10;
-            newPlant = {
-                id: plant.plantId.toString(), // CHANGE WHEN DATABASE IS FIXED
-                // id: `default-${Math.random()}`,
-                imageSource: image,
-                plantName: plant.plantDetails.name,
-                scientificName: plant.plantDetails.binomial_name,
-                waterLevelProgress: waterRatio,
-                nutrientProgress: nutrients,
-                  //     id: 3,
-  //     imageSource: require('../assets/strawberry.jpg'),
-  //     plantName: 'Strawberry',
-  //     scientificName: 'Scientific Name',
-  //     waterLevelProgress: 0.6,
-  //     nutrientProgress: 0.2,
-            }
-            displayData.push(newPlant);
-              console.log(displayData);
-          });
+    if (isFocused) {
+        // Your code to run when HomeScreen is focused
+      async function fetchPlants() {
+          try {
+              const user = await AsyncStorage.getItem('userId');
+              console.log("USER_DEBUG2 " + user);
+              const data = await getGarden(user);
+              // console.log('DEBUGCODE_HOME_SCREEN: ' + data);
+              let displayData = [];
+              let image;
+              data.gardenPlants.forEach(plant => {
+                console.log("Plant ID:", plant._id);
+                console.log("Garden ID:", plant.gardenId);
+                //console.log("Plant Details:", plant.plantDetails);
             
+                // If plantDetails is an array, iterate over it as well
+                if(Array.isArray(plant.plantDetails)){
+                    plant.plantDetails.forEach(detail => {
+                        console.log("Detail ID:", detail._id);
+                        console.log("Detail Name:", detail.name);
+                        console.log("Detail Name:", detail.binomial_name);
+                        console.log("Detail Name:", detail.image_urls[0]);
+                        // Access other properties as needed
+                    });
+                }
+                if (plant.plantDetails && plant.plantDetails.image_urls != null) {
+                  image = plant.plantDetails.image_urls[0];
+              }
+              let waterRatio = plant.waterLevel / 10;
+              let nutrients = plant.fertilizerLevel / 10;
+              let min = 100;
+              let max = 1000;
+              let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+              newPlant = {
+                  id: randomInt.toString(), 
+                  // id: `default-${Math.random()}`,
+                  imageSource: image,
+                  plantName: plant.plantDetails.name,
+                  scientificName: plant.plantDetails.binomial_name,
+                  waterLevelProgress: waterRatio,
+                  nutrientProgress: nutrients,
+              }
+              displayData.push(newPlant);
+                console.log(displayData);
+            });
               
-            // console.log(displayData);
-            setPlantData(displayData);
-        } catch (error) {
-            console.error('Error fetching plants:', error);
-            // Optionally, handle errors in the UI (like showing an error message)
-        }
-    }
+                
+              // console.log(displayData);
+              setPlantData(displayData);
+          } catch (error) {
+              console.error('Error fetching plants:', error);
+              // Optionally, handle errors in the UI (like showing an error message)
+          }
+      }
 
-    fetchPlants();
-  }, []);
+      fetchPlants();
+    } 
+  }, [isFocused]);
 
 
   // Function to handle both the custom and catalog option from the AddOptionsModal
@@ -166,7 +170,7 @@ export default function HomeScreen() {
   // This function defines how the homecard will be rendered
   const renderItem = ({ item }) => (
     <HomeCard
-      imageSource={{ uri: item.imageSource }} 
+      imageSource={{ uri: item.imageSource } } 
       plantName={item.plantName}
       scientificName={item.scientificName}
       waterLevelProgress={item.waterLevelProgress}
