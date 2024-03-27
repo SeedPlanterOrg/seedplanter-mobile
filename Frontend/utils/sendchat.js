@@ -7,7 +7,7 @@ async function sendMessage(message, messages, startConversation) {
     let link = process.env.EXPO_PUBLIC_IP
     const env = process.env.EXPO_PUBLIC_ENV;
 
-    if(env === "production"){
+    if(env == "production"){
       link = process.env.EXPO_PUBLIC_DEPLOYMENT
     }
     
