@@ -3,9 +3,14 @@ import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaVi
 import { StatusBar } from 'expo-status-bar';
 import * as Progress from 'react-native-progress';
 import { MaterialCommunityIcons, FontAwesome6, Feather } from '@expo/vector-icons';
-import { getPlantCatalogPage, findPlantById } from '../utils/http';
+import {getPlantCatalogPage,
+  findPlantById, 
+  getGarden,
+  addPlant,
+  createGarden} from '../utils/http';
 import filter from "lodash.filter";
 import { WebView } from 'react-native-webview';
+
 
 export default function CatalogScreen() {
   const [userInput, setUserInput] = useState("");
@@ -26,9 +31,8 @@ export default function CatalogScreen() {
 
   const [plantsData, setPlantsData] = useState([]);
   const [fullPlantsData, setFullPlantsData] = useState([]);
-
   const [searchQuery, setSearchQuery] = useState('');
-
+  
   useEffect(() => {
     async function fetchPlants() {
       try {
@@ -220,14 +224,34 @@ export default function CatalogScreen() {
                       {/* add onPress for the adding to catalog */}
 
                       <View style={{ alignSelf: "flex-end", justifyContent: 'center' }}>
-                        <TouchableOpacity 
-                          onPress={() => {
+                        <TouchableOpacity style={styles.plusButtonContainer} onPress={() => {
+                          let id = '65efc324a82682e507e38ebc' + 1;
+                          gardenPlant = {
+                            _id: '66003bc6d48a27039a864f5b',
+                            id: id,
+                            plantId: modalID,
+                            water: true,
+                            fertilize: true,
+                            prune: true,
+                            waterLevel: 5,
+                            lastWateringDate: "2024-03-21",
+                            fertilizerLevel: 3,
+                            lastFertilizingDate: "2024-03-15",
+                            notes: "This is a test"
+                          }
+                          try {
+                            const response = addPlant(gardenPlant);
+                            console.log(response);
+                          } catch (err) {
+                            console.error(`Failed to add plant: ${err}`);
+                          }
 
-                          }}
-                          style={styles.addbutton}
-                        >
-                          <Text style={styles.plantAdd}>Add Plant</Text>
-                        </TouchableOpacity>
+                        }}>
+                        <Image
+                          source={require('../assets/plus_icon.png')}
+                          style={styles.plusButton}
+                        />
+                      </TouchableOpacity>
                       </View>
                     </ScrollView>
                   </View>

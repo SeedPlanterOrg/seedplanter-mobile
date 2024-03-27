@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, SafeAreaView, Image, Touchable, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView, Image, Touchable, Pressable, AsyncStorage } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Tabs from '../navigation/tabs';
 import { TextInput, Appearance, useColorScheme} from 'react-native';
@@ -11,7 +11,7 @@ import { ThemeProvider } from 'styled-components/native';
 // import { useContext } from 'react';
 // import { AuthContext } from '../context/AuthContext';
 // import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorMessage from '../components/ErrorMessage';
 let link = process.env.EXPO_PUBLIC_IP
 const env = process.env.EXPO_PUBLIC_ENV;
@@ -84,8 +84,13 @@ export default function LoginScreen() {
       console.log(data);
   
       // Store the user ID and token in local storage or in-memory state
-      await AsyncStorage.setItem('userId', data.userId);
-      await AsyncStorage.setItem('token', data.token);
+      try {
+        console.log("USER_DEBUG " + data.userId);
+        await AsyncStorage.setItem('userId', data.userId);
+        await AsyncStorage.setItem('token', data.token);
+      } catch (error) {
+        console.error('Error setting data in AsyncStorage:', error);
+      }
   
       // Navigate to the next screen
       navigation.navigate(Tabs);
