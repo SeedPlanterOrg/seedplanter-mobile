@@ -37,6 +37,8 @@ export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+  const [plantName, setPlantName] = useState('');
+  const [scientificName, setScientificName] = useState('');
   // const [plantData, setPlantData] = useState([
   //   {
   //     id: 1,
@@ -129,6 +131,13 @@ export default function HomeScreen() {
     fetchPlants();
   }, []);
 
+  // Functions to update plant names and scientific names
+  const handlePlantNameChange = (text) => {
+    setPlantName(text);
+  };
+  const handleScientificNameChange = (text) => {
+    setScientificName(text);
+  };
 
   // Function to handle both the custom and catalog option from the AddOptionsModal
   const handleAddOptionSelection = (option) => {
@@ -189,13 +198,15 @@ export default function HomeScreen() {
     const newPlantData = [...plantData, {
       id: plantData.length + 1,
       imageSource: image ? image : require('../assets/lettuce.jpg'),
-      plantName: 'New Plant',
-      scientificName: 'Scientific Name', 
+      plantName: plantName ? plantName : 'New Plant', // Use updated plant name
+      scientificName: scientificName ? scientificName : 'Scientific Name', // Use updated scientific name
       waterLevelProgress: 0.5, 
       nutrientProgress: 0.5, 
     }];
     setPlantData(newPlantData);
     closeCustomPlantModal();
+    setPlantName('');
+    setScientificName('');
   };
 
   // Function to delete a plant card 
@@ -271,7 +282,7 @@ export default function HomeScreen() {
 
               {/* Backbutton */}
               <View style={styles.Backbutton}>
-                <Button title="Close" color="#000000" alignItems="left" onPress={closeAddOptionsModal}></Button>
+                <Button title="Close" color="#000000" onPress={closeAddOptionsModal}></Button>
               </View>
 
               <View style={styles.selectModalButton}>
@@ -324,6 +335,28 @@ export default function HomeScreen() {
               </TouchableOpacity>
             </View>
 
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Plant Name</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={handlePlantNameChange}
+                value={plantName}
+                placeholder="Enter plant name"
+                placeholderTextColor="#888" 
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Scientific Name</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={handleScientificNameChange}
+                value={scientificName}
+                placeholder="Enter scientific name"
+                placeholderTextColor="#888" 
+              />
+            </View>
+
+
             {/* FlatList for both AddPlantCard components */}
             <FlatList
               data={[
@@ -343,28 +376,37 @@ export default function HomeScreen() {
                   notifyMe: nutrientsNotify,
                   toggleNotifyMe: toggleNutrientsNotify,
                 },
+                {
+                  id: 'addButton',
+                  isButton: true,
+                }
               ]}
               renderItem={({ item }) => (
                 <View style={styles.addPlantCardContainer}>
-                  <AddPlantCard
-                    headerText={item.headerText}
-                    imageSource={item.imageSource}
-                    lastDateText={item.lastDateText}
-                    notifyMe={item.notifyMe}
-                    toggleNotifyMe={item.toggleNotifyMe}
-                  />
+                  {item.isButton ? (
+                    // Add plant button 
+                    <View style={styles.addButtonContainer}>
+                      <View style={styles.addButtonBackground}>
+                        <TouchableOpacity onPress={handleAddPlant}>
+                          <Text style={styles.addButtonText}>Add Plant</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ) : (
+                    // Add plant card
+                    <AddPlantCard
+                      headerText={item.headerText}
+                      imageSource={item.imageSource}
+                      lastDateText={item.lastDateText}
+                      notifyMe={item.notifyMe}
+                      toggleNotifyMe={item.toggleNotifyMe}
+                    />
+                  )}
                 </View>
               )}
               keyExtractor={(item) => item.id.toString()}
               showsVerticalScrollIndicator={false}
             />
-
-            {/* Add Plant Button */}
-            <View style={styles.addButtonContainer}>
-              <TouchableOpacity onPress={handleAddPlant}>
-                <Text style={styles.addButtonText}>Add Plant</Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </Modal>
       </View>
@@ -378,11 +420,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     paddingTop: 10,
-    paddingHorizontal: 15,
   },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 15,
   },
   gardenHealthMeter: {
     alignItems: 'flex-start',
@@ -407,6 +449,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 40,
     marginBottom: 20,
+    paddingLeft: 15,
   },
   greenText: {
     color: '#6ABE6B',
@@ -416,10 +459,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   scrollView: {
-    flex: 1,
     width: '100%',
-    paddingRight: 4,
-    paddingLeft: 4,
   },
   plusButtonContainer: {
     marginLeft: 5,
@@ -442,8 +482,6 @@ const styles = StyleSheet.create({
   customPlantModalContainer: {
     backgroundColor: '#fff',
     paddingTop: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
     height: 760,
     borderRadius: 20,
     elevation: 20,
@@ -451,6 +489,7 @@ const styles = StyleSheet.create({
   Backbutton: {
     alignItems: 'left',
     marginBottom: 10,
+    marginLeft: 15,
   },
   rightImageSize: {
     width: 10,
@@ -472,16 +511,21 @@ const styles = StyleSheet.create({
   plusIconContainer: {
     position: 'absolute',
     bottom: -10,
-    right: 80,
+    right: 105,
     backgroundColor: '#6ABE6B',
     borderRadius: 20,
   },
   addButtonContainer: {
+    flex: 1,
+    alignItems: 'flex-end', 
+    justifyContent: 'flex-end', 
+    padding: 15,
+  },
+  addButtonBackground: {
     marginTop: 20,
     backgroundColor: '#6ABE6B', 
     borderRadius: 20,
     width: 150, 
-    marginLeft: 190, 
   },
   addButtonText: {
     fontSize: 18,
@@ -492,20 +536,16 @@ const styles = StyleSheet.create({
   },  
   selectModalContainer: {
     backgroundColor: '#fff',
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
     height: 270,
     width: 270,
     borderRadius: 20,
     elevation: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   selectModalButton: {
     marginTop: 15, 
     marginBottom: 15, 
-    marginLeft: 15, 
-    marginRight: 15, 
     backgroundColor: '#6ABE6B',
     borderRadius: 20,
     width: 200,
@@ -522,6 +562,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   addPlantCardContainer: {
-    marginHorizontal:6, 
+    marginHorizontal:0, 
+  },
+  inputContainer: {
+    marginBottom: 20,
+    marginHorizontal: 15,
+  },
+  inputLabel: {
+    marginBottom: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333', 
+  },
+  input: {
+    borderWidth: 1.5,
+    borderColor: '#6ABE6B',
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: '#333', 
   },
 });
