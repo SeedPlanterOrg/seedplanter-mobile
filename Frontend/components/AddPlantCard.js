@@ -1,15 +1,18 @@
 import React from 'react';
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { View, Text, Switch, StyleSheet, Image } from 'react-native';
+import { View, Text, Switch, StyleSheet, Image, useColorScheme } from 'react-native';
 import Slider from "@react-native-community/slider";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { SelectList } from 'react-native-dropdown-select-list'
+import { darkTheme, lightTheme } from '../App';
 
 const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource, lastDateText }) => {
     const [sliderState, setSliderState] = React.useState(0);
     const [date, setDate] = useState(new Date()); 
     const [selected, setSelected] = React.useState("");
+    const colorScheme = useColorScheme();
+    const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
     const data = [
         {key:'1', value:'Weekly' },
@@ -23,10 +26,10 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource, lastD
 
     return (
         <View style={styles.cardContainer}>
-            <View style={styles.cardContent}>
+            <View style={[styles.cardContent, { backgroundColor: theme.gardenCard }]}>
                 <View style={styles.headerContainer} >
-                    {imageSource && <Image source={imageSource} style={styles.image} />}
-                    <Text style={styles.cardText}>{headerText}</Text>
+                    {imageSource && <Image source={imageSource} style={[styles.image, { tintColor: theme.text }]} />}
+                    <Text style={[styles.cardText, {color: theme.text}]}>{headerText}</Text>
                     <View style={styles.toggleContainer}>
                         <Text style={styles.toggleText}>Notify Me</Text>
                         <Switch

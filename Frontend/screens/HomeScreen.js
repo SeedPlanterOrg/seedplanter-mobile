@@ -26,6 +26,7 @@ import {
 } from '../utils/http'
 import { darkTheme, lightTheme } from '../App';
 import { styled, ThemeProvider } from 'styled-components/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeScreen() {
   const [customPlantModalVisible, setCustomPlantModalVisible] = useState(false);
@@ -278,30 +279,28 @@ export default function HomeScreen() {
           visible={addOptionsModalVisible}
           onRequestClose={() => setAddOptionsModalVisible(false)}>
           <View style={styles.ModalView}>
-            <View style={styles.selectModalContainer}>
+            <View style={[styles.selectModalContainer, { backgroundColor: theme.gardenBackground }]}>
 
               {/* Backbutton */}
               <View style={styles.Backbutton}>
-                <Button title="Close" color="#000000" onPress={closeAddOptionsModal}></Button>
+                <Button title="Close" color={theme.text} onPress={closeAddOptionsModal}></Button>
               </View>
 
               <View style={styles.selectModalButton}>
-              <TouchableOpacity onPress={() => handleAddOptionSelection('Custom')}>
-                    <Text style={styles.addButtonText}>Add Custom Plant</Text>
-                  </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleAddOptionSelection('Custom')}>
+                  <Text style={styles.addButtonText}>Add Custom Plant</Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.selectModalButton}>
-              <TouchableOpacity onPress={() => handleAddOptionSelection('Catalog')}>
-                    <Text style={styles.addButtonText}>Add from Catalog</Text>
-                  </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleAddOptionSelection('Catalog')}>
+                  <Text style={styles.addButtonText}>Add from Catalog</Text>
+                </TouchableOpacity>
               </View>
-
 
             </View>
           </View>
         </Modal>
-
 
         {/* CustomPlantModal */}
         <Modal
@@ -309,10 +308,10 @@ export default function HomeScreen() {
           presentationStyle='pageSheet'
           visible={customPlantModalVisible}
           onRequestClose={closeCustomPlantModal}>
-          <View style={styles.customPlantModalContainer}>
+          <View style={[styles.customPlantModalContainer, { backgroundColor: theme.gardenBackground }]}>
             {/* Backbutton */}
             <View style={styles.Backbutton}>
-              <Button title="Close" color="#000000" alignItems="left" onPress={closeCustomPlantModal}></Button>
+              <Button title="Close" color={theme.text} alignItems="left" onPress={closeCustomPlantModal}></Button>
             </View>
 
             {/* Image Selector */}
@@ -330,13 +329,13 @@ export default function HomeScreen() {
               <TouchableOpacity style={styles.plusIconContainer} onPress={handleImagePickerPress}>
                 <Image
                   source={require('../assets/plus_icon.png')}
-                  style={styles.plusButton}
+                  style={[styles.plusButton, {tintColor: theme.background}]}
                 />
               </TouchableOpacity>
             </View>
-
+            
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Plant Name</Text>
+              <Text style={[styles.inputLabel, {color: theme.text}]}>Plant Name</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={handlePlantNameChange}
@@ -346,7 +345,7 @@ export default function HomeScreen() {
               />
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Scientific Name</Text>
+            <Text style={[styles.inputLabel, {color: theme.text}]}>Scientific Name</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={handleScientificNameChange}
@@ -480,16 +479,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   customPlantModalContainer: {
-    backgroundColor: '#fff',
-    paddingTop: 20,
-    height: 760,
-    borderRadius: 20,
-    elevation: 20,
-  }, 
+    flex: 1, 
+    backgroundColor: '#fff', 
+  },  
   Backbutton: {
     alignItems: 'left',
-    marginBottom: 10,
-    marginLeft: 15,
+    marginTop: 10,
+    marginLeft: 10,
   },
   rightImageSize: {
     width: 10,

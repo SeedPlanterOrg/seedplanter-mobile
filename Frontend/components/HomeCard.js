@@ -60,10 +60,10 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                 transparent={false}
                 visible={modalVisible}
                 onRequestClose={toggleModal}>
-                <View style={styles.modalContent}>
+                <View style={[styles.modalContent, { backgroundColor: theme.gardenCard }]}>
                     {/* Backbutton */}
                     <View style={styles.Backbutton}>
-                        <Button title="Close" color="#000000" alignItems="left" onPress={() => setModalVisible(false)}></Button>
+                        <Button title="Close" color={theme.text} alignItems="left" onPress={() => setModalVisible(false)}></Button>
                     </View>
                     
                     {imageSource && <Image source={imageSource} style={styles.modalImage} />}
@@ -119,7 +119,7 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                     
                     {/* Delete Button */}
                     <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
-                        <Image source={require('../assets/trashbin.png')} style={styles.deleteIcon} />
+                        <Image source={require('../assets/trashbin.png')} style={[styles.deleteIcon, { tintColor: theme.text }]} />
                     </TouchableOpacity>
                     
                 </View>
@@ -205,17 +205,12 @@ const styles = StyleSheet.create({
         left: 18,
     },
     modalContent: {
+        flex: 1, 
         backgroundColor: '#fff',
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 20,
-        paddingRight: 20,
-        borderRadius: 20,
-        elevation: 20,
     },
     modalImage: {
-        width: 200,
-        height: 200,
+        width: 225,
+        height: 225,
         borderRadius: 10,
         marginBottom: 30,
         marginTop: 30,
@@ -224,20 +219,23 @@ const styles = StyleSheet.create({
     modalTitleText: {
         fontSize: 30,
         marginBottom: 1,
+        marginLeft: 15, 
         fontWeight: 'bold',
         color: '#6ABE6B',
     },
     modalSubText: {
         fontSize: 15,
         marginBottom: 10,
+        marginLeft: 15, 
         fontWeight: 'bold',
         color: '#888'
     },
     progressContainer: {
         flexDirection: 'row',
-        justifyContent: 'center', 
-        alignItems: 'center',
+        justifyContent: 'flex-start', 
+        alignItems: 'flex-start',
         marginTop: 10, 
+        marginLeft: 15, 
     },
     progressItem: {
         alignItems: 'center',
@@ -246,6 +244,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'center', 
+        marginTop: 20,
     },    
     progressSubText: {
         fontSize: 14,
@@ -253,8 +252,9 @@ const styles = StyleSheet.create({
     },
     Backbutton: {
         alignItems: 'left',
-        marginBottom: 10,
-      },
+        marginTop: 10,
+        marginLeft: 10,
+    },
     deleteButton: {
         position: 'absolute',
         top: 10,
