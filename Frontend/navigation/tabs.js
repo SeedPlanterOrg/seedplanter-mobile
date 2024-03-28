@@ -55,10 +55,7 @@ const Tabs = () => {
                     right: 10,
                     left: 10,
                     paddingBottom: 0,
-                    shadowColor: '#333',
-                    shadowColor: theme.navbar,
-                    shadowOpacity: 0.4,
-                    shadowOffset: { width: 1, height: 1 },
+                    borderTopWidth: 0
                 }
             }}>
             <Tab.Screen name="My Garden" component={HomeScreen} options={{
@@ -74,6 +71,16 @@ const Tabs = () => {
                         />
                     </View>
                 ),
+                headerStyle: {
+                    backgroundColor: theme.navbar,
+                    shadowColor: 'transparent',
+                },
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                    fontSize: 19, 
+                    color: theme.text, 
+                },
+                headerTitleAlign: 'left',
             }}/>
 
             <Tab.Screen name="Journal" component={JournalScreen} options={{
@@ -98,12 +105,23 @@ const Tabs = () => {
                         style={{
                             width: 30,
                             height: 30,
+                            tintColor: focused ? '#68b454' : theme.text
                         }}
                     />
                 ),
                 tabBarButton: (props) => (
                     <CustomTabBarButton { ... props }/>
-                )
+                ),
+                headerStyle: {
+                    backgroundColor: theme.navbar,
+                    shadowColor: 'transparent',
+                },
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                    fontSize: 19, 
+                    color: theme.text, 
+                },
+                headerTitleAlign: 'left',
             }}/>
 
             <Tab.Screen name="Search Plants" component={CatalogScreen} options={{
