@@ -19,7 +19,9 @@ export const lightTheme = {
   text: '#000000',
   navbar: 'white',
 
-  // Add more color variables as needed
+  // Welcome and Login
+  welcomeBG: ["#91f086", "#11823b", "#02231c"],
+  loginBG: ["#FFFFFF", "#378B29"],
 };
 
 export const darkTheme = {
@@ -27,9 +29,11 @@ export const darkTheme = {
   gardenCard: '#2C2C2C',
   gardenBackground: '#1E1E1E',
   text: '#FFFFFF',
-  navbar: '#191919'
+  navbar: '#191919',
 
-  // Add more color variables as needed
+  // Welcome and Login 
+  welcomeBG: ["#4cbf4c", "#0a5228", "#002112"],
+  loginBG: ["#000000", "#1B4514"],
 };
 
 const App = () => {

@@ -13,6 +13,8 @@ import { ThemeProvider } from 'styled-components/native';
 // import { useEffect } from 'react';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorMessage from '../components/ErrorMessage';
+import { LinearGradient } from 'expo-linear-gradient';
+
 let link = process.env.EXPO_PUBLIC_IP
 const env = process.env.EXPO_PUBLIC_ENV;
 
@@ -103,65 +105,67 @@ export default function LoginScreen() {
   
 
   return (
-    <ThemeProvider theme={theme}>
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Image 
-            source={require('../assets/LogoActiveGreen.png')}
-            style={styles.headerImg}
-            alt="logo"
-          />
-          <Text style={[styles.title, { color: theme.text }]}>Sign in to SeedPlanter</Text>
-          <Text style={styles.subtitle}>Get access to your plants now</Text>
-        </View>
-        <View style={styles.form}>
-          <View style={styles.input}>
-            <Text style={[styles.inputLabel, {color: theme.text}]}>Email address</Text>
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="email-address"
-              style={styles.inputControls}
-              placeholder="example@example.com"
-              placeholderTextColor="#6b7280"
-              value={email}
-              onChangeText={text => setEmail(text)}
+    <LinearGradient style={styles.container}
+      colors={theme.loginBG}
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 1}}
+    >
+      <SafeAreaView style={{ flex: 1 }}>
+          <View style={styles.header}>
+            <Image 
+              source={require('../assets/LogoActiveGreen.png')}
+              style={styles.headerImg}
+              alt="logo"
             />
+            <Text style={[styles.title, { color: theme.text }]}>Sign in to SeedPlanter</Text>
+            <Text style={styles.subtitle}>Get access to your plants now</Text>
           </View>
-          <View style={styles.input}>
-            <Text style={[styles.inputLabel, {color: theme.text}]}>Password</Text>
-            <TextInput
-              secureTextEntry
-              style={styles.inputControls}
-              placeholder="**********"
-              placeholderTextColor="#6b7280"
-              value={password}
-              onChangeText={text => setPassword(text)}
-            />
-          </View>
-          <ErrorMessage message={errorMessage} />
-          <View style={styles.formAction}>
-            <TouchableOpacity onPress={handleLogin} >
-              <View style={styles.loginButton}>
-                <Text style={styles.buttonTxt}>LOGIN</Text>
-              </View>
-            </TouchableOpacity>
+          <View style={styles.form}>
+            <View style={styles.input}>
+              <Text style={[styles.inputLabel, {color: theme.text}]}>Email address</Text>
+              <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                style={styles.inputControls}
+                placeholder="example@example.com"
+                placeholderTextColor="#6b7280"
+                value={email}
+                onChangeText={text => setEmail(text)}
+              />
+            </View>
+            <View style={styles.input}>
+              <Text style={[styles.inputLabel, {color: theme.text}]}>Password</Text>
+              <TextInput
+                secureTextEntry
+                style={styles.inputControls}
+                placeholder="**********"
+                placeholderTextColor="#6b7280"
+                value={password}
+                onChangeText={text => setPassword(text)}
+              />
+            </View>
+            <ErrorMessage message={errorMessage} />
+            <View style={styles.formAction}>
+              <TouchableOpacity onPress={handleLogin} >
+                <View style={styles.loginButton}>
+                  <Text style={styles.buttonTxt}>LOGIN</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.inline}>
+              <Text style={[styles.signupLabel, {color: theme.text}]}>Don't have an account?</Text>
+              <Pressable onPress={() => navigation.navigate("Signup")} >
+                  <Text style={[styles.signupLabel, {color: theme.text}]}> Sign up</Text>
+              </Pressable>
+            </View>
+
           </View>
 
-          <View style={styles.inline}>
-            <Text style={[styles.signupLabel, {color: theme.text}]}>Don't have an account?</Text>
-            <Pressable onPress={() => navigation.navigate("Signup")} >
-                <Text style={[styles.signupLabel, {color: theme.text}]}> Sign up</Text>
-            </Pressable>
-          </View>
-
-        </View>
-
-        <StatusBar style="auto" />
-      </View>
-    </SafeAreaView>
-    </ThemeProvider>
+          <StatusBar style="auto" />
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 

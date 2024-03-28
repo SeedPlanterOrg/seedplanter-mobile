@@ -13,118 +13,118 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
     };
 
     return (
-    <View style={styles.container}>
-        <TouchableOpacity style={[styles.card, {backgroundColor: theme.gardenCard}]} onPress={toggleModal}>
-            <View style={styles.cardContent}>
-                {imageSource && <Image source={imageSource} style={styles.cardImage} />}
-                <View style={[styles.textContent, {color: theme.text}]}>
-                    <Text style={[styles.plantName, {color: theme.text}]}>{plantName}</Text>
-                    <Text style={styles.scientificName}>{scientificName}</Text>
+        <View style={styles.container}>
+            <TouchableOpacity style={[styles.card, {backgroundColor: theme.gardenCard}]} onPress={toggleModal}>
+                <View style={styles.cardContent}>
+                    {imageSource && <Image source={imageSource} style={styles.cardImage} />}
+                    <View style={[styles.textContent, {color: theme.text}]}>
+                        <Text style={[styles.plantName, {color: theme.text}]}>{plantName}</Text>
+                        <Text style={styles.scientificName}>{scientificName}</Text>
 
-                    {/* Dummy progress circle for Water Level */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {/* Dummy progress circle for Water Level */}
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Progress.Circle
+                                size={100}
+                                thickness={8}
+                                progress={waterLevelProgress}
+                                color='#7EC8E3'
+                                borderWidth={0}
+                                unfilledColor='#DFF1F8'
+                                strokeCap='round'
+                            >
+                                {/* Nested progress circle for nutrients */}
+                                <View style={styles.innerCircle}>
+                                    <Progress.Circle
+                                        size={65}
+                                        thickness={8}
+                                        progress={nutrientProgress}
+                                        color='#6ABE6B'
+                                        borderWidth={0}
+                                        unfilledColor='#D7EED8'
+                                        strokeCap='round'
+                                    />
+                                </View>
+                            </Progress.Circle>
+                            <View style={{ marginLeft: 10 }}>
+                                <Text style={styles.waterLevel}>Water Level</Text>
+                                <Text style={styles.nutrients}>Nutrients</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </TouchableOpacity>
+            {/* Additional information about the plant provided through modal */}
+            <Modal
+                animationType="slide"
+                presentationStyle='pageSheet'
+                transparent={false}
+                visible={modalVisible}
+                onRequestClose={toggleModal}>
+                <View style={[styles.modalContent, { backgroundColor: theme.gardenCard }]}>
+                    {/* Backbutton */}
+                    <View style={styles.Backbutton}>
+                        <Button title="Close" color={theme.text} alignItems="left" onPress={() => setModalVisible(false)}></Button>
+                    </View>
+                    
+                    {imageSource && <Image source={imageSource} style={styles.modalImage} />}
+                    <Text style={styles.modalTitleText}>{plantName}</Text>
+                    <Text style={styles.modalSubText}>{scientificName}</Text>
+                    
+                    {/* Small Note: To make the showsText property work, I had to manually adjust the Circle.js file
+                    in the react-native-progress folder in node_modules. There was a bug in the library where this would
+                    only display 0% no matter what you did.
+                    
+                    It solved by changing
+                    {formatText(progressValue)}
+
+                    in  Circle.js (node_modules\react-native-progress\Circle.js) to
+
+                    {progress ? formatText(progress._value) : this.forceUpdate()} 
+                    */}
+                    
+                    <View style={styles.progressContainer}>
+                        <View style={styles.progressItem}>
+                            <Text style={[styles.progressText, { color: '#7EC8E3' }]}>Water</Text>
+                            <Text style={[styles.progressSubText, { color: '#7EC8E3' }]}>Level</Text>
+                        </View>
+
                         <Progress.Circle
-                            size={100}
+                            size={80}
                             thickness={8}
                             progress={waterLevelProgress}
                             color='#7EC8E3'
                             borderWidth={0}
                             unfilledColor='#DFF1F8'
                             strokeCap='round'
-                        >
-                            {/* Nested progress circle for nutrients */}
-                            <View style={styles.innerCircle}>
-                                <Progress.Circle
-                                    size={65}
-                                    thickness={8}
-                                    progress={nutrientProgress}
-                                    color='#6ABE6B'
-                                    borderWidth={0}
-                                    unfilledColor='#D7EED8'
-                                    strokeCap='round'
-                                />
-                            </View>
-                        </Progress.Circle>
-                        <View style={{ marginLeft: 10 }}>
-                            <Text style={styles.waterLevel}>Water Level</Text>
-                            <Text style={styles.nutrients}>Nutrients</Text>
+                            showsText={true}
+                            style={{ marginLeft: 20, marginRight: 20 }}
+                        />
+                        <View style={styles.progressItem}>
+                            <Text style={[styles.progressText, { color: '#6ABE6B' }]}>Nutrient</Text>
+                            <Text style={[styles.progressSubText, { color: '#6ABE6B' }]}>Level</Text>
                         </View>
+
+                        <Progress.Circle
+                            size={80}
+                            thickness={8}
+                            progress={nutrientProgress}
+                            color='#6ABE6B'
+                            borderWidth={0}
+                            unfilledColor='#D7EED8'
+                            strokeCap='round'
+                            showsText={true}
+                            style={{ marginLeft: 20, marginRight: 20 }}
+                        />
                     </View>
+                    
+                    {/* Delete Button */}
+                    <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
+                        <Image source={require('../assets/trashbin.png')} style={[styles.deleteIcon, { tintColor: theme.text }]} />
+                    </TouchableOpacity>
+                    
                 </View>
-            </View>
-        </TouchableOpacity>
-        {/* Additional information about the plant provided through modal */}
-        <Modal
-            animationType="slide"
-            presentationStyle='pageSheet'
-            transparent={false}
-            visible={modalVisible}
-            onRequestClose={toggleModal}>
-            <View style={styles.modalContent}>
-                {/* Backbutton */}
-                <View style={styles.Backbutton}>
-                    <Button title="Close" color="#000000" alignItems="left" onPress={() => setModalVisible(false)}></Button>
-                </View>
-
-                <Image source={imageSource} style={styles.modalImage} />
-                <Text style={styles.modalTitleText}>{plantName}</Text>
-                <Text style={styles.modalSubText}>{scientificName}</Text>
-                
-                {/* Small Note: To make the showsText property work, I had to manually adjust the Circle.js file
-                in the react-native-progress folder in node_modules. There was a bug in the library where this would
-                only display 0% no matter what you did.
-                
-                It solved by changing
-                {formatText(progressValue)}
-
-                in  Circle.js (node_modules\react-native-progress\Circle.js) to
-
-                {progress ? formatText(progress._value) : this.forceUpdate()} 
-                */}
-                
-                <View style={styles.progressContainer}>
-                    <View style={styles.progressItem}>
-                        <Text style={[styles.progressText, { color: '#7EC8E3' }]}>Water</Text>
-                        <Text style={[styles.progressSubText, { color: '#7EC8E3' }]}>Level</Text>
-                    </View>
-
-                    <Progress.Circle
-                        size={80}
-                        thickness={8}
-                        progress={waterLevelProgress}
-                        color='#7EC8E3'
-                        borderWidth={0}
-                        unfilledColor='#DFF1F8'
-                        strokeCap='round'
-                        showsText={true}
-                        style={{ marginLeft: 20, marginRight: 20 }}
-                    />
-                    <View style={styles.progressItem}>
-                        <Text style={[styles.progressText, { color: '#6ABE6B' }]}>Nutrient</Text>
-                        <Text style={[styles.progressSubText, { color: '#6ABE6B' }]}>Level</Text>
-                    </View>
-
-                    <Progress.Circle
-                        size={80}
-                        thickness={8}
-                        progress={nutrientProgress}
-                        color='#6ABE6B'
-                        borderWidth={0}
-                        unfilledColor='#D7EED8'
-                        strokeCap='round'
-                        showsText={true}
-                        style={{ marginLeft: 20, marginRight: 20 }}
-                    />
-                </View>
-                
-                {/* Delete Button */}
-                <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
-                    <Image source={require('../assets/trashbin.png')} style={styles.deleteIcon} />
-                </TouchableOpacity>
-                
-            </View>
-        </Modal>
-    </View>
+            </Modal>
+        </View>
     );
 }
 
@@ -135,8 +135,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        paddingTop: 20,
-        paddingHorizontal: 25,
+        paddingTop: 15,
+        paddingHorizontal:15,
+        shadowOffset: { width: 1, height: 1 },
+        shadowColor: '#333',
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
     },
     healthMeter: {
         fontSize: 20,
@@ -149,38 +153,26 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 90,
     },
-
-    // Card Styling
     scrollView: {
         flex: 1,
         width: '100%',
     },
-
-    // Actual Card Styling 
     card: {
         borderRadius: 10,
         elevation: 3,
         backgroundColor: '#fff',
-        shadowOffset: { width: 1, height: 1 },
-        shadowColor: '#333',
-        shadowOpacity: 0.3,
-        padding: 20,
-        marginTop: 10,
+        padding: 15,
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: -25,
-        marginBottom: -20,
-        shadowRadius: 3,
     },
     cardContent: {
         flexDirection: 'row',
-        alignItems: 'center',
     },
     cardImage: {
-        width: 100,
-        height: 125,
+        width: 125,
+        height: 150,
         borderRadius: 10,
-        marginRight: 10,
+        marginRight: 20,
         resizeMode: 'cover',
     },
     textContent: {
@@ -189,12 +181,12 @@ const styles = StyleSheet.create({
     plantName: {
         fontSize: 16,
         fontWeight: 'bold',
-        marginBottom: 5,
     },
     scientificName: {
-        fontSize: 12,
+        fontSize: 14,
         color: '#888',
         marginBottom: 10,
+        marginTop: 5,
     },
     waterLevel: {
         color: '#7EC8E3',
@@ -213,17 +205,12 @@ const styles = StyleSheet.create({
         left: 18,
     },
     modalContent: {
+        flex: 1, 
         backgroundColor: '#fff',
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 20,
-        paddingRight: 20,
-        borderRadius: 20,
-        elevation: 20,
     },
     modalImage: {
-        width: 200,
-        height: 200,
+        width: 225,
+        height: 225,
         borderRadius: 10,
         marginBottom: 30,
         marginTop: 30,
@@ -232,20 +219,23 @@ const styles = StyleSheet.create({
     modalTitleText: {
         fontSize: 30,
         marginBottom: 1,
+        marginLeft: 15, 
         fontWeight: 'bold',
         color: '#6ABE6B',
     },
     modalSubText: {
         fontSize: 15,
         marginBottom: 10,
+        marginLeft: 15, 
         fontWeight: 'bold',
         color: '#888'
     },
     progressContainer: {
         flexDirection: 'row',
-        justifyContent: 'center', 
-        alignItems: 'center',
+        justifyContent: 'flex-start', 
+        alignItems: 'flex-start',
         marginTop: 10, 
+        marginLeft: 15, 
     },
     progressItem: {
         alignItems: 'center',
@@ -254,6 +244,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'center', 
+        marginTop: 20,
     },    
     progressSubText: {
         fontSize: 14,
@@ -261,8 +252,9 @@ const styles = StyleSheet.create({
     },
     Backbutton: {
         alignItems: 'left',
-        marginBottom: 10,
-      },
+        marginTop: 10,
+        marginLeft: 10,
+    },
     deleteButton: {
         position: 'absolute',
         top: 10,
