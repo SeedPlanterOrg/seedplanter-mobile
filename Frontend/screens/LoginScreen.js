@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, SafeAreaView, Image, Touchable, Pressable, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView, Image, Touchable, Pressable} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Tabs from '../navigation/tabs';
 import { TextInput, Appearance, useColorScheme} from 'react-native';
@@ -11,7 +11,7 @@ import { ThemeProvider } from 'styled-components/native';
 // import { useContext } from 'react';
 // import { AuthContext } from '../context/AuthContext';
 // import { useEffect } from 'react';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorMessage from '../components/ErrorMessage';
 import { LinearGradient } from 'expo-linear-gradient';
 

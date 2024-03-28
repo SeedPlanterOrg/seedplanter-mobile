@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, Keyboard} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Keyboard, useColorScheme} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState, useCallback } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -7,6 +7,8 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { GiftedChat, InputToolbar, Composer, Bubble, Send } from 'react-native-gifted-chat'
 import { sendMessage } from '../utils/sendchat'; 
 import logo from '../assets/LogoActiveGreen.png';
+import { darkTheme, lightTheme } from '../App';
+
 // import { Markdown } from 'react-native-markdown-display';
 
 
@@ -14,6 +16,8 @@ export default function ChatBotScreen() {
   const [messages, setMessages] = useState([])
   const [isBotTyping, setIsBotTyping] = useState(false);
   const [startConversation, setStartConversation] = useState(false);
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
   
   const navigation = useNavigation();
@@ -81,11 +85,11 @@ export default function ChatBotScreen() {
   }, [startConversation]);
 
   const renderInputToolbar = (props) => (
-    <InputToolbar {...props} containerStyle={styles.inputToolbar} />
+    <InputToolbar {...props} containerStyle={[styles.inputToolbar, {backgroundColor: theme.gardenCard}]} />
   );
   
   const renderComposer = (props) => (
-    <Composer {...props} textInputStyle={styles.composer} />
+    <Composer {...props} textInputStyle={[styles.composer, {color: theme.text }]} />
   );
   const renderChatFooter = (props) => {
     if (isBotTyping) {
@@ -134,6 +138,14 @@ const renderSendButton = (props) => {
           right: {
             backgroundColor: '#68b454', 
           },
+          left: {
+            backgroundColor: theme.gardenCard
+          }
+        }}
+        textStyle={{
+          left: {
+            color: theme.text, // text color for bot's messages
+          },
         }}
       />
     );
@@ -151,7 +163,7 @@ const renderSendButton = (props) => {
   }, [navigation]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4'}}>
+    <SafeAreaView style={[{ flex: 1, backgroundColor: '#e8ecf4'}, {backgroundColor: theme.background}]}>
       <View style={{marginLeft: 10, marginTop: 5}}>
         <Ionicons
           name="chevron-back-circle"

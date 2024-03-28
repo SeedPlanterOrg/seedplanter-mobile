@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Animated, AppRegistry, FlatList, TextInput, Modal, ImageBackground, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Progress from 'react-native-progress';
-import { MaterialCommunityIcons, FontAwesome6, Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons, FontAwesome6, Feather, AntDesign} from '@expo/vector-icons';
 import {getPlantCatalogPage,
   findPlantById, 
   getGarden,
@@ -247,10 +247,7 @@ export default function CatalogScreen() {
                           }
 
                         }}>
-                        <Image
-                          source={require('../assets/plus_icon.png')}
-                          style={styles.plusButton}
-                        />
+                        <AntDesign name="pluscircle" size={40} color="#68b454" />
                       </TouchableOpacity>
                       </View>
                     </ScrollView>
