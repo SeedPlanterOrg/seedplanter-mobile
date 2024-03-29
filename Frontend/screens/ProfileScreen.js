@@ -23,7 +23,6 @@ export default function ProfileScreen() {
       <View style={styles.container}>
         {/* {errorMessage && <Text style={styles.error}>{errorMessage}</Text>} */}
         <Button title="Logout" onPress={handleLogout} />
-        {/* rest of your code... */}
       </View>
     </SafeAreaView>
   );
