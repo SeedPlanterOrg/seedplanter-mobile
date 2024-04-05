@@ -82,8 +82,8 @@ export default function CatalogScreen() {
           <View style={styles.cardContent}>
             {imageSource && <Image source={imageSource} style={styles.cardImage} />}
             <View style={styles.textContent}>
-              <Text style={styles.plantName}>{plantName}</Text>
-              <Text style={styles.scientificName}>{scientificName}</Text>
+              <Text style={styles.plantName} numberOfLines={1} ellipsizeMode='tail'>{plantName}</Text>
+              <Text style={styles.scientificName} numberOfLines={1} ellipsizeMode='tail'>{scientificName}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -121,8 +121,8 @@ export default function CatalogScreen() {
         />
 
         <FlatList
-          columnWrapperStyle={{ gap: -30 }}
-          contentContainerStyle={{ alignItems: 'center', gap: -30 }}
+          columnWrapperStyle={{ gap: -28  }}
+          contentContainerStyle={{ alignItems: 'center', gap: -28 }}
           data={plantsData}
           numColumns={2}
           keyExtractor={item => item.id.toString()} // Ensure item.id is a string
@@ -264,7 +264,7 @@ export default function CatalogScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 24,
+    padding: 18,
     flex: 1,
   },
   searchingbar: {
@@ -275,6 +275,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     elevation: 3,
     padding: 8,
+    marginBottom: 15,
   },
   ModalView: {
     flex: 1,
@@ -303,12 +304,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 1 },
     shadowColor: '#333',
     shadowOpacity: 0.2,
-    padding: 20,
+    padding: 12,
     alignItems: 'center',
     justifyContent: 'center',
     shadowRadius: 2,
     width: 165,
-    height: 265,
+    height: 200,
   },
   cardContent: {
     flexDirection: 'column',
@@ -316,8 +317,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardImage: {
-    width: 125,
-    height: 125,
+    width: 140,
+    height: 140,
     borderRadius: 15,
     resizeMode: 'cover',
     justifyContent: 'center',
@@ -343,17 +344,17 @@ const styles = StyleSheet.create({
   plantName: {
     fontSize: 13,
     fontWeight: 'bold',
-    marginBottom: 5,
-    marginTop: 15,
-    textAlign: 'center',
+    marginBottom: 1,
+    marginTop: 2,
+    textAlign: 'left',
   },
   scientificName: {
     fontSize: 10,
     color: '#888',
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
+    textAlign: 'left',
+    justifyContent: 'flex-start',
+    alignItems: 'left',
+    marginBottom: 1,
   },
   Backbutton: {
     alignItems: 'left',
