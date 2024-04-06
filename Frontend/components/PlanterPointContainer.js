@@ -1,15 +1,19 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, useColorScheme } from 'react-native';
+import { darkTheme, lightTheme } from '../App';
 
 const PlanterPointContainer = ({ points }) => {
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.pointsLabelText}>Planter Points</Text>
-      <View style={styles.pointsContainer}>
+      <Text style={styles.pointsLabelText}>Streak</Text>
+      <View style={[styles.pointsContainer, { backgroundColor: theme.progUnfill }]}>
         <View style={styles.planterPointsIconContainer}>
           <Image
             source={require('../assets/LogoLightGreen.png')} 
-            style={styles.planterPointsIcon}
+            style={[styles.planterPointsIcon, { tintColor: '#1DB954' }]}
           />
           <Text style={styles.planterPointsCount}>{points}</Text>
         </View>
@@ -20,7 +24,7 @@ const PlanterPointContainer = ({ points }) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   pointsLabelText: {
     fontSize: 15,
@@ -43,12 +47,12 @@ const styles = StyleSheet.create({
   planterPointsIcon: {
     width: 40,
     height: 30,
-    marginRight: 5,
   },
   planterPointsCount: {
     color: '#1DB954',
     fontSize: 20,
     fontWeight: 'bold',
+    paddingRight: 5, 
   },
 });
 

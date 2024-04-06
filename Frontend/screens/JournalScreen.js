@@ -4,11 +4,18 @@ import { darkTheme, lightTheme } from '../App';
 import React, { useState, useEffect } from 'react';
 import * as Progress from 'react-native-progress';
 import JournalTaskCard from '../components/JournalTaskCard';
+import PlanterPointContainer from '../components/PlanterPointContainer';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function JournalScreen() {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
   const [progressValue, setProgressValue] = useState(0.6);
+  const [date, setDate] = useState(new Date()); 
+
+  const onChange = (e, selectedDate) => {
+    setDate(selectedDate);
+  }
 
   // dummy data
   const tasksData = [
@@ -75,12 +82,31 @@ export default function JournalScreen() {
         </View>
 
         <View style={styles.middleContainer}>
-          <Text style={[styles.myTasksText, { color: theme.text }]}>
+          <Text style={[styles.myJournalText, { color: theme.text }]}>
               My <Text style={styles.greenText}>Journal</Text>
           </Text>
+          
         </View>
 
+        <View style={styles.middleSubContainer}>
+          {/* Date container */}
+          <View style={styles.dateContainer}>
+              <Text style={styles.dateText}>Date</Text>
+              <DateTimePicker
+                  value={date}
+                  mode={"date"}
+                  is24Hour={true}
+                  onChange={onChange}
+              />
+              <StatusBar style="auto" />
+          </View>
+          
+          {/* Planter Points */}
+          <View style={styles.planterContainer}>
+            <PlanterPointContainer points={123} />
+          </View>
 
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -100,14 +126,25 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   middleContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
-    paddingVertical: 10,
-    paddingBottom: 15,
+    width: '100%',
+  },
+  middleSubContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    width: '100%',
   },
   myTasksText: {
     fontSize: 23,
     fontWeight: 'bold',
+  },
+  myJournalText: {
+    fontSize: 23,
+    fontWeight: 'bold',
+    marginBottom: 15, 
   },
   greenText: {
     color: '#1DB954',
@@ -138,5 +175,18 @@ const styles = StyleSheet.create({
   flatListContainer: {
     height: '35%', 
     width: '100%',
+  },
+  planterContainer: {
+    marginLeft: 'auto',
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 35,
+  },
+  dateText: {
+    fontSize: 16,
+    color: '#888',
+    marginRight: 10,
   },
 });

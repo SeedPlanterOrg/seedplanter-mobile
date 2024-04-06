@@ -236,15 +236,15 @@ export default function HomeScreen() {
         <View style={styles.headerContainer}>
           <View style={styles.gardenHealthMeter}>
             <Text style={styles.healthMeterText}>Garden Health</Text>
-            <Progress.Bar
-              progress={progressValue}
-              width={200}
-              height={39}
-              borderRadius={20}
-              color="#1DB954"
-              unfilledColor={theme.progUnfill}
-              borderWidth={0}
-            />
+              <Progress.Bar
+                progress={progressValue}
+                width={200}
+                height={39}
+                borderRadius={20}
+                color="#1DB954"
+                unfilledColor={theme.progUnfill}
+                borderWidth={0}
+              />
             <Text style={styles.progressValueText}>{`${Math.round(progressValue * 100)}%`}</Text>
           </View>
 
@@ -257,7 +257,7 @@ export default function HomeScreen() {
           <TouchableOpacity style={styles.plusButtonContainer} onPress={openAddOptionsModal}>
             <Image
               source={require('../assets/plus_icon.png')}
-              style={[styles.plusButton, {tintColor: theme.background}]}
+              style={[styles.plusButton, {tintColor: theme.gardenBackground}]}
             />
           </TouchableOpacity>
         </View>
@@ -333,7 +333,7 @@ export default function HomeScreen() {
               <TouchableOpacity style={styles.plusIconContainer} onPress={handleImagePickerPress}>
                 <Image
                   source={require('../assets/plus_icon.png')}
-                  style={[styles.plusButton, {tintColor: theme.background}]}
+                  style={[styles.plusButton, {tintColor: theme.gardenBackground}]}
                 />
               </TouchableOpacity>
             </View>
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   plusButtonContainer: {
-    marginLeft: 5,
+    marginLeft: 15,
     marginTop: 30,
     backgroundColor: '#1DB954',
     borderRadius: 20,
