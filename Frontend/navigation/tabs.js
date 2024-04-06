@@ -9,6 +9,8 @@ import ChatBotScreen from '../screens/ChatBotScreen';
 import { DefaultTheme } from '@react-navigation/native';
 import { darkTheme, lightTheme } from '../App';
 import { styled, ThemeProvider } from 'styled-components/native';
+import { useContext } from 'react';
+import { PlantProvider } from '../context/PlantContext.js';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,6 +43,7 @@ const Tabs = () => {
     const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
     return(
+        <PlantProvider>
         <Tab.Navigator 
             screenOptions={{ 
                 tabBarShowLabel: false,
@@ -155,6 +158,7 @@ const Tabs = () => {
             }}/>
 
         </Tab.Navigator>
+    </PlantProvider>
     );
 }
 

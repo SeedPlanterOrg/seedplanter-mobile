@@ -10,6 +10,8 @@ import {getPlantCatalogPage,
   createGarden} from '../utils/http';
 import filter from "lodash.filter";
 import { WebView } from 'react-native-webview';
+import { PlantContext } from '../context/PlantContext';
+import { useContext } from 'react';
 
 
 export default function CatalogScreen() {
@@ -29,33 +31,34 @@ export default function CatalogScreen() {
   const [modalImgHardi, setModalImgHardi] = useState('');
   const [modalID, setModalID] = useState('');
 
-  const [plantsData, setPlantsData] = useState([]);
-  const [fullPlantsData, setFullPlantsData] = useState([]);
+  // const [plantsData, setPlantsData] = useState([]);
+ // const [fullPlantsData, setFullPlantsData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   
-  useEffect(() => {
-    async function fetchPlants() {
-      try {
-        const plantsArray = await getPlantCatalogPage(1);
-        console.log('DEBUGCODE: ' + plantsArray[1].id);
-        console.log('DEBUGCODE: ' + plantsArray[1].name);
-        console.log('DEBUGCODE: ' + plantsArray[1].binomial_name);
-        console.log('DEBUGCODE: ' + plantsArray[1].zone.hardy);
-        console.log('DEBUGCODE: ' + plantsArray[1].light[0]);
-        console.log('DEBUGCODE: ' + plantsArray[1].image_urls[0]);
-        console.log('DEBUGCODE: ' + plantsArray[1].hardiness_url);
+  // useEffect(() => {
+  //   async function fetchPlants() {
+  //     try {
+  //       const plantsArray = await getPlantCatalogPage(1);
+  //       console.log('DEBUGCODE: ' + plantsArray[1].id);
+  //       console.log('DEBUGCODE: ' + plantsArray[1].name);
+  //       console.log('DEBUGCODE: ' + plantsArray[1].binomial_name);
+  //       console.log('DEBUGCODE: ' + plantsArray[1].zone.hardy);
+  //       console.log('DEBUGCODE: ' + plantsArray[1].light[0]);
+  //       console.log('DEBUGCODE: ' + plantsArray[1].image_urls[0]);
+  //       console.log('DEBUGCODE: ' + plantsArray[1].hardiness_url);
 
-        setPlantsData(plantsArray);
-        setFullPlantsData(plantsArray);
-      } catch (error) {
-        console.error('Error fetching plants:', error);
-        // Optionally, handle errors in the UI (like showing an error message)
-      }
-    }
+  //       setPlantsData(plantsArray);
+  //       setFullPlantsData(plantsArray);
+  //     } catch (error) {
+  //       console.error('Error fetching plants:', error);
+  //       // Optionally, handle errors in the UI (like showing an error message)
+  //     }
+  //   }
 
-    fetchPlants();
-  }, []);
+  //   fetchPlants();
+  // }, []);
 
+  const { plantsData, setPlantsData, fullPlantsData, setFullPlantsData } = useContext(PlantContext);
 
   const PlantTile = ({ imageSource, plantName, scientificName, description, care, water, WaterDes, Sun, SunDes, PrunDes, Zone, ImgHardi, ID }) => {
     return (

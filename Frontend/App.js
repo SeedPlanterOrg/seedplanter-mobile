@@ -8,6 +8,9 @@ import Tabs from './navigation/tabs';
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import { ThemeProvider } from 'styled-components/native';
+import { useContext } from 'react';
+import { PlantProvider } from './context/PlantContext.js';
+
 // import { Appearance } from 'react-native-appearance';
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +42,7 @@ export const darkTheme = {
 const App = () => {
 
   const colorScheme = useColorScheme() || 'light';
+  // const { plantsData } = useContext(PlantContext); 
 
   return (
     <ThemeProvider theme={colorScheme === 'dark' ? darkTheme : lightTheme}>
@@ -52,7 +56,8 @@ const App = () => {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="Tabs" component={Tabs} />
+          <Stack.Screen name="Tabs" component={Tabs} />
+        
       </Stack.Navigator>
     </NavigationContainer>
     </ThemeProvider>
