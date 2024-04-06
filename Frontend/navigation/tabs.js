@@ -9,13 +9,14 @@ import ChatBotScreen from '../screens/ChatBotScreen';
 import { DefaultTheme } from '@react-navigation/native';
 import { darkTheme, lightTheme } from '../App';
 import { styled, ThemeProvider } from 'styled-components/native';
+import { BlurView } from 'expo-blur';
 
 const Tab = createBottomTabNavigator();
 
 const CustomTabBarButton = ({children, onPress}) => (
     <TouchableOpacity
         style={{
-            top: -30,
+            top: -20,
             justifyContent: 'center',
             alignItems: 'center',
         }}
@@ -25,7 +26,7 @@ const CustomTabBarButton = ({children, onPress}) => (
             width: 75,
             height: 75,
             borderRadius: 50,
-            backgroundColor: '#68b454',
+            backgroundColor: '#1DB954',
             shadowColor: '#333',
             shadowOpacity: 0.4,
             shadowOffset: { width: 1, height: 1 },
@@ -46,17 +47,23 @@ const Tabs = () => {
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     flex: 1,
-                    backgroundColor: theme.navbar,
                     position: 'absolute',
-                    height: 70,
+                    height: 80,
                     borderRadius: 50,
-                    bottom: 10,
                     elevation: 0,
-                    right: 10,
-                    left: 10,
-                    paddingBottom: 0,
+                    paddingBottom: 15,
                     borderTopWidth: 0
-                }
+                },
+                tabBarBackground: () => (
+                    <BlurView 
+                        intensity={80} 
+                        style={{ 
+                            flex: 1, 
+                            overflow: "hidden", 
+                            backgroundColor: "transparent" 
+                        }}>
+                    </BlurView>
+                ),
             }}>
             <Tab.Screen name="My Garden" component={HomeScreen} options={{
                 tabBarIcon: ({focused}) => (
@@ -66,7 +73,7 @@ const Tabs = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#68b454' : theme.text
+                                tintColor: focused ? '#1DB954' : theme.text
                             }}
                         />
                     </View>
@@ -77,7 +84,7 @@ const Tabs = () => {
                 },
                 headerTitleStyle: {
                     fontWeight: 'bold',
-                    fontSize: 19, 
+                    fontSize: 23, 
                     color: theme.text, 
                 },
                 headerTitleAlign: 'left',
@@ -91,11 +98,21 @@ const Tabs = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#68b454' : theme.text
+                                tintColor: focused ? '#1DB954' : theme.text
                             }}
                         />
                     </View>
                 ),
+                headerStyle: {
+                    backgroundColor: theme.navbar,
+                    shadowColor: 'transparent',
+                },
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                    fontSize: 23, 
+                    color: theme.text, 
+                },
+                headerTitleAlign: 'left',
             }}/>
 
             <Tab.Screen name="Plantbot" component={ChatBotScreen} options={{
@@ -105,7 +122,7 @@ const Tabs = () => {
                         style={{
                             width: 30,
                             height: 30,
-                            tintColor: focused ? '#68b454' : theme.text
+                            tintColor: focused ? '#1DB954' : theme.text
                         }}
                     />
                 ),
@@ -118,7 +135,7 @@ const Tabs = () => {
                 },
                 headerTitleStyle: {
                     fontWeight: 'bold',
-                    fontSize: 19, 
+                    fontSize: 23, 
                     color: theme.text, 
                 },
                 headerTitleAlign: 'left',
@@ -132,11 +149,21 @@ const Tabs = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#68b454' : theme.text
+                                tintColor: focused ? '#1DB954' : theme.text
                             }}
                         />
                     </View>
                 ),
+                    headerStyle: {
+                    backgroundColor: theme.navbar,
+                    shadowColor: 'transparent',
+                },
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                    fontSize: 23, 
+                    color: theme.text, 
+                },
+                headerTitleAlign: 'left',
             }}/>
 
             <Tab.Screen name="My Profile" component={ProfileScreen} options={{
@@ -147,11 +174,21 @@ const Tabs = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? '#68b454' : theme.text
+                                tintColor: focused ? '#1DB954' : theme.text
                             }}
                         />
                     </View>
                 ),
+                headerStyle: {
+                    backgroundColor: theme.navbar,
+                    shadowColor: 'transparent',
+                },
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                    fontSize: 23, 
+                    color: theme.text, 
+                },
+                headerTitleAlign: 'left',
             }}/>
 
         </Tab.Navigator>

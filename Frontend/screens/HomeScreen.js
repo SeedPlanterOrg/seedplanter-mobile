@@ -241,8 +241,8 @@ export default function HomeScreen() {
               width={200}
               height={39}
               borderRadius={20}
-              color="#6ABE6B"
-              unfilledColor="#D7EED8"
+              color="#1DB954"
+              unfilledColor={theme.progUnfill}
               borderWidth={0}
             />
             <Text style={styles.progressValueText}>{`${Math.round(progressValue * 100)}%`}</Text>
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
   healthMeterText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#6ABE6B',
+    color: '#1DB954',
     marginBottom: 10,
   },
   progressValueText: {
@@ -455,7 +455,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   greenText: {
-    color: '#6ABE6B',
+    color: '#1DB954',
   },
   planterContainer: {
     marginLeft: 10,
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
   plusButtonContainer: {
     marginLeft: 5,
     marginTop: 30,
-    backgroundColor: '#6ABE6B',
+    backgroundColor: '#1DB954',
     borderRadius: 20,
   },
   plusButton: {
@@ -505,14 +505,14 @@ const styles = StyleSheet.create({
     height: 150, 
     borderRadius: 20,
     borderWidth: 1.5, 
-    borderColor: '#6ABE6B', 
+    borderColor: '#1DB954', 
     backgroundColor: 'transparent', 
   },
   plusIconContainer: {
     position: 'absolute',
     bottom: -10,
     right: 105,
-    backgroundColor: '#6ABE6B',
+    backgroundColor: '#1DB954',
     borderRadius: 20,
   },
   addButtonContainer: {
@@ -523,7 +523,7 @@ const styles = StyleSheet.create({
   },
   addButtonBackground: {
     marginTop: 20,
-    backgroundColor: '#6ABE6B', 
+    backgroundColor: '#1DB954', 
     borderRadius: 20,
     width: 150, 
   },
@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
   selectModalButton: {
     marginTop: 15, 
     marginBottom: 15, 
-    backgroundColor: '#6ABE6B',
+    backgroundColor: '#1DB954',
     borderRadius: 20,
     width: 200,
   },
@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1.5,
-    borderColor: '#6ABE6B',
+    borderColor: '#1DB954',
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingVertical: 12,

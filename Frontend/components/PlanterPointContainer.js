@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#6ABE6B', 
+    color: '#1DB954', 
   },
   pointsContainer: {
     flexDirection: 'row',
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   planterPointsCount: {
-    color: '#6ABE6B',
+    color: '#1DB954',
     fontSize: 20,
     fontWeight: 'bold',
   },
