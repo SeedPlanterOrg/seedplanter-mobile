@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Animated, AppRegistry, FlatList, TextInput, Modal, ImageBackground, Button } from 'react-native';
+import React, { useState, useEffect, memo } from 'react';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Animated, AppRegistry, FlatList, TextInput, Modal, ImageBackground, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Progress from 'react-native-progress';
 import { MaterialCommunityIcons, FontAwesome6, Feather, AntDesign} from '@expo/vector-icons';
@@ -10,6 +10,8 @@ import {getPlantCatalogPage,
   createGarden} from '../utils/http';
 import filter from "lodash.filter";
 import { WebView } from 'react-native-webview';
+import { Image } from 'expo-image';
+
 
 
 export default function CatalogScreen() {
@@ -57,7 +59,7 @@ export default function CatalogScreen() {
   }, []);
 
 
-  const PlantTile = ({ imageSource, plantName, scientificName, description, care, water, WaterDes, Sun, SunDes, PrunDes, Zone, ImgHardi, ID }) => {
+  const PlantTile = React.memo(({ imageSource, plantName, scientificName, description, care, water, WaterDes, Sun, SunDes, PrunDes, Zone, ImgHardi, ID }) => {
     return (
       <View style={styles.container}>
 
@@ -80,7 +82,7 @@ export default function CatalogScreen() {
           }}
         >
           <View style={styles.cardContent}>
-            {imageSource && <Image source={imageSource} style={styles.cardImage} />}
+            {imageSource && <Image source={imageSource} style={styles.cardImage} transition={500} />}
             <View style={styles.textContent}>
               <Text style={styles.plantName} numberOfLines={1} ellipsizeMode='tail'>{plantName}</Text>
               <Text style={styles.scientificName} numberOfLines={1} ellipsizeMode='tail'>{scientificName}</Text>
@@ -89,7 +91,7 @@ export default function CatalogScreen() {
         </TouchableOpacity>
       </View>
     );
-  }
+  })
 
   const plantSearch = (query) => {
     setSearchQuery(query);
@@ -156,7 +158,7 @@ export default function CatalogScreen() {
                     </View>
                     <ScrollView>
                       <View style={styles.centerItems}>
-                        <Image source={modalImage} style={styles.modalImageSizing} />
+                        <Image source={modalImage} style={styles.modalImageSizing} transition={200} />
                       </View>
                       <View style={styles.RightText}>
                         <Text style={styles.RightText}>{modalName}</Text>
@@ -338,6 +340,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   textContent: {
+    marginTop: 5,
     flex: 1,
     alignItems: 'center',
   },
