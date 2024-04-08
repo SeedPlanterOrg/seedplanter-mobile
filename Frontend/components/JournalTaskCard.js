@@ -34,7 +34,7 @@ const JournalTaskCard = ({ icon, title, description, smallImage }) => {
                         </View>
                     </View>
                     <View style={styles.endContainer}>
-                        <Text style={[styles.taskTimeText, {color: theme.text}]}>2:00 PM</Text>
+                        <Text style={styles.taskTimeText}>2:00 PM</Text>
                     </View>
                 </View>
             </View>
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
     width: '100%',
+    justifyContent: 'space-between',
   },
   middleContainer: {
     flexDirection: 'row',
@@ -91,6 +92,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 14,
+    color: "#888",
   },
   smallImageContainer: {
     width: 30,
@@ -105,11 +107,15 @@ const styles = StyleSheet.create({
     resizeMode: 'cover', 
   },
   endContainer: {
-    flex: 1,
+    alignItems: 'flex-end', 
+    justifyContent: 'center', 
+    flex: 1, 
   },
   taskTimeText: {
-    fontSize: 14, 
-    alignSelf: 'center',
+    alignSelf: 'flex-end', 
+    fontSize: 17,
+    fontWeight: '500',
+    color: "#888",
   },
 });
 

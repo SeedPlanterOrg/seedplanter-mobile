@@ -341,7 +341,7 @@ export default function HomeScreen() {
             <View style={styles.inputContainer}>
               <Text style={[styles.inputLabel, {color: theme.text}]}>Plant Name</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, {color: theme.text}]}
                 onChangeText={handlePlantNameChange}
                 value={plantName}
                 placeholder="Enter plant name"
@@ -351,7 +351,7 @@ export default function HomeScreen() {
             <View style={styles.inputContainer}>
             <Text style={[styles.inputLabel, {color: theme.text}]}>Scientific Name</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, {color: theme.text}]}
                 onChangeText={handleScientificNameChange}
                 value={scientificName}
                 placeholder="Enter scientific name"
@@ -581,6 +581,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#333', 
   },
 });

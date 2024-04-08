@@ -4,6 +4,7 @@ import { darkTheme, lightTheme } from '../App';
 import React, { useState, useEffect } from 'react';
 import * as Progress from 'react-native-progress';
 import JournalTaskCard from '../components/JournalTaskCard';
+import JournalCard from '../components/JournalCard';
 import PlanterPointContainer from '../components/PlanterPointContainer';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -17,7 +18,7 @@ export default function JournalScreen() {
     setDate(selectedDate);
   }
 
-  // dummy data
+  // Dummy data for Journal Task Cards
   const tasksData = [
     {
       id: 1,
@@ -44,6 +45,54 @@ export default function JournalScreen() {
     />
   );
 
+  // Dummy data for Journal Cards
+  const journalCardsData = [
+    {
+      id: 1,
+      date: "2023 . 02 . 13",
+      nutrientProgress: 0.9,
+      waterLevelProgress: 0.7,
+      points: 5,
+      smallImages: [
+        require('../assets/marigold.jpg'),
+        require('../assets/strawberry.jpg'),
+        require('../assets/lettuce.jpg'),
+      ]
+    },
+    {
+      id: 2,
+      date: "2024 . 04 . 15",
+      nutrientProgress: 0.4,
+      waterLevelProgress: 0.6,
+      points: 2,
+      smallImages: [
+        require('../assets/strawberry.jpg'),
+        require('../assets/lettuce.jpg'),
+      ]
+    },
+    {
+      id: 3,
+      date: "2024 . 04 . 15",
+      nutrientProgress: 0.4,
+      waterLevelProgress: 0.6,
+      points: 7,
+      smallImages: [
+        require('../assets/strawberry.jpg'),
+        require('../assets/marigold.jpg'),
+      ]
+    }
+  ];
+  
+  const renderJournalCard = ({ item }) => (
+    <JournalCard
+      date={item.date}
+      nutrientProgress={item.nutrientProgress}
+      waterLevelProgress={item.waterLevelProgress}
+      points={item.points}
+      smallImages={item.smallImages}
+    />
+  );
+
   return (
     <SafeAreaView style={[{ flex: 1, backgroundColor: '#FFF' }, { backgroundColor: theme.gardenBackground }]}>
       <View style={styles.container}>
@@ -55,7 +104,7 @@ export default function JournalScreen() {
 
         <View style={styles.headerSubContainer}>
           <Text style={[styles.numberTasksText, { color: theme.text }]}>
-            <Text style={styles.greenText}>4</Text> Tasks today
+            <Text style={styles.greenText}>4</Text> Tasks Today
           </Text>
 
           <Progress.Bar
@@ -107,6 +156,19 @@ export default function JournalScreen() {
           </View>
 
         </View>
+        
+        {/* Journal Cards Container */}
+        <View style={styles.journalCardsContainer}>
+          <FlatList
+              data={journalCardsData}
+              renderItem={renderJournalCard}
+              keyExtractor={(item) => item.id.toString()}
+              style={styles.scrollView}
+              showsVerticalScrollIndicator={false}
+            />
+        </View>
+
+
       </View>
     </SafeAreaView>
   );
@@ -189,4 +251,8 @@ const styles = StyleSheet.create({
     color: '#888',
     marginRight: 10,
   },
+  journalCardsContainer: {
+    width: '100%',
+    height: '35%',
+  }
 });
