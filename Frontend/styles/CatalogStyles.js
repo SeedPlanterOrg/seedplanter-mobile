@@ -95,9 +95,9 @@ export const styles = StyleSheet.create({
     scientificName: {
       fontSize: 10,
       color: '#888',
-      textAlign: 'left',
+      textAlign: 'center',
       justifyContent: 'flex-start',
-      alignItems: 'left',
+      alignItems: 'flex-start',
       marginBottom: 10
     },
     Backbutton: {

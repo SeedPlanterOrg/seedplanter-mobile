@@ -6,7 +6,7 @@ import filter from "lodash.filter";
 import PlantTile from '../components/PlantTile';
 import { styles } from '../styles/CatalogStyles';
 import PlantModal from '../components/PlantModal';
-
+const PAGE_LIMIT = 11;
 
 
 export default function CatalogScreen() {
@@ -81,7 +81,7 @@ export default function CatalogScreen() {
           numColumns={2}
           keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()} // Ensure item.id is a string
           onEndReached={() => {
-            if (currentPage < 10) {
+            if (currentPage < PAGE_LIMIT) {
               setCurrentPage(prevPage => prevPage + 1);
             }
           }}
