@@ -26,13 +26,40 @@ return (
     </View>
     <ScrollView>
       <View style={styles.centerItems}>
-        <Image source={plant.image_urls && plant.image_urls[0] ? { uri: plant.image_urls[0] } : require('../resource/flower1.jpg')} style={styles.modalImageSizing} transition={200} />
+        <Image source={plant.image_urls && plant.image_urls[0] ? { uri: plant.image_urls[0] } : require('../resource/flower1.jpg')} style={styles.modalImageSizing} transition={300} />
       </View>
       <View style={styles.RightText}>
         <Text style={styles.RightText}>{plant.name}</Text>
       </View>
       <View style={styles.sciNameText}>
         <Text style={styles.sciNameText}>{plant.binomial_name}</Text>
+      </View>
+      <View style={{ flexDirection: 'row', alignSelf: "flex-end", marginTop: -65, marginBottom: 20}}>
+        <TouchableOpacity style={styles.plusButtonContainer} onPress={() => {
+          let id = '65efc324a82682e507e38ebc' + 1;
+          gardenPlant = {
+            _id: '66003bc6d48a27039a864f5b',
+            id: plant.id,
+            plantId: plant.id,
+            water: true,
+            fertilize: true,
+            prune: true,
+            waterLevel: 5,
+            lastWateringDate: "2024-03-21",
+            fertilizerLevel: 3,
+            lastFertilizingDate: "2024-03-15",
+            notes: "This is a test"
+          }
+          try {
+            const response = addPlant(gardenPlant);
+            console.log(response);
+          } catch (err) {
+            console.error(`Failed to add plant: ${err}`);
+          }
+
+        }}>
+        <AntDesign name="pluscircle" size={40} color="#68b454" />
+      </TouchableOpacity>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <View style={styles.cardGrey}>
@@ -92,34 +119,6 @@ return (
       </View>
 
       {/* add onPress for the adding to catalog */}
-
-      <View style={{ alignSelf: "flex-end", justifyContent: 'center' }}>
-        <TouchableOpacity style={styles.plusButtonContainer} onPress={() => {
-          let id = '65efc324a82682e507e38ebc' + 1;
-          gardenPlant = {
-            _id: '66003bc6d48a27039a864f5b',
-            id: plant.id,
-            plantId: plant.id,
-            water: true,
-            fertilize: true,
-            prune: true,
-            waterLevel: 5,
-            lastWateringDate: "2024-03-21",
-            fertilizerLevel: 3,
-            lastFertilizingDate: "2024-03-15",
-            notes: "This is a test"
-          }
-          try {
-            const response = addPlant(gardenPlant);
-            console.log(response);
-          } catch (err) {
-            console.error(`Failed to add plant: ${err}`);
-          }
-
-        }}>
-        <AntDesign name="pluscircle" size={40} color="#68b454" />
-      </TouchableOpacity>
-      </View>
     </ScrollView>
   </View>
 </View>

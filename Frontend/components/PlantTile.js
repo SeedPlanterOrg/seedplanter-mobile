@@ -14,7 +14,7 @@ return(
     <TouchableOpacity onPress={() => onSelect(plant)} style={styles.card}
     >
       <View style={styles.cardContent}>
-        <Image source={plant.image_urls && plant.image_urls[0] ? { uri: plant.image_urls[0] } : require('../resource/flower1.jpg')} style={styles.cardImage} transition={200} placeholder={blurhash} />
+        <Image source={plant.image_urls && plant.image_urls[0] ? { uri: plant.image_urls[0] } : require('../resource/flower1.jpg')} style={styles.cardImage} transition={300} />
         <View style={styles.textContent}>
           <Text style={styles.plantName} numberOfLines={1} ellipsizeMode='tail'>{plant.name}</Text>
           <Text style={styles.scientificName} numberOfLines={1} ellipsizeMode='tail'>{plant.binomial_name}</Text>

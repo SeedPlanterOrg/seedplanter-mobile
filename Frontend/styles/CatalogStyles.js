@@ -98,7 +98,7 @@ export const styles = StyleSheet.create({
       textAlign: 'left',
       justifyContent: 'flex-start',
       alignItems: 'left',
-      marginBottom: 1,
+      marginBottom: 10
     },
     Backbutton: {
       alignItems: 'left',
