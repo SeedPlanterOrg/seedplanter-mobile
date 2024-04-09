@@ -1,69 +1,28 @@
 import React, { useState, memo } from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, SafeAreaView} from 'react-native';
 import * as Progress from 'react-native-progress';
+import { styles } from '../styles/CatalogStyles';
+import { Image } from 'expo-image';
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-const PlantTile = React.memo(({ imageSource, plantName, scientificName }) => {
-    return (
-        <View style={styles.container}>
-            <TouchableOpacity style={styles.card} >
-                <View style={styles.cardContent}>
-                    {imageSource && <Image source={imageSource} style={styles.cardImage} />}
-                    <View style={styles.textContent}>
-                        <Text style={styles.plantName}>{plantName}</Text>
-                        <Text style={styles.scientificName}>{scientificName}</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
+
+const PlantTile = React.memo(({ plant, onSelect}) => {
+return(
+    <View style={styles.container}>
+
+    <TouchableOpacity onPress={() => onSelect(plant)} style={styles.card}
+    >
+      <View style={styles.cardContent}>
+        <Image source={plant.image_urls && plant.image_urls[0] ? { uri: plant.image_urls[0] } : require('../resource/flower1.jpg')} style={styles.cardImage} transition={300} />
+        <View style={styles.textContent}>
+          <Text style={styles.plantName} numberOfLines={1} ellipsizeMode='tail'>{plant.name}</Text>
+          <Text style={styles.scientificName} numberOfLines={1} ellipsizeMode='tail'>{plant.binomial_name}</Text>
         </View>
-    );
+      </View>
+    </TouchableOpacity>
+  </View>
+);
 })
-
-const styles = StyleSheet.create({
-    container: {
-        padding: 24,
-        flex: 1,
-    },
-    card: {
-        borderRadius: 15,
-        elevation: 3,
-        backgroundColor: '#fcfafa',
-        shadowOffset: { width: 1, height: 1 },
-        shadowColor: '#333',
-        shadowOpacity: 0.2,
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowRadius: 2,
-        width: 165,
-        height: 230,
-    },
-    cardContent: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    cardImage: {
-        width: 125,
-        height: 125,
-        borderRadius: 15,
-        resizeMode: 'cover',
-        justifyContent: 'center',
-    },
-    textContent: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    plantName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 5,
-        marginTop: 15,
-    },
-    scientificName: {
-        fontSize: 12,
-        color: '#888',
-        marginBottom: 2,
-    },
-});
 
 export default PlantTile;
