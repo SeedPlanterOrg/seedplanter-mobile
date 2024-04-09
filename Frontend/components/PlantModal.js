@@ -58,7 +58,7 @@ return (
           }
 
         }}>
-        <AntDesign name="pluscircle" size={40} color="#68b454" />
+        <AntDesign name="pluscircle" size={35} color="#68b454" />
       </TouchableOpacity>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
