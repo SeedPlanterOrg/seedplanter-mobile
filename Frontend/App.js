@@ -22,18 +22,24 @@ export const lightTheme = {
   // Welcome and Login
   welcomeBG: ["#91f086", "#11823b", "#02231c"],
   loginBG: ["#FFFFFF", "#378B29"],
+
+  //Unfilled progress bar color and planter point color
+  progUnfill: '#D7EED8'
 };
 
 export const darkTheme = {
-  background: '#191919',
-  gardenCard: '#2C2C2C',
-  gardenBackground: '#1E1E1E',
+  background: '#000000',
+  gardenCard: '#212121',
+  gardenBackground: '#000000',
   text: '#FFFFFF',
-  navbar: '#191919',
+  navbar: '#000000',
 
   // Welcome and Login 
   welcomeBG: ["#4cbf4c", "#0a5228", "#002112"],
   loginBG: ["#000000", "#1B4514"],
+
+  //Unfilled progress bar color and planter point color
+  progUnfill: '#313b32'
 };
 
 const App = () => {

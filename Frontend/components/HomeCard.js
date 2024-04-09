@@ -27,7 +27,7 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                                 size={100}
                                 thickness={8}
                                 progress={waterLevelProgress}
-                                color='#7EC8E3'
+                                color='#3FA9EB'
                                 borderWidth={0}
                                 unfilledColor='#DFF1F8'
                                 strokeCap='round'
@@ -38,7 +38,7 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                                         size={65}
                                         thickness={8}
                                         progress={nutrientProgress}
-                                        color='#6ABE6B'
+                                        color='#1DB954'
                                         borderWidth={0}
                                         unfilledColor='#D7EED8'
                                         strokeCap='round'
@@ -84,15 +84,15 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                     
                     <View style={styles.progressContainer}>
                         <View style={styles.progressItem}>
-                            <Text style={[styles.progressText, { color: '#7EC8E3' }]}>Water</Text>
-                            <Text style={[styles.progressSubText, { color: '#7EC8E3' }]}>Level</Text>
+                            <Text style={[styles.progressText, { color: '#3FA9EB' }]}>Water</Text>
+                            <Text style={[styles.progressSubText, { color: '#3FA9EB' }]}>Level</Text>
                         </View>
 
                         <Progress.Circle
                             size={80}
                             thickness={8}
                             progress={waterLevelProgress}
-                            color='#7EC8E3'
+                            color='#3FA9EB'
                             borderWidth={0}
                             unfilledColor='#DFF1F8'
                             strokeCap='round'
@@ -100,15 +100,15 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                             style={{ marginLeft: 20, marginRight: 20 }}
                         />
                         <View style={styles.progressItem}>
-                            <Text style={[styles.progressText, { color: '#6ABE6B' }]}>Nutrient</Text>
-                            <Text style={[styles.progressSubText, { color: '#6ABE6B' }]}>Level</Text>
+                            <Text style={[styles.progressText, { color: '#1DB954' }]}>Nutrient</Text>
+                            <Text style={[styles.progressSubText, { color: '#1DB954' }]}>Level</Text>
                         </View>
 
                         <Progress.Circle
                             size={80}
                             thickness={8}
                             progress={nutrientProgress}
-                            color='#6ABE6B'
+                            color='#1DB954'
                             borderWidth={0}
                             unfilledColor='#D7EED8'
                             strokeCap='round'
@@ -141,12 +141,6 @@ const styles = StyleSheet.create({
         shadowColor: '#333',
         shadowOpacity: 0.3,
         shadowRadius: 4,
-    },
-    healthMeter: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginTop: 10,
-        color: '#6ABE6B', // Pastel green color
     },
     myPlants: {
         fontSize: 23,
@@ -189,11 +183,11 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     waterLevel: {
-        color: '#7EC8E3',
+        color: '#3FA9EB',
         fontSize: 14,
     },
     nutrients: {
-        color: '#6ABE6B',
+        color: '#1DB954',
         fontSize: 14,
     },
     // Style for the circular progress bars inside of the cards 
@@ -221,7 +215,7 @@ const styles = StyleSheet.create({
         marginBottom: 1,
         marginLeft: 15, 
         fontWeight: 'bold',
-        color: '#6ABE6B',
+        color: '#1DB954',
     },
     modalSubText: {
         fontSize: 15,

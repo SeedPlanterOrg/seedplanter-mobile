@@ -236,15 +236,15 @@ export default function HomeScreen() {
         <View style={styles.headerContainer}>
           <View style={styles.gardenHealthMeter}>
             <Text style={styles.healthMeterText}>Garden Health</Text>
-            <Progress.Bar
-              progress={progressValue}
-              width={200}
-              height={39}
-              borderRadius={20}
-              color="#6ABE6B"
-              unfilledColor="#D7EED8"
-              borderWidth={0}
-            />
+              <Progress.Bar
+                progress={progressValue}
+                width={200}
+                height={39}
+                borderRadius={20}
+                color="#1DB954"
+                unfilledColor={theme.progUnfill}
+                borderWidth={0}
+              />
             <Text style={styles.progressValueText}>{`${Math.round(progressValue * 100)}%`}</Text>
           </View>
 
@@ -257,7 +257,7 @@ export default function HomeScreen() {
           <TouchableOpacity style={styles.plusButtonContainer} onPress={openAddOptionsModal}>
             <Image
               source={require('../assets/plus_icon.png')}
-              style={[styles.plusButton, {tintColor: theme.background}]}
+              style={[styles.plusButton, {tintColor: theme.gardenBackground}]}
             />
           </TouchableOpacity>
         </View>
@@ -333,7 +333,7 @@ export default function HomeScreen() {
               <TouchableOpacity style={styles.plusIconContainer} onPress={handleImagePickerPress}>
                 <Image
                   source={require('../assets/plus_icon.png')}
-                  style={[styles.plusButton, {tintColor: theme.background}]}
+                  style={[styles.plusButton, {tintColor: theme.gardenBackground}]}
                 />
               </TouchableOpacity>
             </View>
@@ -341,7 +341,7 @@ export default function HomeScreen() {
             <View style={styles.inputContainer}>
               <Text style={[styles.inputLabel, {color: theme.text}]}>Plant Name</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, {color: theme.text}]}
                 onChangeText={handlePlantNameChange}
                 value={plantName}
                 placeholder="Enter plant name"
@@ -351,7 +351,7 @@ export default function HomeScreen() {
             <View style={styles.inputContainer}>
             <Text style={[styles.inputLabel, {color: theme.text}]}>Scientific Name</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, {color: theme.text}]}
                 onChangeText={handleScientificNameChange}
                 value={scientificName}
                 placeholder="Enter scientific name"
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
   healthMeterText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#6ABE6B',
+    color: '#1DB954',
     marginBottom: 10,
   },
   progressValueText: {
@@ -455,7 +455,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   greenText: {
-    color: '#6ABE6B',
+    color: '#1DB954',
   },
   planterContainer: {
     marginLeft: 10,
@@ -465,9 +465,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   plusButtonContainer: {
-    marginLeft: 5,
+    marginLeft: 15,
     marginTop: 30,
-    backgroundColor: '#6ABE6B',
+    backgroundColor: '#1DB954',
     borderRadius: 20,
   },
   plusButton: {
@@ -505,14 +505,14 @@ const styles = StyleSheet.create({
     height: 150, 
     borderRadius: 20,
     borderWidth: 1.5, 
-    borderColor: '#6ABE6B', 
+    borderColor: '#1DB954', 
     backgroundColor: 'transparent', 
   },
   plusIconContainer: {
     position: 'absolute',
     bottom: -10,
     right: 105,
-    backgroundColor: '#6ABE6B',
+    backgroundColor: '#1DB954',
     borderRadius: 20,
   },
   addButtonContainer: {
@@ -523,7 +523,7 @@ const styles = StyleSheet.create({
   },
   addButtonBackground: {
     marginTop: 20,
-    backgroundColor: '#6ABE6B', 
+    backgroundColor: '#1DB954', 
     borderRadius: 20,
     width: 150, 
   },
@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
   selectModalButton: {
     marginTop: 15, 
     marginBottom: 15, 
-    backgroundColor: '#6ABE6B',
+    backgroundColor: '#1DB954',
     borderRadius: 20,
     width: 200,
   },
@@ -576,11 +576,10 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1.5,
-    borderColor: '#6ABE6B',
+    borderColor: '#1DB954',
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#333', 
   },
 });

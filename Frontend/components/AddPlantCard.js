@@ -73,7 +73,7 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource, lastD
                         </View>
                 </View>
 
-                {/* Date container, currently not implemented */}
+                {/* Date container */}
                 <View style={styles.dateContainer}>
                     <Text style={styles.dateText}>Last {lastDateText} date </Text>
                     <DateTimePicker
