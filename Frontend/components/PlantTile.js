@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import * as Progress from 'react-native-progress';
 
-const PlantTile = ({ imageSource, plantName, scientificName }) => {
+const PlantTile = React.memo(({ imageSource, plantName, scientificName }) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.card} >
@@ -16,7 +16,7 @@ const PlantTile = ({ imageSource, plantName, scientificName }) => {
             </TouchableOpacity>
         </View>
     );
-}
+})
 
 const styles = StyleSheet.create({
     container: {
