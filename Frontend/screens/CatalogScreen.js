@@ -24,13 +24,6 @@ export default function CatalogScreen() {
     async function fetchPlants() {
       try {
         const plantsArray = await getPlantCatalogPage(1);
-        console.log('DEBUGCODE: ' + plantsArray[1].id);
-        console.log('DEBUGCODE: ' + plantsArray[1].name);
-        console.log('DEBUGCODE: ' + plantsArray[1].binomial_name);
-        console.log('DEBUGCODE: ' + plantsArray[1].zone.hardy);
-        console.log('DEBUGCODE: ' + plantsArray[1].light[0]);
-        console.log('DEBUGCODE: ' + plantsArray[1].image_urls[0]);
-        console.log('DEBUGCODE: ' + plantsArray[1].hardiness_url);
         setPlantsData(plantsArray);
         setFullPlantsData(plantsArray);
       } catch (error) {
@@ -45,7 +38,6 @@ export default function CatalogScreen() {
 
   const plantSearch = (query) => {
     setSearchQuery(query);
-    //const formatQuery = query.toLowerCase();
     const filterData = filter(fullPlantsData, (plant) => {
       return contains(plant, query);
     });
@@ -68,9 +60,6 @@ export default function CatalogScreen() {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-  // const openModal = () => {
-  //   setModalVisible(true);
-  // }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4' }}>
@@ -97,8 +86,6 @@ export default function CatalogScreen() {
                 plant={item}
                 onSelect={() => handleSelectPlant(item)}
               />
-              
-
             </View>
           )}
         />
