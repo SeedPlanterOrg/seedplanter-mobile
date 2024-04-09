@@ -15,25 +15,25 @@ export default function CatalogScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [fullPlantsData, setFullPlantsData] = useState([]);
   const [selectedPlant, setSelectedPlant] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
 
   const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
   useEffect(() => {
-    async function fetchPlants() {
+    async function fetchPlants(page) {
       try {
-        const plantsArray = await getPlantCatalogPage(1);
-        setPlantsData(plantsArray);
-        setFullPlantsData(plantsArray);
+        const plantsArray = await getPlantCatalogPage(page);
+        setPlantsData(prevPlants => [...prevPlants, ...plantsArray]);
+        setFullPlantsData(prevPlants => [...prevPlants, ...plantsArray]);
       } catch (error) {
         console.error('Error fetching plants:', error);
-        // Optionally, handle errors in the UI (like showing an error message)
       }
     }
 
-    fetchPlants();
-  }, []);
+    fetchPlants(currentPage);
+  }, [currentPage]);
 
 
   const plantSearch = (query) => {
@@ -79,7 +79,13 @@ export default function CatalogScreen() {
           contentContainerStyle={{ alignItems: 'center', gap: -28 }}
           data={plantsData}
           numColumns={2}
-          keyExtractor={item => item.id.toString()} // Ensure item.id is a string
+          keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()} // Ensure item.id is a string
+          onEndReached={() => {
+            if (currentPage < 10) {
+              setCurrentPage(prevPage => prevPage + 1);
+            }
+          }}
+          onEndReachedThreshold={0.6}
           renderItem={({ item }) => (
             <View>
               <PlantTile
