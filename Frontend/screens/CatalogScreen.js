@@ -6,8 +6,8 @@ import filter from "lodash.filter";
 import PlantTile from '../components/PlantTile';
 import { styles } from '../styles/CatalogStyles';
 import PlantModal from '../components/PlantModal';
-import { darkTheme, lightTheme } from '../App';
 const PAGE_LIMIT = 11;
+import { useTheme, ThemeProvider } from 'styled-components/native';
 
 
 export default function CatalogScreen() {
@@ -17,8 +17,7 @@ export default function CatalogScreen() {
   const [fullPlantsData, setFullPlantsData] = useState([]);
   const [selectedPlant, setSelectedPlant] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+  const theme = useTheme();
 
 
   const blurhash =
@@ -65,6 +64,7 @@ export default function CatalogScreen() {
   };
 
   return (
+    <ThemeProvider theme={theme}>
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.gardenBackground }}>
       <View style={styles.container}>
         <TextInput 
@@ -102,5 +102,6 @@ export default function CatalogScreen() {
         {modalVisible && <PlantModal plant={selectedPlant} onClose={handleCloseModal} modalVisible={modalVisible}/>}
       </View>
     </SafeAreaView>
+    </ThemeProvider>
   );
 }

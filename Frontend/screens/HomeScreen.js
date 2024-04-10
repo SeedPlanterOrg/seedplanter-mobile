@@ -17,21 +17,12 @@ import HomeCard from '../components/HomeCard';
 import PlanterPointContainer from '../components/PlanterPointContainer';
 import AddPlantCard from '../components/AddPlantCard';
 import * as ImagePicker from 'expo-image-picker';
-import {
-  getPlantCatalogPage,
-  findPlantById, 
-  getGarden,
-  addPlant,
-  createGarden
-} from '../utils/http'
-import { darkTheme, lightTheme } from '../App';
-import { styled, ThemeProvider } from 'styled-components/native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { getGarden } from '../utils/http'
+import { useTheme, ThemeProvider } from 'styled-components/native';
 import { Image } from 'expo-image';
-// import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-// import Tabs from '../navigation/tabs';
-// import { useNavigation } from '@react-navigation/native';
+
+
 
 export default function HomeScreen() {
   const [customPlantModalVisible, setCustomPlantModalVisible] = useState(false);
@@ -41,8 +32,7 @@ export default function HomeScreen() {
   const [nutrientsNotify, setNutrientsNotify] = useState(false); 
   const [image, setImage] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+  const theme = useTheme();
   const [plantName, setPlantName] = useState('');
   const [scientificName, setScientificName] = useState('');
   const navigation = useNavigation();
@@ -234,6 +224,7 @@ export default function HomeScreen() {
   };
 
   return (
+    <ThemeProvider theme={theme}>
     <SafeAreaView style={[{ flex: 1, backgroundColor: '#FFF' }, {backgroundColor: theme.gardenBackground}]}>
       <View style={styles.container}>
         {/* Wrapped the two objects, ProgressBar and PlanterPointContainer, into a header container */}
@@ -275,7 +266,7 @@ export default function HomeScreen() {
         <FlatList
           data={plantData}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         />
@@ -418,6 +409,7 @@ export default function HomeScreen() {
         </Modal>
       </View>
     </SafeAreaView>
+    </ThemeProvider>
   );
 }
 

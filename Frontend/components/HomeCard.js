@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Modal, Button, useColorScheme } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { darkTheme, lightTheme } from '../App';
+import { useTheme, ThemeProvider } from 'styled-components/native';
 import { Image } from 'expo-image';
 
 const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, nutrientProgress, onDelete }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const colorScheme = useColorScheme();
-    const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+    const theme = useTheme();
 
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     };
 
     return (
+        <ThemeProvider theme={theme}>
         <View style={styles.container}>
             <TouchableOpacity style={[styles.card, {backgroundColor: theme.gardenCard}]} onPress={toggleModal}>
                 <View style={styles.cardContent}>
@@ -126,6 +126,7 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                 </View>
             </Modal>
         </View>
+        </ThemeProvider>
     );
 }
 

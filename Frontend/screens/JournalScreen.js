@@ -1,16 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, useColorScheme, FlatList } from 'react-native';
-import { darkTheme, lightTheme } from '../App';
+// import { darkTheme, lightTheme } from '../App';
 import React, { useState, useEffect } from 'react';
 import * as Progress from 'react-native-progress';
 import JournalTaskCard from '../components/JournalTaskCard';
 import JournalCard from '../components/JournalCard';
 import PlanterPointContainer from '../components/PlanterPointContainer';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useTheme, ThemeProvider } from 'styled-components/native';
 
 export default function JournalScreen() {
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+  const theme = useTheme();
+  // const colorScheme = useColorScheme();
+  // const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
   const [progressValue, setProgressValue] = useState(0.6);
   const [date, setDate] = useState(new Date()); 
 
@@ -94,6 +96,7 @@ export default function JournalScreen() {
   );
 
   return (
+    <ThemeProvider theme={theme}>
     <SafeAreaView style={[{ flex: 1, backgroundColor: '#FFF' }, { backgroundColor: theme.gardenBackground }]}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -171,6 +174,7 @@ export default function JournalScreen() {
 
       </View>
     </SafeAreaView>
+    </ThemeProvider>
   );
 }
 

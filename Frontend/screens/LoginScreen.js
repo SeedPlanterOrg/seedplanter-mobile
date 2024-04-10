@@ -5,15 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 import Tabs from '../navigation/tabs';
 import { TextInput, Appearance, useColorScheme} from 'react-native';
 import { TouchableOpacity } from 'react-native';
-import { darkTheme, lightTheme } from '../App';
-import { ThemeProvider } from 'styled-components/native';
-// import { IP, PORT } from "@env"
-// import { useContext } from 'react';
-// import { AuthContext } from '../context/AuthContext';
-// import { useEffect } from 'react';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorMessage from '../components/ErrorMessage';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTheme, ThemeProvider } from 'styled-components/native';
 
 let link = process.env.EXPO_PUBLIC_IP
 const env = process.env.EXPO_PUBLIC_ENV;
@@ -26,13 +22,13 @@ console.log(`Link: ${link}`);
 
 export default function LoginScreen() {
   const navigation = useNavigation()
-
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const theme = useTheme();
   // const colorScheme = useColorScheme();
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+  // const colorScheme = useColorScheme();
+  // const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
 //   const Container = styled.View`
 //   flex: 1;
@@ -105,6 +101,7 @@ export default function LoginScreen() {
   
 
   return (
+    <ThemeProvider theme={theme}>
     <LinearGradient style={styles.container}
       colors={theme.loginBG}
       start={{x: 0, y: 0}}
@@ -166,6 +163,7 @@ export default function LoginScreen() {
           <StatusBar style="auto" />
       </SafeAreaView>
     </LinearGradient>
+    </ThemeProvider>
   );
 }
 

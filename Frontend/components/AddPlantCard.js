@@ -5,14 +5,13 @@ import { View, Text, Switch, StyleSheet, Image, useColorScheme } from 'react-nat
 import Slider from "@react-native-community/slider";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { SelectList } from 'react-native-dropdown-select-list'
-import { darkTheme, lightTheme } from '../App';
+import { useTheme, ThemeProvider } from 'styled-components/native';
 
 const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource, lastDateText }) => {
     const [sliderState, setSliderState] = React.useState(0);
     const [date, setDate] = useState(new Date()); 
     const [selected, setSelected] = React.useState("");
-    const colorScheme = useColorScheme();
-    const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+    const theme = useTheme();
 
     const data = [
         {key:'1', value:'Weekly' },
@@ -25,6 +24,7 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource, lastD
     }
 
     return (
+        <ThemeProvider theme={theme}>
         <View style={styles.cardContainer}>
             <View style={[styles.cardContent, { backgroundColor: theme.gardenCard }]}>
                 <View style={styles.headerContainer} >
@@ -87,6 +87,7 @@ const AddPlantCard = ({ notifyMe, toggleNotifyMe, headerText, imageSource, lastD
 
             </View>
         </View>
+        </ThemeProvider>
     );
 };
 

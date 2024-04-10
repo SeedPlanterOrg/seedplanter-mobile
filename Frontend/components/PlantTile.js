@@ -3,16 +3,16 @@ import { ScrollView, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, use
 import * as Progress from 'react-native-progress';
 import { styles } from '../styles/CatalogStyles';
 import { Image } from 'expo-image';
-import { darkTheme, lightTheme } from '../App';
+import { useTheme, ThemeProvider } from 'styled-components/native';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 
 const PlantTile = React.memo(({ plant, onSelect}) => {
-const colorScheme = useColorScheme();
-const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+const theme = useTheme();
 return(
+    <ThemeProvider theme={theme}>
     <View style={styles.container}>
 
       <TouchableOpacity onPress={() => onSelect(plant)} style={styles.card}
@@ -26,6 +26,7 @@ return(
         </View>
       </TouchableOpacity>
     </View>
+    </ThemeProvider>
   );
 })
 

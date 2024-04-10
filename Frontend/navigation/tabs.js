@@ -7,8 +7,8 @@ import CatalogScreen from '../screens/CatalogScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ChatBotScreen from '../screens/ChatBotScreen';
 import { DefaultTheme } from '@react-navigation/native';
-import { darkTheme, lightTheme } from '../App';
-import { styled, ThemeProvider } from 'styled-components/native';
+import { useTheme, ThemeProvider } from 'styled-components/native';
+import { styled } from 'styled-components/native';
 import { BlurView } from 'expo-blur';
 
 const Tab = createBottomTabNavigator();
@@ -38,10 +38,10 @@ const CustomTabBarButton = ({children, onPress}) => (
 );
 
 const Tabs = () => {
-    const colorScheme = useColorScheme();
-    const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+    const theme = useTheme();
 
     return(
+        <ThemeProvider theme={theme}>
         <Tab.Navigator 
             screenOptions={{ 
                 tabBarShowLabel: false,
@@ -115,7 +115,7 @@ const Tabs = () => {
                 headerTitleAlign: 'left',
             }}/>
 
-            <Tab.Screen name="Plantbot" component={ChatBotScreen} options={{
+            <Tab.Screen name="AI Plantbot" component={ChatBotScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <Image source={require('../assets/chat6.png')}
                         resizeMode="contain"
@@ -192,6 +192,7 @@ const Tabs = () => {
             }}/>
 
         </Tab.Navigator>
+        </ThemeProvider>
     );
 }
 

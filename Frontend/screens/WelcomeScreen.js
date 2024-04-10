@@ -4,15 +4,16 @@ import { StyleSheet, Text, View, Button, SafeAreaView, Image, Touchable, Pressab
 import { useNavigation } from '@react-navigation/native';
 import Tabs from '../navigation/tabs';
 import { LinearGradient } from 'expo-linear-gradient';
-import { darkTheme, lightTheme } from '../App';
+import { useTheme } from 'styled-components/native';
+import { ThemeProvider } from 'styled-components/native';
 
 export default function WelcomeScreen() {
     const navigation = useNavigation()
+    const theme = useTheme();
 
-    const colorScheme = useColorScheme();
-    const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
     return (
+      <ThemeProvider theme={theme}>
         <LinearGradient
             colors={theme.welcomeBG}
             start={{x: 0, y: 0}}
@@ -40,6 +41,7 @@ export default function WelcomeScreen() {
                 <StatusBar style="auto" />
             </SafeAreaView>
         </LinearGradient>
+        </ThemeProvider>
     );
 }
 

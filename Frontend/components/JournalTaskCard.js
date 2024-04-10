@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, useColorScheme } from 'react-native';
-import { darkTheme, lightTheme } from '../App';
+import { useTheme, ThemeProvider } from 'styled-components/native';
 
 const JournalTaskCard = ({ icon, title, description, smallImage }) => {
-    const colorScheme = useColorScheme();
-    const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+    const theme = useTheme();
 
     return (
+        <ThemeProvider theme={theme}>
         <View style={styles.container}>
             <View style={[styles.card, {backgroundColor: theme.gardenCard}]}>
                 <View style={styles.content}>
@@ -39,6 +39,7 @@ const JournalTaskCard = ({ icon, title, description, smallImage }) => {
                 </View>
             </View>
         </View>
+        </ThemeProvider>
     );
 };
 

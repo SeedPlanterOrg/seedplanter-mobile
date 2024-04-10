@@ -7,7 +7,7 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { GiftedChat, InputToolbar, Composer, Bubble, Send } from 'react-native-gifted-chat'
 import { sendMessage } from '../utils/sendchat'; 
 import logo from '../assets/LogoActiveGreen.png';
-import { darkTheme, lightTheme } from '../App';
+import { useTheme, ThemeProvider } from 'styled-components/native';
 
 // import { Markdown } from 'react-native-markdown-display';
 
@@ -16,8 +16,7 @@ export default function ChatBotScreen() {
   const [messages, setMessages] = useState([])
   const [isBotTyping, setIsBotTyping] = useState(false);
   const [startConversation, setStartConversation] = useState(false);
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+  const theme = useTheme();
 
   
   const navigation = useNavigation();
@@ -163,6 +162,7 @@ const renderSendButton = (props) => {
   }, [navigation]);
 
   return (
+    <ThemeProvider theme={theme}>
     <SafeAreaView style={[{ flex: 1, backgroundColor: '#e8ecf4'}, {backgroundColor: theme.background}]}>
       <View style={{marginLeft: 10, marginTop: 5}}>
         <Ionicons
@@ -194,6 +194,7 @@ const renderSendButton = (props) => {
           }}
         />
     </SafeAreaView>
+    </ThemeProvider>
   );
 }
 

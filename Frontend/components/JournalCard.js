@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, useColorScheme } from 'react-native';
-import { darkTheme, lightTheme } from '../App';
+import { useTheme, ThemeProvider } from 'styled-components/native';
 import * as Progress from 'react-native-progress';
 
 const JournalCard = ({ date, smallImages, waterLevelProgress, nutrientProgress, points }) => {
-    const colorScheme = useColorScheme();
-    const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+    const theme = useTheme();
 
     return (
+        <ThemeProvider theme={theme}>
         <View style={styles.container}>
             <View style={[styles.card, { backgroundColor: theme.gardenCard }]}>
                 <View style={styles.content}>
@@ -53,6 +53,7 @@ const JournalCard = ({ date, smallImages, waterLevelProgress, nutrientProgress, 
                 </View>
             </View>
         </View>
+        </ThemeProvider>
     );
 };
 

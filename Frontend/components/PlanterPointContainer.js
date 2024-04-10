@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, useColorScheme } from 'react-native';
-import { darkTheme, lightTheme } from '../App';
+import { useTheme, ThemeProvider } from 'styled-components/native';
 
 const PlanterPointContainer = ({ points }) => {
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+  const theme = useTheme();
 
   return (
+    <ThemeProvider theme={theme}>
     <View style={styles.container}>
       <Text style={styles.pointsLabelText}>Streak</Text>
       <View style={[styles.pointsContainer, { backgroundColor: theme.progUnfill }]}>
@@ -19,6 +19,7 @@ const PlanterPointContainer = ({ points }) => {
         </View>
       </View>
     </View>
+    </ThemeProvider>
   );
 };
 
