@@ -1,11 +1,12 @@
 import React, { useState, useEffect, memo } from 'react';
-import {View, SafeAreaView, FlatList, TextInput} from 'react-native';
+import {View, SafeAreaView, FlatList, TextInput, useColorScheme} from 'react-native';
 import {getPlantCatalogPage,
 } from '../utils/http';
 import filter from "lodash.filter";
 import PlantTile from '../components/PlantTile';
 import { styles } from '../styles/CatalogStyles';
 import PlantModal from '../components/PlantModal';
+import { darkTheme, lightTheme } from '../App';
 const PAGE_LIMIT = 11;
 
 
@@ -16,6 +17,8 @@ export default function CatalogScreen() {
   const [fullPlantsData, setFullPlantsData] = useState([]);
   const [selectedPlant, setSelectedPlant] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
 
   const blurhash =
@@ -62,10 +65,11 @@ export default function CatalogScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.gardenBackground }}>
       <View style={styles.container}>
-        <TextInput
-          style={styles.searchingbar}
+        <TextInput 
+          style={[styles.searchingbar, {color: theme.text}]}
+          placeholderTextColor="#888" 
           placeholder="Search"
           clearButtonMode='always'
           value={searchQuery}
@@ -75,8 +79,8 @@ export default function CatalogScreen() {
         />
 
         <FlatList
-          columnWrapperStyle={{ gap: -28  }}
-          contentContainerStyle={{ alignItems: 'center', gap: -28 }}
+          columnWrapperStyle={{ gap: -15  }}
+          contentContainerStyle={{ alignItems: 'center', gap: -20}}
           data={plantsData}
           numColumns={2}
           keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()} // Ensure item.id is a string
