@@ -2,9 +2,10 @@ import { styles } from '../styles/CatalogStyles';
 import React, { useState} from 'react';
 import { Image } from 'expo-image';
 import { addPlant } from '../utils/http';
-import { Modal, View, Button, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { Modal, View, Button, ScrollView, Text, TouchableOpacity, useColorScheme } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { FontAwesome6, MaterialCommunityIcons, Feather, AntDesign } from '@expo/vector-icons';
+import { darkTheme, lightTheme } from '../App';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -13,17 +14,24 @@ const blurhash =
 const PlantModal =({ plant, onClose, modalVisible }) => {
     console.log('Modal visible:', modalVisible);
 
+const colorScheme = useColorScheme();
+const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+
 return (
 <Modal
-      animationType='fade'
-      transparent={true} 
+      animationType="slide"
+      presentationStyle='pageSheet'
+      transparent={false}
       visible={modalVisible}
 >
-<View style={styles.ModalView}>
-  <View style={styles.ModalContainer}>
+
+  <View style={[styles.ModalContainer, { backgroundColor: theme.gardenBackground }]}>
+
+    {/* Backbutton */}
     <View style={styles.Backbutton}>
-      <Button title="Close" color="#000000" alignItems="left" onPress={onClose}></Button>
+        <Button title="Close" color={theme.text} alignItems="left" onPress={onClose}></Button>
     </View>
+    
     <ScrollView>
       <View style={styles.centerItems}>
         <Image source={plant.image_urls && plant.image_urls[0] ? { uri: plant.image_urls[0] } : require('../resource/flower1.jpg')} style={styles.modalImageSizing} transition={300} />
@@ -58,70 +66,88 @@ return (
           }
 
         }}>
-        <AntDesign name="pluscircle" size={35} color="#68b454" />
+        <AntDesign name="pluscircle" size={35} color="#1DB954" />
       </TouchableOpacity>
       </View>
+      
+      {/* Description */}
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <View style={styles.cardGrey}>
-          <Text style={styles.DescriptionText}>Description</Text>
-          <Text style={styles.descriptionOfPlant2}>{plant.description}</Text>
+        <View style={[styles.cardGrey, { backgroundColor: theme.gardenCard }]}>
+          <Text style={[styles.DescriptionText, { color: theme.text }]}>Description</Text>
+          <Text style={[styles.descriptionOfPlant2, { color: theme.text }]}>{plant.description}</Text>
         </View>
       </View>
+
       <View style={{ justifyContent: 'center', flexDirection: 'row', }} >
-        <View style={styles.card3}>
-          <Text style={styles.cardText2}>{plant.care_level}</Text>
-          <FontAwesome6 name="plant-wilt" size={30} color="#6ABE6B" />
+        {/* Circle 1 */}
+        <View style={[styles.card3, { backgroundColor: theme.gardenBackground }]}>
+          <Text style={[styles.cardText2, { color: theme.text }]}>{plant.care_level}</Text>
+          <FontAwesome6 name="plant-wilt" size={30} color="#1DB954" />
           <Text style={styles.cardText3}>Care Level</Text>
         </View>
-        <View style={styles.card7}>
-          <Text style={styles.cardText2}>{plant.daily_watering}</Text>
+        {/* Circle 2 */}
+        <View style={[styles.card7, { backgroundColor: theme.gardenBackground }]}>
+          <Text style={[styles.cardText2, { color: theme.text }]}>{plant.daily_watering}</Text>
           <MaterialCommunityIcons name="water" size={30} color="#7EC8E3" />
           <Text style={styles.cardText3}>Daily Watering</Text>
         </View>
       </View>
+
       <View style={{ justifyContent: 'center', flexDirection: 'row', }} >
-        <View style={styles.card9}>
-          <Text style={styles.cardText2}>{plant.light}</Text>
+      {/* Circle 3 */}
+        <View style={[styles.card9, { backgroundColor: theme.gardenBackground }]}>
+          <Text style={[styles.cardText2, { color: theme.text }]}>{plant.light}</Text>
           <Feather name="sun" size={30} color="#ffd061" />
           <Text style={styles.cardText3}>Sun</Text>
         </View>
-        <View style={styles.card10}>
-          <Text style={styles.cardText2}>{plant?.zone?.hardy}</Text>
+
+      {/* Circle 4 */}
+        <View style={[styles.card10, { backgroundColor: theme.gardenBackground }]}>
+          <Text style={[styles.cardText2, { color: theme.text }]}>{plant?.zone?.hardy}</Text>
           <Feather name="map" size={30} color="#ff7878" />
           <Text style={styles.cardText3}>Hardy Zone</Text>
         </View>
       </View>
+
+      {/* Pruing Description */}
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <View style={styles.card4}>
+        <View style={[styles.card4, { backgroundColor: theme.gardenCard }]}>
           <Text style={styles.DescriptionText4}>Pruning Description</Text>
-          <Text style={styles.descriptionOfPlant2}>{plant.pruning_description}</Text>
+          <Text style={[styles.descriptionOfPlant2, { color: theme.text }]}>{plant.pruning_description}</Text>
         </View>
       </View>
+      
+      {/* Watering Description */}
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <View style={styles.cardBlue}>
+        <View style={[styles.cardBlue, { backgroundColor: theme.gardenCard }]}>
           <Text style={styles.DescriptionText2}>Watering Description</Text>
-          <Text style={styles.descriptionOfPlant2}>{plant.watering_description}</Text>
+          <Text style={[styles.descriptionOfPlant2, { color: theme.text }]}>{plant.watering_description}</Text>
         </View>
       </View>
+      
+      {/* Sunlight Description */}
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <View style={styles.cardYellow}>
+        <View style={[styles.cardYellow, { backgroundColor: theme.gardenCard }]}>
           <Text style={styles.DescriptionText3}>Sunlight Description</Text>
-          <Text style={styles.descriptionOfPlant2}>{plant.sunlight_description}</Text>
+          <Text style={[styles.descriptionOfPlant2, { color: theme.text }]}>{plant.sunlight_description}</Text>
         </View>
       </View>
+
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         {/*<View style={styles.cardRed}> */}
           <Text style={styles.cardText7}>Hardiness Map</Text>
         {/*</View>*/}
       </View>
-      <View>
+
+      <View style={{ paddingHorizontal: 35 }}>
         <WebView source={{ uri: plant.hardiness_url }} style={styles.modalImageSizing2}/>
       </View>
+
 
       {/* add onPress for the adding to catalog */}
     </ScrollView>
   </View>
-</View>
+
 </Modal>
 )
 };
