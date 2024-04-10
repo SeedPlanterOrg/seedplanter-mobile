@@ -89,9 +89,7 @@ export default function ChatBotScreen() {
   );
   
   const renderComposer = (props) => (
-    <View>
-    <Composer {...props} textInputStyle={[styles.composer, {color: theme.text }]} textInputProps={{multiline: true }} />
-    </View>
+    <Composer {...props} textInputStyle={[styles.composer, {color: theme.text }]} />
   );
   const renderChatFooter = (props) => {
     if (isBotTyping) {
