@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Modal, Button, useColorScheme } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Modal, Button, useColorScheme } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { darkTheme, lightTheme } from '../App';
+import { Image } from 'expo-image';
 
 const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, nutrientProgress, onDelete }) => {
     const [modalVisible, setModalVisible] = useState(false);

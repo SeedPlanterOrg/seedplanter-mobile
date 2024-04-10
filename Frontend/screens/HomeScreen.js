@@ -6,7 +6,6 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  Image,
   Modal,
   TextInput,
   Button,
@@ -28,8 +27,11 @@ import {
 import { darkTheme, lightTheme } from '../App';
 import { styled, ThemeProvider } from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Image } from 'expo-image';
 // import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+// import Tabs from '../navigation/tabs';
+// import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen() {
   const [customPlantModalVisible, setCustomPlantModalVisible] = useState(false);
@@ -43,6 +45,7 @@ export default function HomeScreen() {
   const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
   const [plantName, setPlantName] = useState('');
   const [scientificName, setScientificName] = useState('');
+  const navigation = useNavigation();
   // const [plantData, setPlantData] = useState([
   //   {
   //     id: 1,
@@ -149,6 +152,7 @@ export default function HomeScreen() {
     if (option === 'Catalog') {
       // Placeholder function for adding from catalog
       console.log('Add from Catalog selected');
+      navigation.navigate('Search Plants');
     } else if (option === 'Custom') {
       openCustomPlantModal();
     }
