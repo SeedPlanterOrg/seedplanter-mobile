@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
       borderColor: '#1DB954',
       borderRadius: 15,
       paddingHorizontal: 10,
+      marginBottom: 20,
       paddingVertical: 12,
       fontSize: 16,
     },

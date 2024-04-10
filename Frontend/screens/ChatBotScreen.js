@@ -89,7 +89,9 @@ export default function ChatBotScreen() {
   );
   
   const renderComposer = (props) => (
-    <Composer {...props} textInputStyle={[styles.composer, {color: theme.text }]} />
+    <View>
+    <Composer {...props} textInputStyle={[styles.composer, {color: theme.text }]} textInputProps={{multiline: true }} />
+    </View>
   );
   const renderChatFooter = (props) => {
     if (isBotTyping) {
@@ -113,7 +115,7 @@ const renderSendButton = (props) => {
         borderRadius: 24,
         alignItems: 'center', 
         justifyContent: 'center',
-        backgroundColor: '#68b454' 
+        backgroundColor: '#1DB954' 
       }}>
         <FontAwesome name="send" size={18} color="white" />
       </View>
@@ -168,7 +170,7 @@ const renderSendButton = (props) => {
         <Ionicons
           name="chevron-back-circle"
           size={40}
-          color="#68b454"
+          color="#1DB954"
           style={{
             borderRadius: 15,
             padding: 5,
@@ -188,6 +190,7 @@ const renderSendButton = (props) => {
           renderBubble={renderBubble}
           renderSend={renderSendButton}
           renderComposer={renderComposer}
+          placeholder="Ask me a gardening question..."
           user={{
             _id: 1,
           }}
