@@ -38,12 +38,18 @@ export default function JournalScreen() {
     }
   ];
 
+  const handleDeleteTask = (taskId) => {
+    const updatedTasks = tasksData.filter(task => task.id !== taskId);
+    setTasksData(updatedTasks);
+  };
+
   const renderItem = ({ item }) => (
     <JournalTaskCard
       icon={item.icon}
       title={item.title}
       description={item.description}
       smallImage={item.smallImage}
+      onDelete={() => handleDeleteTask(item.id)}
     />
   );
 
