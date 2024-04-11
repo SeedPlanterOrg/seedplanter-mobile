@@ -3,22 +3,16 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const authenticate = require('../middleware/authenticate')
-const { getGardenByUserId, createGarden, 
-    addPlant, deletePlantById } = require ('../controllers/garden-controller');
+const { getEntryById, 
+    deleteEntryById, createEntry } = require ('../controllers/journal-controller');
 
 // setup .env
 require("dotenv").config();
 
-const GardenModel = require("../models/garden-schema");
-
-
-
-
 // router.use(authenticate); // makes routes accessible by only the user
-router.post('/create_garden', createGarden);
-router.put('/add_plant', addPlant);
-router.get('/get_garden', getGardenByUserId);
-router.get('/remove_plant', deletePlantById);
+router.get('/get_entry_by_id', getEntryById);
+router.delete('/delete_entry_by_Id', deleteEntryById);
+router.post('/create_entry', createEntry);
 
 router 
     .route("/")

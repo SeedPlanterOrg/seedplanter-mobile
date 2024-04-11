@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const journalEntrySchema = new mongoose.Schema({
+const journalEntryModel = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -26,5 +26,5 @@ const journalEntrySchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('JournalEntry', journalEntrySchema )
+module.exports = mongoose.model('journalEntryModel', journalEntryModel )
   
