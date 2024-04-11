@@ -18,7 +18,7 @@ const GardenModel = require("../models/garden-schema");
 router.post('/create_garden', createGarden);
 router.put('/add_plant', addPlant);
 router.get('/get_garden', getGardenByUserId);
-router.get('/remove_plant', deletePlantById);
+router.delete('/remove_plant', deletePlantById);
 
 router 
     .route("/")

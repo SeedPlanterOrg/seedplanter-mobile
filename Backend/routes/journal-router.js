@@ -4,13 +4,14 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const authenticate = require('../middleware/authenticate')
 const { getEntryById, 
-    deleteEntryById, createEntry } = require ('../controllers/journal-controller');
+    deleteEntryById, createEntry, getAllEntries } = require ('../controllers/journal-controller');
 
 // setup .env
 require("dotenv").config();
 
 // router.use(authenticate); // makes routes accessible by only the user
 router.get('/get_entry_by_id', getEntryById);
+router.get('/get_journal', getAllEntries);
 router.delete('/delete_entry_by_Id', deleteEntryById);
 router.post('/create_entry', createEntry);
 

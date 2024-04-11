@@ -16,11 +16,41 @@ const bodyParser = require('body-parser');
  */
 const getEntryById = async (req, res, next) => {
     try {
-        // Extract the ID from the request parameters
         const id = req.query.id;
+        console.log('id: ' + id);
+        if (!id) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+        // Retrieve all entries from the database
+        const entry = await journalEntryModel.findById(id);
+        console.log(entry);
+        // Check if there are any entries found
+        if (!entry || entry.length === 0) {
+            // If no entries are found, send a 404 response
+            return res.status(404).json({ message: "No entry found" });
+        }
+
+        // If entries are found, send them in the response
+        res.status(200).json(entry);
+    } catch (error) {
+        // Handle any errors that occur
+        res.status(500).json({ message: error.message });
+    }
+};
+
+/**
+ * Route handler to retrieve a journal entry by its ID.
+ * @param {Object} req - request object.
+ * @param {Object} res - response object.
+ * @param {Function} next - next middleware function.
+ */
+const getAllEntries = async (req, res, next) => {
+    try {
+        // Extract the ID from the request parameters
+        const userId = req.query.id;
 
         // Use findById to retrieve the entry with the given ID
-        const entry = await journalEntryModel.findById(id);
+        const entry = await journalEntryModel.find({ userId: userId });
 
         // Check if the entry was found
         if (!entry) {
@@ -97,4 +127,5 @@ module.exports = {
     getEntryById,
     deleteEntryById,
     createEntry,
+    getAllEntries
 };

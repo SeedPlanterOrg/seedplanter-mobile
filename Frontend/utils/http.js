@@ -98,7 +98,7 @@ async function addPlant(gardenPlant) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json(); // Assuming the response is JSON
+        return response.json();
     })
     .then(responseData => {
         // Process the response data
@@ -124,7 +124,7 @@ async function createGarden(userId) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json(); // Assuming the response is JSON
+        return response.json();
     })
     .then(responseData => {
         // Process the response data
@@ -135,87 +135,149 @@ async function createGarden(userId) {
     });
 }
 
-    
+async function deleteGardenPlant(_userId, _plantId) {
+    const url = new URL(`${link}/garden/remove_plant`);
+    // const url = new URL(`http://localhost:3000/garden/remove_plant`); // unit testing 
+    const requestBody = {
+        userId: _userId,
+        plantId: _plantId
+    };
 
-// // drivers
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
 
-// async function run() {
-//         try {
-//             let object = {
-//                 id: "65efc58051a3024ba286442d"
-//             };
-//             const plantsArray = await createGarden(object);
-//             console.log(plantsArray);
-//             // You can use plantsArray here
-//         } catch (error) {
-//             console.error("Error: ", error);
-//         }
-//     }
-//     run();
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-// async function run() {
-//     try {
-//         let id = "65efc324a82682e507e38ebc";
-//         const plantsArray = await getGarden(id);
-//         console.log(plantsArray);
-//         // You can use plantsArray here
-//     } catch (error) {
-//         console.error("Error: ", error);
-//     }
-// }
-// run();
-// async function run() {
-//         try {
-//             let object = {
-//                 _id: "66003bc6d48a27039a864f5b",
-//                 id: "65efc324a82682e507e38ebc1",
-//                 plantId: 2,
-//                 water: true,
-//                 fertilize: false,
-//                 prune: true,
-//                 waterLevel: 5,
-//                 lastWateringDate: "2024-03-21",
-//                 fertilizerLevel: 3,
-//                 lastFertilizingDate: "2024-03-15",
-//                 notes: " ",
-//                 imagesUrls: [
-//                   "http://example.com/image1.jpg",
-//                   "http://example.com/image2.jpg"
-//                 ]
-//             };
-//             const plantsArray = await addPlant(object);
-//             console.log(plantsArray);
-//             // You can use plantsArray here
-//         } catch (error) {
-//             console.error("Error: ", error);
-//         }
-//     }
-//     run();
-// async function run() {
-//     try {
-//         const plantsArray = await getPlantCatalogPage(4);
-//         const stuff = await plantsArray;
-//         //console.log(plantsArray[0]);
-//         // You can use plantsArray here
-//         return stuff;
-//     } catch (error) {
-//         console.error("Error: ", error);
-//     }
-    
-// }
+        const responseData = await response.json();
+        return responseData; // Return the response from the server
 
-// const gotstuff = run();
-// const finaldrive = gotstuff.then((value) => {
-//     console.log(value);
-//     //return value;
-// })
-// console.log(finaldrive);
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        throw error; // Rethrow the error for the caller to handle
+    }
+}
+
+async function createJournalEntry(entryObject) {
+    const url = new URL(`${link}/journal/create_entry`);
+    //const url = new URL(`http://localhost:3000/journal/create_entry`);// for unit test
+    console.log(entryObject);
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json' // Set Content-Type to application/json
+        },
+        body: JSON.stringify(entryObject),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(responseData => {
+        // Process the response data
+        console.log(responseData);
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
+
+async function deleteJournalEntry(_id) {
+    const url = new URL(`${link}/journal/delete_entry_by_Id`);
+    //const url = new URL(`http://localhost:3000/journal/delete_entry_by_Id`);// for unit test
+    const params = {
+       id: _id,
+    };
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    fetch(url, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(responseData => {
+        // Process the response data
+        console.log(responseData);
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
+
+async function getJournalEntry(_id) {
+    const url = new URL(`${link}/journal/get_entry_by_id`);
+    //const url = new URL(`http://localhost:3000/journal/get_entry_by_id`);// for unit test
+    const params = {
+       id: _id,
+    };
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+    fetch(url, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(responseData => {
+        // Process the response data
+        console.log(responseData);
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
+
+async function getJournal(_id) {
+    const url = new URL(`${link}/journal/get_journal`);
+    // const url = new URL(`http://localhost:3000/journal/get_journal`);// for unit test
+    const params = {
+       id: _id,
+    };
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+    fetch(url, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(responseData => {
+        // Process the response data
+        console.log(responseData);
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
 
 module.exports = {
     getPlantCatalogPage,
     findPlantById, 
     getGarden,
     addPlant,
-    createGarden
+    createGarden,
+    createJournalEntry,
+    deleteJournalEntry,
+    getJournal,
+    getJournalEntry,
+    deleteGardenPlant
 };
 

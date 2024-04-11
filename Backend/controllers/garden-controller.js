@@ -220,19 +220,27 @@ const deletePlantById = async (req, res, next) => {
 
     // Use the findByIdAndDelete method to remove the document
     const deletedEntry = await GardenPlantModel.findByIdAndDelete(plantId);
-
     if (!deletedEntry) {
-        return res.status(404).json({ message: "Entry not found" });
+      return res.status(404).json({ message: "Plant not found" });
+    }
+
+    // Then, pull the plant ID from the garden's plant array
+    const gardenUpdate = await GardenModel.findOneAndUpdate(
+      { userId: userId },
+      { $pull: { plants: plantId } },
+      { new: true }
+    );
+
+    if (!gardenUpdate) {
+      return res.status(404).json({ message: "Garden not found" });
     }
 
     // Send a response indicating successful deletion
-    res.status(200).json({ message: "Entry successfully deleted" });
-} catch (error) {
-    // Handle any errors
-    res.status(500).json({ message: error.message });
-}
-
-
+    res.status(200).json({ message: "Plant successfully deleted from garden" });
+  } catch (error) {
+      // Handle any errors
+      res.status(500).json({ message: error.message });
+  }
 }
 
 // const deleteGarden = async (req, res, next) => {
