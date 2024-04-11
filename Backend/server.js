@@ -55,6 +55,9 @@ app.use('/garden', gardenRouter);
 const chatRouter = require('./routes/chat-routes');
 app.use('/chat', chatRouter);
 
+const journalRouter = require('./routes/journal-router');
+app.use('/journal', journalRouter);
+
 
 app.all('*', (req, res, next)=> { 
     next(new AppError(`Can't find ${req.originalUrl}`, 404)); //throw error if using a non-existant route.
