@@ -217,9 +217,10 @@ const deletePlantById = async (req, res, next) => {
     // (TODO: ) remove plant from garden plant array then delete plant
     const userId = req.body.userId;
     const plantId = req.body.plantId; // Get the ID from the request parameters
-
+    console.log("info: user " + userId + " plantId " + plantId);
     // Use the findByIdAndDelete method to remove the document
     const deletedEntry = await GardenPlantModel.findByIdAndDelete(plantId);
+    console.log("info: Entry " + deletedEntry);
     if (!deletedEntry) {
       return res.status(404).json({ message: "Plant not found" });
     }

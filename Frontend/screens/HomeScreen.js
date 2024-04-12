@@ -21,7 +21,7 @@ import { getGarden } from '../utils/http'
 import { useTheme, ThemeProvider } from 'styled-components/native';
 import { Image } from 'expo-image';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import {deleteGardenPlant} from '../utils/http';
 
 
 export default function HomeScreen() {
@@ -83,6 +83,7 @@ export default function HomeScreen() {
               data.gardenPlants.forEach(plant => {
                 console.log("Plant ID:", plant._id);
                 console.log("Garden ID:", plant.gardenId);
+                console.log("PlantID", plant.plantId);
                 //console.log("Plant Details:", plant.plantDetails);
             
                 // If plantDetails is an array, iterate over it as well
@@ -100,12 +101,11 @@ export default function HomeScreen() {
               }
               let waterRatio = plant.waterLevel / 10;
               let nutrients = plant.fertilizerLevel / 10;
-              let min = 100;
-              let max = 1000;
-              let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
               newPlant = {
-                  id: randomInt.toString(), 
+                  
+                  id: plant.plantId, 
                   // id: `default-${Math.random()}`,
+                  _id: plant._id,
                   imageSource: image,
                   plantName: plant.plantDetails.name,
                   scientificName: plant.plantDetails.binomial_name,
@@ -179,7 +179,7 @@ export default function HomeScreen() {
       scientificName={item.scientificName}
       waterLevelProgress={item.waterLevelProgress}
       nutrientProgress={item.nutrientProgress}
-      onDelete={() => deletePlant(item.id)} 
+      onDelete={() => deletePlant(item)} 
     />
   );
   
@@ -209,7 +209,18 @@ export default function HomeScreen() {
   };
 
   // Function to delete a plant card 
-  const deletePlant = (id) => {
+  const deletePlant = async (plantObj) => {
+    let id = plantObj.id;
+    try {
+      const user = await AsyncStorage.getItem('userId');
+      console.log("id " + user);
+      deleteGardenPlant(user, plantObj._id)
+    } catch (error) {
+      console.log(`Error deleteing plant: ${err}`);
+    }
+    
+    console.log("PLANT_ID= " + plantObj);
+    console.dir("User_ID= " + plantObj);
     console.log("Deleting plant with ID:", id); // Log a message
     const updatedPlantData = plantData.filter(item => item.id !== id);
     setPlantData(updatedPlantData);
