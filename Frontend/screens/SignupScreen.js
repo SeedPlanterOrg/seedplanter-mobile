@@ -110,10 +110,10 @@ export default function SignupScreen() {
   // });
 
         createGarden({id: data.userId})
-        .then(() => {
+        .then(async () => {
             // console.log("DEBUG:   " + gardenId.garden[0]._id);
             console.log("ASYNC_START: ---------------------------------------------------------------------------------------------------");
-            const gardenId = getGarden(data.userId); //get gardenId
+            const gardenId = await getGarden(data.userId); //get gardenId
             AsyncStorage.setItem('gardenId', gardenId.garden[0]._id); //set gardenId in local storage
             console.log("ASYNC_END: ---------------------------------------------------------------------------------------------------");
           })
