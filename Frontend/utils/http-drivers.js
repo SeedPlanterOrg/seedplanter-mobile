@@ -5,8 +5,8 @@
 async function run() {
     try {
         let object = {
-            id: "65efc58051a3024ba286442d"
-        };us
+     id: "65efc58051a3024ba286442d"       
+        };
         const plantsArray = await createGarden(object);
         console.log(plantsArray);
         // You can use plantsArray here

@@ -75,23 +75,23 @@ export default function HomeScreen() {
       async function fetchPlants() {
           try {
               const user = await AsyncStorage.getItem('userId');
-              console.log("USER_DEBUG2 " + user);
+              // console.log("USER_DEBUG2 " + user);
               const data = await getGarden(user);
               // console.log('DEBUGCODE_HOME_SCREEN: ' + data);
               let displayData = [];
               let image;
               data.gardenPlants.forEach(plant => {
-                console.log("Plant ID:", plant._id);
-                console.log("Garden ID:", plant.gardenId);
+                // console.log("Plant ID:", plant._id);
+                // console.log("Garden ID:", plant.gardenId);
                 //console.log("Plant Details:", plant.plantDetails);
             
                 // If plantDetails is an array, iterate over it as well
                 if(Array.isArray(plant.plantDetails)){
                     plant.plantDetails.forEach(detail => {
-                        console.log("Detail ID:", detail._id);
-                        console.log("Detail Name:", detail.name);
-                        console.log("Detail Name:", detail.binomial_name);
-                        console.log("Detail Name:", detail.image_urls[0]);
+                        // console.log("Detail ID:", detail._id);
+                        // console.log("Detail Name:", detail.name);
+                        // console.log("Detail Name:", detail.binomial_name);
+                        // console.log("Detail Name:", detail.image_urls[0]);
                         // Access other properties as needed
                     });
                 }

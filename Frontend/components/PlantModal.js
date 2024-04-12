@@ -6,6 +6,7 @@ import { Modal, View, Button, ScrollView, Text, TouchableOpacity, useColorScheme
 import { WebView } from 'react-native-webview';
 import { FontAwesome6, MaterialCommunityIcons, Feather, AntDesign } from '@expo/vector-icons';
 import { useTheme, ThemeProvider } from 'styled-components/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -42,22 +43,26 @@ const PlantModal =({ plant, onClose, modalVisible }) => {
             <Text style={styles.sciNameText}>{plant.binomial_name}</Text>
         </View>
         <View style={{ flexDirection: 'row', alignSelf: "flex-end", marginTop: -65, marginBottom: 20}}>
-            <TouchableOpacity style={styles.plusButtonContainer} onPress={() => {
-            let id = '65efc324a82682e507e38ebc' + 1;
-            gardenPlant = {
-                _id: '66003bc6d48a27039a864f5b',
-                id: plant.id,
-                plantId: plant.id,
-                water: true,
-                fertilize: true,
-                prune: true,
-                waterLevel: 5,
-                lastWateringDate: "2024-03-21",
-                fertilizerLevel: 3,
-                lastFertilizingDate: "2024-03-15",
-                notes: "This is a test"
-            }
+            <TouchableOpacity style={styles.plusButtonContainer} onPress={async () => {
+            // const userId = await AsyncStorage.getItem('userId');
+            // let id = '65efc324a82682e507e38ebc' + 1;
             try {
+                const gardenId = await AsyncStorage.getItem('gardenId');
+                console.log("ID: " + gardenId);
+                gardenPlant = {
+                    _id: gardenId,
+                    id: plant.id,
+                    plantId: plant.id,
+                    water: true, //test
+                    fertilize: true, //test
+                    prune: true, //test
+                    waterLevel: 5, //test
+                    lastWateringDate: "2024-03-21", //test
+                    fertilizerLevel: 3, //test
+                    lastFertilizingDate: "2024-03-15", //test
+                    notes: "This is a test" //test
+                }
+                
                 const response = addPlant(gardenPlant);
                 console.log(response);
             } catch (err) {

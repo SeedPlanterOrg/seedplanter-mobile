@@ -159,10 +159,11 @@ const createGarden = async (req, res, next) => {
       gardenHealthLevel: 100 // initial garden health level
     });
     
-    await createdGarden.save();
+    // await createdGarden.save();
     res.status(201).json({message: "Garden Created"});
   
   } catch (err) {
+    console.log("ERROR: " + err);
     return next(new AppError('Creating garden failed, please try again later', 500));
   }
 };

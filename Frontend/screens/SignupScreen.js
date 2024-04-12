@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import ErrorMessage from '../components/ErrorMessage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Tabs from '../navigation/tabs';
-// import {IP, PORT} from "@env"
+import { createGarden, getGarden } from '../utils/http';
 
 export default function SignupScreen() {
     const navigation = useNavigation()
@@ -20,7 +20,6 @@ export default function SignupScreen() {
     const [errorMessage, setErrorMessage] = useState(null);
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const IP = process.env.EXPO_PUBLIC_IP;
-    //const PORT = process.env.EXPO_PUBLIC_PORT;
 
   let link = process.env.EXPO_PUBLIC_IP
 
@@ -84,8 +83,6 @@ export default function SignupScreen() {
         
         console.log('response', response);
 
-        // const data = await response.json();
-        // const text = await data.text(); 
 
         if (!response.ok) {
           console.log('Response not OK');
@@ -98,16 +95,41 @@ export default function SignupScreen() {
         console.log('Data:', data);
   
         // Store the user ID and token in local storage or in-memory state
+        console.log("ASYNC_PRE: ---------------------------------------------------------------------------------------------------");
         await AsyncStorage.setItem('userId', data.userId);
         await AsyncStorage.setItem('token', data.token);
+        console.log("USER: " + data.userId);
 
-        const storedUserId = await AsyncStorage.getItem('userId');
-        const storedToken = await AsyncStorage.getItem('token');
-        console.log('Stored user ID:', storedUserId);
-        console.log('Stored token:', storedToken); 
-        // Navigate to the next screen
+        // somePromise
+  // .then(function(result) {
+  //   // Handle the result when the promise is fulfilled
+  //   console.log('Success:', result);
+  // }, function(error) {
+  //   // Handle the error if the promise is rejected
+  //   console.log('Error:', error);
+  // });
+
+        createGarden({id: data.userId})
+        .then(() => {
+            // console.log("DEBUG:   " + gardenId.garden[0]._id);
+            console.log("ASYNC_START: ---------------------------------------------------------------------------------------------------");
+            const gardenId = getGarden(data.userId); //get gardenId
+            AsyncStorage.setItem('gardenId', gardenId.garden[0]._id); //set gardenId in local storage
+            console.log("ASYNC_END: ---------------------------------------------------------------------------------------------------");
+          })
+          .catch((err) => {
+            console.log("ERROR " + err);
+          });
+
         navigation.navigate(Tabs);
-    
+
+        
+        // const storedUserId = await AsyncStorage.getItem('userId');
+        // const storedToken = await AsyncStorage.getItem('token');
+        // console.log('Stored user ID:', storedUserId);
+        // console.log('Stored token:', storedToken); 
+        // Navigate to the next screen
+
       } catch (error) {
         // setErrorMessage(responseBody.message);
         console.log(error);
