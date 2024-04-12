@@ -135,7 +135,7 @@ const renderSendButton = (props) => {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#68b454', 
+            backgroundColor: '#1DB954', 
           },
           left: {
             backgroundColor: theme.gardenCard

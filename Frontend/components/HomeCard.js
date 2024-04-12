@@ -30,7 +30,7 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                                 progress={waterLevelProgress}
                                 color='#3FA9EB'
                                 borderWidth={0}
-                                unfilledColor='#DFF1F8'
+                                unfilledColor={theme.progBlueUnfill}
                                 strokeCap='round'
                             >
                                 {/* Nested progress circle for nutrients */}
@@ -41,7 +41,7 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                                         progress={nutrientProgress}
                                         color='#1DB954'
                                         borderWidth={0}
-                                        unfilledColor='#D7EED8'
+                                        unfilledColor={theme.progUnfill}
                                         strokeCap='round'
                                     />
                                 </View>
@@ -95,7 +95,7 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                             progress={waterLevelProgress}
                             color='#3FA9EB'
                             borderWidth={0}
-                            unfilledColor='#DFF1F8'
+                            unfilledColor={theme.progBlueUnfill}
                             strokeCap='round'
                             showsText={true}
                             style={{ marginLeft: 20, marginRight: 20 }}
@@ -111,7 +111,7 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
                             progress={nutrientProgress}
                             color='#1DB954'
                             borderWidth={0}
-                            unfilledColor='#D7EED8'
+                            unfilledColor={theme.progUnfill}
                             strokeCap='round'
                             showsText={true}
                             style={{ marginLeft: 20, marginRight: 20 }}
