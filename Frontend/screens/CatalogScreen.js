@@ -79,7 +79,7 @@ export default function CatalogScreen() {
         />
 
         <FlatList
-          columnWrapperStyle={{ gap: -15  }}
+          columnWrapperStyle={{ gap: -20  }}
           contentContainerStyle={{ alignItems: 'center', gap: -20}}
           data={plantsData}
           numColumns={2}
