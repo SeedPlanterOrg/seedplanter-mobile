@@ -217,7 +217,6 @@ const deletePlantById = async (req, res, next) => {
     // (TODO: ) remove plant from garden plant array then delete plant
     const userId = req.body.userId;
     const plantId = req.body.plantId; // Get the ID from the request parameters
-
     // Use the findByIdAndDelete method to remove the document
     const deletedEntry = await GardenPlantModel.findByIdAndDelete(plantId);
     if (!deletedEntry) {
