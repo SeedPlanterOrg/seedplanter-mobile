@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, useColorScheme, FlatList, TouchableOpacity, Modal, Button, TouchableWithoutFeedback, TextInput } from 'react-native';
-// import { darkTheme, lightTheme } from '../App';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal, TouchableWithoutFeedback, TextInput, Keyboard } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as Progress from 'react-native-progress';
 import JournalTaskCard from '../components/JournalTaskCard';
@@ -9,60 +8,91 @@ import PlanterPointContainer from '../components/PlanterPointContainer';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Image } from 'expo-image';
 import { useTheme, ThemeProvider } from 'styled-components/native';
-import TagInput from 'react-native-tags-input';
 
 export default function JournalScreen() {
   const theme = useTheme();
-  // const colorScheme = useColorScheme();
-  // const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+
+  // Progress Bar Value
   const [progressValue, setProgressValue] = useState(0.6);
   const [date, setDate] = useState(new Date()); 
-  const [createPageModalVisible, setCreatePageModalVisible] = useState(false);
 
+  const [createPageModalVisible, setCreatePageModalVisible] = useState(false);
+  const [modalMarginBottom, setModalMarginBottom] = useState(0);
+
+  // These are used to move the modal up when the keyboard is present
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  const _keyboardDidShow = (event) => {
+    setModalMarginBottom(250);
+  };
+  const _keyboardDidHide = () => {
+    setModalMarginBottom(0);
+  };
+
+  // Title Const 
   const [pageTitle, setPageTitle] = useState('');
-  const [pageSubjects, setPageSubjects] = useState('');
-  // Functions to update plant names and scientific names
+
+  // Functions to update the title of a page
   const handlePageTitleChange = (text) => {
     setPageTitle(text);
   };
-  const handlePageSubjectsChange = (text) => {
-    setPageSubjects(text);
-  };
+
+  // Updates tags shown in the modal
+const handleTagsChange = (text) => {
+  // Split comma-separated tags and filter out empty strings
+  const tagsArray = text.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+
+  if (tagsArray.length > 4) {
+    return;
+  }
+  setTags({
+    tag: text,
+    tagsArray: tagsArray
+  });
+};
+
+  
 
   // Tag States
   const [tags, setTags] = useState({
     tag: '',
     tagsArray: []
   });
-  // Adds tags to the array, stops once 4 tags are present
-  const updateTagState = (state) => {
-    if (state.tagsArray.length <= 4) {
-      setTags(state);
-    }
-  };  
+
   // Tag colors
   const tagColors = ['#F1C40F', '#E74C3C', '#2ECC71', '#3498DB'];
 
   // Function to handle saving inputs from the modal and adding a new JournalCard
   const createJournalCard = () => {
     const formattedDate = `${date.getFullYear()} . ${(date.getMonth() + 1).toString().padStart(2, '0')} . ${date.getDate().toString().padStart(2, '0')}`;
+    const title = pageTitle.trim() === '' ? 'New Journal' : pageTitle;
 
     const newJournalCard = {
-      id: journalCardsData.length + 1, // Generate unique id for the new card
+      id: journalCardsData.length + 1, // id for the new card
       date: formattedDate,
-      smallImages: [], // Add small images if needed
-      title: pageTitle,
-      tags: tags.tagsArray // Add tags
+      smallImages: [], 
+      title: title,
+      tags: tags.tagsArray, 
     };
 
-    // Add new JournalCard to the existing data
+    // Add to JournalCardData Array
     setJournalCardsData([...journalCardsData, newJournalCard]);
-    // Close the modal
+
+    // Close modal and clear inputs
     setCreatePageModalVisible(false);
-    // Clear inputs
     setPageTitle('');
-    setTags({ tag: '', tagsArray: [] });
+    setTags({
+      tag: '',
+      tagsArray: []
+    });
   };
+
 
   // Functions to open and close the createPageModal
   const openCreatePageModal = () => {
@@ -72,9 +102,10 @@ export default function JournalScreen() {
     setCreatePageModalVisible(false);
   };
 
-const onChange = (e, selectedDate) => {
-  setDate(selectedDate);
-}
+  // Date picker
+  const onChange = (e, selectedDate) => {
+    setDate(selectedDate);
+  }
 
   // Dummy data for Journal Task Cards
   const tasksData = [
@@ -123,6 +154,7 @@ const onChange = (e, selectedDate) => {
         require('../assets/lettuce.jpg'),
       ],
       title: "Title 1 - asdfa",
+      tags: ["tag1", "tag2", "tag3"],
     },
     {
       id: 2,
@@ -135,6 +167,7 @@ const onChange = (e, selectedDate) => {
         require('../assets/lettuce.jpg'),
       ],
       title: "Title 2 - asdfa",
+      tags: ["tag1", "tag2", "tag3", "tag3"],
     },
     {
       id: 3,
@@ -147,6 +180,7 @@ const onChange = (e, selectedDate) => {
         require('../assets/marigold.jpg'),
       ],
       title: "Title 3 - asdfa",
+      tags: ["tag1", "tag2"],
     }
   ]);
   
@@ -197,6 +231,7 @@ const onChange = (e, selectedDate) => {
             keyExtractor={(item) => item.id.toString()}
             style={styles.scrollView}
             showsVerticalScrollIndicator={false}
+            ListFooterComponent={<View style={{ height: 50 }} />} 
           />
         </View>
 
@@ -243,6 +278,7 @@ const onChange = (e, selectedDate) => {
               keyExtractor={(item) => item.id.toString()}
               style={styles.scrollView}
               showsVerticalScrollIndicator={false}
+              ListFooterComponent={<View style={{ height: 50 }} />} 
             />
         </View>
 
@@ -255,7 +291,7 @@ const onChange = (e, selectedDate) => {
           onRequestClose={() => setCreatePageModalVisible(false)}>
           <TouchableWithoutFeedback onPress={() => setCreatePageModalVisible(false)}>
             <View style={styles.ModalView}>
-              <View style={[styles.selectModalContainer, { backgroundColor: theme.gardenBackground }]}>
+              <View style={[styles.selectModalContainer, { backgroundColor: theme.gardenBackground, marginBottom: modalMarginBottom }]}>
                 
                 {/* Create Page */}
                 <View style={[styles.headerContainer, { paddingTop: 15, paddingBottom: 25 }]}>
@@ -280,21 +316,22 @@ const onChange = (e, selectedDate) => {
                 {/* Subjects Tags */}
                 <View style={styles.inputContainer}>
                   <Text style={[styles.inputLabel, {color: theme.text}]}>Subjects</Text>
-                  <TagInput
-                    updateState={updateTagState}
-                    tags={tags}
-                    placeholder="Add up to 4 subjects"
+                  <TextInput
+                    style={[styles.input, {color: theme.text}]}
+                    onChangeText={handleTagsChange}
+                    value={tags.tag}
+                    placeholder="Add up to 4 subjects (comma-separated)"
                     placeholderTextColor="#888" 
-                    //leftElement={<Icon name={'tag-multiple'} type={'material-community'} color={theme.text}/>}
-                    containerStyle={styles.tagContainer}
-                    inputContainerStyle={styles.tagInputContainer}
-                    inputStyle={[styles.tagInputStyle, {color: theme.text}]}
-                    autoCorrect={false}
-                    //tagStyle={styles.tag}
-                    tagStyle={[styles.tag, {backgroundColor: tagColors[tags.tagsArray.length % tagColors.length]}]}
-                    tagTextStyle={styles.tagText}
-                    keysForTag={', '}
                   />
+                </View>
+
+                {/* Tags Container */}
+                <View style={styles.tagsContainer}>
+                  {tags.tagsArray.map((tag, index) => (
+                    <View key={index} style={[styles.tagTextContainer, { backgroundColor: tagColors[index % tagColors.length] }]}>
+                      <Text style={styles.tagText}>{tag}</Text>
+                    </View>
+                  ))}
                 </View>
 
                 <View style={styles.bottomContainerPageModal}>
@@ -434,6 +471,7 @@ const styles = StyleSheet.create({
     width: '90%',
     borderRadius: 20,
     elevation: 20,
+    marginBottom: 250,
   },
   Backbutton: {
     marginTop: 10,
@@ -473,35 +511,27 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft: 'auto',
   },
-  tagContainer: {
-    flexDirection: 'row', 
-    flexWrap: 'wrap', 
-    alignItems: 'center', 
-    width: '100%', 
-    paddingHorizontal: -10, 
-  },
-  tagInputContainer: {
-    borderWidth: 1.5,
-    borderColor: '#1DB954',
-    borderRadius: 15,
-  },
-  tagInputStyle: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 12,
-  },
-  tag: {
-    borderRadius: 10,
-    borderWidth: 0,
-    width: 125,
-    height: 30,
-    backgroundColor: '#1DB954', 
-    marginHorizontal: 18, 
-    marginVertical: 10, 
-  },
+  tagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    width: '49%',
+    alignSelf: 'center',
+  }, 
+  tagTextContainer: {
+    overflow: 'hidden',
+    backgroundColor: '#1DB954',
+    borderRadius: 5,
+    width: 80,
+    height: 25,
+    marginHorizontal: 3,
+    marginVertical: 3,
+    paddingLeft: 8, 
+    paddingTop: 4, 
+  },  
   tagText: {
-    fontSize: 16,
-    color: '#FFF', 
+    fontSize: 14,
     fontWeight: 'bold',
-  },
+    color: '#FFF',
+  },   
 });

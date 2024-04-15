@@ -269,6 +269,7 @@ export default function HomeScreen() {
           keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
+          ListFooterComponent={<View style={{ height: 80 }} />} 
         />
 
         {/* AddOptionsModal */}

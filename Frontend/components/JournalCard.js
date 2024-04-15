@@ -201,8 +201,7 @@ const styles = StyleSheet.create({
     tagsContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        alignItems: 'center',
-        width: '74%',
+        width: 172,
     }, 
     tagsModalContainer: {
         flexDirection: 'row',
@@ -237,8 +236,7 @@ const styles = StyleSheet.create({
     },   
     endContainer: {
         flexDirection: 'column',
-        width: '70%',
-        alignItems: 'center',
+        alignItems: 'flex-start',
     },
     modalContent: {
         flex: 1, 
