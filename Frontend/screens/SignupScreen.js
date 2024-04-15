@@ -3,9 +3,10 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, SafeAreaView, Image, Touchable, Pressable, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ErrorMessage from '../components/ErrorMessage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 import Tabs from '../navigation/tabs';
-import { createGarden, getGarden } from '../utils/http';
+// import { createGarden, getGarden } from '../utils/http';
+import { useAuth } from '../context/AuthContext';
 
 export default function SignupScreen() {
     const navigation = useNavigation()
@@ -20,6 +21,7 @@ export default function SignupScreen() {
     const [errorMessage, setErrorMessage] = useState(null);
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const IP = process.env.EXPO_PUBLIC_IP;
+    const { handleSignup } = useAuth();
 
   let link = process.env.EXPO_PUBLIC_IP
 
@@ -29,7 +31,7 @@ export default function SignupScreen() {
       link = process.env.EXPO_PUBLIC_DEPLOYMENT;
     }
 
-    const handleSubmit = async () => {
+    const onSignupPress = async () => {
       setNameError(null);
       setEmailError(null);
       setPasswordError(null);
@@ -67,71 +69,15 @@ export default function SignupScreen() {
         setPasswordError("Please make sure the passwords match");
         return;
       }
+
+
     
       try {
-        const response = await fetch(`${link}/user/signup`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: name,
-            email: email,
-            password: password,
-          }),
-        });
-        
-        console.log('response', response);
-
-
-        if (!response.ok) {
-          console.log('Response not OK');
-          const text = await response.text();
-          console.log('Response text:', text);
-          return;
-        }
-
-        const data = await response.json();
-        console.log('Data:', data);
-  
-        // Store the user ID and token in local storage or in-memory state
-        console.log("ASYNC_PRE: ---------------------------------------------------------------------------------------------------");
-        await AsyncStorage.setItem('userId', data.userId);
-        await AsyncStorage.setItem('token', data.token);
-        console.log("USER: " + data.userId);
-
-        // somePromise
-  // .then(function(result) {
-  //   // Handle the result when the promise is fulfilled
-  //   console.log('Success:', result);
-  // }, function(error) {
-  //   // Handle the error if the promise is rejected
-  //   console.log('Error:', error);
-  // });
-
-        createGarden({id: data.userId})
-        .then(async () => {
-            // console.log("DEBUG:   " + gardenId.garden[0]._id);
-            console.log("ASYNC_START: ---------------------------------------------------------------------------------------------------");
-            const gardenId = await getGarden(data.userId); //get gardenId
-            AsyncStorage.setItem('gardenId', gardenId.garden[0]._id); //set gardenId in local storage
-            console.log("ASYNC_END: ---------------------------------------------------------------------------------------------------");
-          })
-          .catch((err) => {
-            console.log("ERROR " + err);
-          });
-
+        await handleSignup(name, email, password);
         navigation.navigate(Tabs);
 
-        
-        // const storedUserId = await AsyncStorage.getItem('userId');
-        // const storedToken = await AsyncStorage.getItem('token');
-        // console.log('Stored user ID:', storedUserId);
-        // console.log('Stored token:', storedToken); 
-        // Navigate to the next screen
-
       } catch (error) {
-        // setErrorMessage(responseBody.message);
+
         console.log(error);
       }
     };
@@ -212,7 +158,7 @@ export default function SignupScreen() {
                     <ErrorMessage message={errorMessage} />
 
                     <View style={styles.formAction}>
-                        <TouchableOpacity onPress={handleSubmit} >
+                        <TouchableOpacity onPress={onSignupPress} >
                          <View style={styles.loginButton}>
                             <Text style={styles.buttonTxt}>REGISTER NOW</Text>
                          </View>
