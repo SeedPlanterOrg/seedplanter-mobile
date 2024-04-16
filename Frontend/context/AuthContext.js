@@ -1,10 +1,7 @@
 // AuthContext.js
 import React, { createContext, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-// import { createGarden, getGarden } from '../utils/http';
 import { createGarden, getGarden } from '../utils/http';
-// import Tabs from '../navigation/tabs';
 
 let link = process.env.EXPO_PUBLIC_IP
 const env = process.env.EXPO_PUBLIC_ENV;
@@ -88,10 +85,11 @@ export const AuthProvider = ({ children }) => {
         const data = await response.json();
   
         try {
+
           await AsyncStorage.setItem('userId', data.userId);
           await AsyncStorage.setItem('token', data.token);
   
-          createGarden({id: data.userId})
+          await createGarden({id: data.userId})
           .then( async () => {
               const gardenId = await getGarden(data.userId); //get gardenId
               AsyncStorage.setItem('gardenId', gardenId.garden[0]._id); //set gardenId in local storage
@@ -118,7 +116,7 @@ export const AuthProvider = ({ children }) => {
       }
     });
   };
-  
+
   return (
     <AuthContext.Provider value={{ user, setUser, handleLogin, handleSignup }}>
       {children}

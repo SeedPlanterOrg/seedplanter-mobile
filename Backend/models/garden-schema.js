@@ -21,15 +21,20 @@ const gardenPlantSchema = new mongoose.Schema({
     type: Boolean,
     required: true
   },
-  prune: {
-    type: Boolean,
-    required: true
-  },
   waterLevel: {
     type: Number,
     max: 100
   },
   lastWateringDate: {
+    type: Date
+  },
+  wateringInterval: {
+    type: Number
+  },
+  wateringFrequency: { 
+    type: String
+  },
+  nextWateringDate: {
     type: Date
   },
   fertilizerLevel: {
@@ -39,6 +44,15 @@ const gardenPlantSchema = new mongoose.Schema({
   lastFertilizingDate: {
     type: Date
   },
+  // fertilizingInterval: {
+  //   type: Number
+  // },
+  // fertilizingFrequency: {
+  //   type: String
+  // },
+  // nextFertilizingDate: {
+  //   type: Date
+  // },
   notes: [{
     // for now 
     //type: mongoose.Schema.Types.ObjectId, 

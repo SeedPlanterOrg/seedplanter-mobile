@@ -35,11 +35,14 @@ async function run() {
             plantId: 2,
             water: true,
             fertilize: false,
-            prune: true,
             waterLevel: 5,
             lastWateringDate: "2024-03-21",
+            wateringFrequency: "daily",
+            wateringInterval: 4,
             fertilizerLevel: 3,
             lastFertilizingDate: "2024-03-15",
+            fertilizeFrequency: "weekly",
+            fertilizeInterval: 1,
             notes: " ",
             imagesUrls: [
               "http://example.com/image1.jpg",
@@ -66,6 +69,12 @@ try {
 }
 
 }
+
+/*******************************************/
+
+//Journal Operations
+
+/******************************************/
 
 const gotstuff = run();
 const finaldrive = gotstuff.then((value) => {
