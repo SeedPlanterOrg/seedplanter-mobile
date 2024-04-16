@@ -53,8 +53,12 @@ const PlantModal = ({ plant, onClose, modalVisible }) => {
                                     prune: true,
                                     waterLevel: 5,
                                     lastWateringDate: "2024-03-21",
+                                    wateringFrequency: "daily", //test
+                                    wateringInterval: 4, //test
                                     fertilizerLevel: 3,
                                     lastFertilizingDate: "2024-03-15",
+                                    fertilizeFrequency: "weekly", //test
+                                    fertilizeInterval: 1, //test
                                     notes: "This is a test"
                                 }
                                 try {
