@@ -107,7 +107,6 @@ useEffect(() => {
         console.error('Error fetching plants:', error);
       }
     }
-    fetchPlants();
     // //  Then call fetchPlants every 5 seconds
     // const intervalId = setInterval(fetchPlants, 20000);
 
