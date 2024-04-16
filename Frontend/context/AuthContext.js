@@ -86,26 +86,29 @@ export const AuthProvider = ({ children }) => {
   
         try {
 
-          await AsyncStorage.setItem('userId', data.userId);
-          await AsyncStorage.setItem('token', data.token);
+          // await AsyncStorage.setItem('userId', data.userId);
+          // await AsyncStorage.setItem('token', data.token);
   
-          await createGarden({id: data.userId})
-          .then( async () => {
-              const gardenId = await getGarden(data.userId); //get gardenId
-              AsyncStorage.setItem('gardenId', gardenId.garden[0]._id); //set gardenId in local storage
-  
-              setUser({
-                id: data.userId,
-                token: data.token,
-                gardenId: gardenId.garden[0]._id,
-              });
-  
-              resolve(); // resolve the promise here
-            })
-            .catch((err) => {
-              console.log("ERROR " + err);
-              reject(err); // reject the promise if there's an error
+          createGarden({id: data.userId})
+          .then(async () => {
+            await AsyncStorage.setItem('userId', data.userId);
+            await AsyncStorage.setItem('token', data.token);
+        
+            const gardenId = await getGarden(data.userId); //get gardenId
+            await AsyncStorage.setItem('gardenId', gardenId.garden[0]._id); //set gardenId in local storage
+        
+            setUser({
+              id: data.userId,
+              token: data.token,
+              gardenId: gardenId.garden[0]._id,
             });
+        
+            resolve(); // resolve the promise here
+          })
+          .catch((err) => {
+            console.log("ERROR " + err);
+            reject(err); // reject the promise if there's an error
+          });
         } catch (error) {
           console.error('Error setting data in AsyncStorage:', error);
           reject(error);
