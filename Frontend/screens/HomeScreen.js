@@ -107,11 +107,12 @@ useEffect(() => {
         console.error('Error fetching plants:', error);
       }
     }
-    // //  Then call fetchPlants every 5 seconds
-    // const intervalId = setInterval(fetchPlants, 20000);
+    fetchPlants();
+    //  Then call fetchPlants every 5 seconds
+    const intervalId = setInterval(fetchPlants, 20000);
 
-    // // Clear interval on component unmount
-    // return () => clearInterval(intervalId);
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
   });
 
   return unsubscribe;
