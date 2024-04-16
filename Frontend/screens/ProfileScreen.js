@@ -31,6 +31,7 @@ export default function ProfileScreen() {
     // Clear the user's credentials
     await AsyncStorage.removeItem('userId');
     await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('gardenId');
 
     console.log("Logged out!", AsyncStorage.getAllKeys());
 
