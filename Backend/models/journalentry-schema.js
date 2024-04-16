@@ -24,6 +24,16 @@ const journalEntryModel = new mongoose.Schema({
   fertilizerLevel: {
     type: Number,
   },
+  page_number: {
+    type: Number,
+  }, 
+  subject: {
+    type: [String],
+    max: 4
+  },
+  title: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model('journalEntryModel', journalEntryModel )

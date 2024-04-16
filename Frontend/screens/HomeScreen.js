@@ -21,7 +21,7 @@ import { getGarden } from '../utils/http'
 import { useTheme, ThemeProvider } from 'styled-components/native';
 import { Image } from 'expo-image';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import {deleteGardenPlant} from '../utils/http';
 
 
 export default function HomeScreen() {
@@ -69,7 +69,7 @@ export default function HomeScreen() {
   // let user = '65efc324a82682e507e38ebc';
   const [plantData, setPlantData] = useState([]);
   const isFocused = useIsFocused();
-  
+
 useEffect(() => {
   const unsubscribe = navigation.addListener('focus', async () => {
     async function fetchPlants() {
@@ -168,7 +168,7 @@ useEffect(() => {
       scientificName={item.scientificName}
       waterLevelProgress={item.waterLevelProgress}
       nutrientProgress={item.nutrientProgress}
-      onDelete={() => deletePlant(item.id)} 
+      onDelete={() => deletePlant(item)} 
     />
   );
   
@@ -198,7 +198,18 @@ useEffect(() => {
   };
 
   // Function to delete a plant card 
-  const deletePlant = (id) => {
+  const deletePlant = async (plantObj) => {
+    let id = plantObj.id;
+    try {
+      const user = await AsyncStorage.getItem('userId');
+      console.log("id " + user);
+      deleteGardenPlant(user, plantObj._id)
+    } catch (error) {
+      console.log(`Error deleteing plant: ${err}`);
+    }
+    
+    console.log("PLANT_ID= " + plantObj);
+    console.dir("User_ID= " + plantObj);
     console.log("Deleting plant with ID:", id); // Log a message
     const updatedPlantData = plantData.filter(item => item.id !== id);
     setPlantData(updatedPlantData);
@@ -258,6 +269,7 @@ useEffect(() => {
           keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
+          ListFooterComponent={<View style={{ height: 80 }} />} 
         />
 
         {/* AddOptionsModal */}
