@@ -17,6 +17,7 @@ export const styles = StyleSheet.create({
     ModalContainer: {
       backgroundColor: '#fff',
       position: 'relative',
+      flex: 1,
     },
     centerItems: {
       alignItems: 'center',
@@ -25,12 +26,13 @@ export const styles = StyleSheet.create({
       borderRadius: 25,
       elevation: 3,
       backgroundColor: 'transparent',
-      padding: 12,
+      padding: 15,
       alignItems: 'center',
       justifyContent: 'center',
       shadowRadius: 2,
       width: 180,
       height: 250,
+      borderWidth: 2,
     },
     cardContent: {
       flexDirection: 'column',
@@ -39,17 +41,19 @@ export const styles = StyleSheet.create({
     },
     cardImage: {
       width: 165,
-      height: 180,
-      borderRadius: 10,
+      height: 165,
+      borderRadius: 15,
       resizeMode: 'cover',
       justifyContent: 'center',
+      borderColor: "#f2f3f5",
+      borderWidth: 2,
     },
     modalImageSizing: {
-      width: 325,
-      height: 250,
-      paddingHorizontal: 15,
+      width: '100%',
+      height: 375,
       resizeMode: 'cover',
-      borderRadius: 10,
+      borderBottomRightRadius: 30,
+      borderBottomLeftRadius: 30,
     },
     modalImageSizing2: {
       width: 325,
@@ -68,16 +72,18 @@ export const styles = StyleSheet.create({
       fontWeight: 'bold',
       marginBottom: 1,
       marginTop: 2,
+      marginLeft: 2,
     },
     scientificName: {
       fontSize: 10,
       color: '#888',
       textAlign: 'left',
-      marginBottom: 10
+      marginBottom: 10,
+      marginLeft: 2,
     },
     Backbutton: {
       alignItems: 'left',
-      padding: 15, 
+      padding: 10,
     },
     addbutton: {
       width: 150,
@@ -198,7 +204,7 @@ export const styles = StyleSheet.create({
       marginRight: 10,
       marginBottom: 20,
       borderColor: "#1DB954",
-      borderWidth: 3
+      borderWidth: 2
     },
     card7: {
       borderRadius: 100,
@@ -217,7 +223,7 @@ export const styles = StyleSheet.create({
       marginRight: 10,
       marginBottom: 20,
       borderColor: "#7EC8E3",
-      borderWidth: 3
+      borderWidth: 2
     },
     card9: {
       borderRadius: 100,
@@ -236,7 +242,7 @@ export const styles = StyleSheet.create({
       marginRight: 10,
       marginBottom: 20,
       borderColor: "#ffd061",
-      borderWidth: 3
+      borderWidth: 2
     },
     card10: {
       borderRadius: 100,
@@ -255,7 +261,7 @@ export const styles = StyleSheet.create({
       marginRight: 10,
       marginBottom: 20,
       borderColor: "#ff7878",
-      borderWidth: 3
+      borderWidth: 2
     },
     cardText2: {
       justifyContent: 'center',
@@ -367,5 +373,14 @@ export const styles = StyleSheet.create({
     },
     plusButtonContainer: {
       paddingRight: 35,
+    },
+    conCounter: {
+      justifyContent: 'center', 
+      alignItems: 'center',
+      borderWidth: 2, 
+      padding: 10, 
+      width: 55, 
+      height: 55, 
+      borderRadius: 20,
     },
   });

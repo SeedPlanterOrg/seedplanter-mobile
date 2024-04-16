@@ -4,6 +4,8 @@ export const lightTheme = {
     gardenBackground: '#FFFFFF',
     text: '#000000',
     navbar: 'white',
+    catBorderColor: "#f2f3f5",
+    aboutBack: "#b0fcac",
   
     // Welcome and Login
     welcomeBG: ["#91f086", "#11823b", "#02231c"],
@@ -20,6 +22,8 @@ export const darkTheme = {
     gardenBackground: '#000000',
     text: '#FFFFFF',
     navbar: '#000000',
+    catBorderColor: "#383838",
+    aboutBack: "#0b8704",
   
     // Welcome and Login 
     welcomeBG: ["#4cbf4c", "#0a5228", "#002112"],
