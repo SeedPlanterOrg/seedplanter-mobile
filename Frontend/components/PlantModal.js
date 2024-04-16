@@ -6,6 +6,7 @@ import { Modal, View, Button, ScrollView, Text, TouchableOpacity, useColorScheme
 import { WebView } from 'react-native-webview';
 import { FontAwesome6, MaterialCommunityIcons, Feather, AntDesign } from '@expo/vector-icons';
 import { useTheme, ThemeProvider } from 'styled-components/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const blurhash =
     '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';

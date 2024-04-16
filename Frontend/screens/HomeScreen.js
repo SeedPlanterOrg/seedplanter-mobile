@@ -69,65 +69,54 @@ export default function HomeScreen() {
   // let user = '65efc324a82682e507e38ebc';
   const [plantData, setPlantData] = useState([]);
   const isFocused = useIsFocused();
-  useEffect(() => {
-    if (isFocused) {
-        // Your code to run when HomeScreen is focused
-      async function fetchPlants() {
-          try {
-              const user = await AsyncStorage.getItem('userId');
-              console.log("USER_DEBUG2 " + user);
-              const data = await getGarden(user);
-              // console.log('DEBUGCODE_HOME_SCREEN: ' + data);
-              let displayData = [];
-              let image;
-              data.gardenPlants.forEach(plant => {
-                console.log("Plant ID:", plant._id);
-                console.log("Garden ID:", plant.gardenId);
-                console.log("PlantID", plant.plantId);
-                //console.log("Plant Details:", plant.plantDetails);
-            
-                // If plantDetails is an array, iterate over it as well
-                if(Array.isArray(plant.plantDetails)){
-                    plant.plantDetails.forEach(detail => {
-                        console.log("Detail ID:", detail._id);
-                        console.log("Detail Name:", detail.name);
-                        console.log("Detail Name:", detail.binomial_name);
-                        console.log("Detail Name:", detail.image_urls[0]);
-                        // Access other properties as needed
-                    });
-                }
-                if (plant.plantDetails && plant.plantDetails.image_urls != null) {
-                  image = plant.plantDetails.image_urls[0];
-              }
-              let waterRatio = plant.waterLevel / 10;
-              let nutrients = plant.fertilizerLevel / 10;
-              newPlant = {
-                  
-                  id: plant.plantId, 
-                  // id: `default-${Math.random()}`,
-                  _id: plant._id,
-                  imageSource: image,
-                  plantName: plant.plantDetails.name,
-                  scientificName: plant.plantDetails.binomial_name,
-                  waterLevelProgress: waterRatio,
-                  nutrientProgress: nutrients,
-              }
-              displayData.push(newPlant);
-                console.log(displayData);
-            });
-              
-                
-              // console.log(displayData);
-              setPlantData(displayData);
-          } catch (error) {
-              console.error('Error fetching plants:', error);
-              // Optionally, handle errors in the UI (like showing an error message)
-          }
-      }
 
-      fetchPlants();
-    } 
-  }, [isFocused]);
+useEffect(() => {
+  const unsubscribe = navigation.addListener('focus', async () => {
+    async function fetchPlants() {
+      try {
+        const user = await AsyncStorage.getItem('userId');
+        const data = await getGarden(user);
+        let displayData = [];
+        let image;
+        data.gardenPlants.forEach(plant => {
+          if(Array.isArray(plant.plantDetails)){
+            plant.plantDetails.forEach(detail => {
+              // Access other properties as needed
+            });
+          }
+          if (plant.plantDetails && plant.plantDetails.image_urls != null) {
+            image = plant.plantDetails.image_urls[0];
+          }
+          let waterRatio = plant.waterLevel / 10;
+          let nutrients = plant.fertilizerLevel / 10;
+          let min = 100;
+          let max = 1000;
+          let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+          newPlant = {
+            id: randomInt.toString(), 
+            imageSource: image,
+            plantName: plant.plantDetails.name,
+            scientificName: plant.plantDetails.binomial_name,
+            waterLevelProgress: waterRatio,
+            nutrientProgress: nutrients,
+          }
+          displayData.push(newPlant);
+        });
+        setPlantData(displayData);
+      } catch (error) {
+        console.error('Error fetching plants:', error);
+      }
+    }
+    fetchPlants();
+    // //  Then call fetchPlants every 5 seconds
+    // const intervalId = setInterval(fetchPlants, 20000);
+
+    // // Clear interval on component unmount
+    // return () => clearInterval(intervalId);
+  });
+
+  return unsubscribe;
+}, [navigation]);
 
   // Functions to update plant names and scientific names
   const handlePlantNameChange = (text) => {

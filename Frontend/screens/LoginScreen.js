@@ -10,91 +10,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorMessage from '../components/ErrorMessage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme, ThemeProvider } from 'styled-components/native';
+import { useAuth } from '../context/AuthContext';
 
-let link = process.env.EXPO_PUBLIC_IP
-const env = process.env.EXPO_PUBLIC_ENV;
-
-if(env === "production"){
-  link = process.env.EXPO_PUBLIC_DEPLOYMENT;
-}
-
-console.log(`Link: ${link}`);
 
 export default function LoginScreen() {
   const navigation = useNavigation()
+  const { handleLogin } = useAuth();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const theme = useTheme();
-  // const colorScheme = useColorScheme();
-  // const colorScheme = useColorScheme();
-  // const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
-
-//   const Container = styled.View`
-//   flex: 1;
-//   background-color: ${(props) => props.theme.background};
-//   padding: 16px;
-// `;
-
-// const StyledText = styled.Text`
-// color: ${(props) => props.theme.text};
-// `;
-
-//   const Input = styled.TextInput`
-//     height: 40px;
-//     border: 1px solid ${(props) => props.theme.borderColor};
-//     margin-bottom: 10px;
-//     color: ${(props) => props.theme.text};
-//   `;
-
-//   const ErrorText = styled.Text`
-//     color: red;
-//     margin-bottom: 10px;
-//   `;
-
-
-  // const IP = process.env.EXPO_PUBLIC_IP;
-  // const PORT = process.env.EXPO_PUBLIC_PORT;
   
-
-  const handleLogin = async () => {
+  const onLoginPress = async () => {
     try {
-      const response = await fetch(`${link}/user/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
-      // const num = await AsyncStorage.getItem('userId');  
-      if (!response.ok) {
-        setErrorMessage('Invalid credentials, could not log in');
-        throw new Error('Error logging in');
-      }
-
-      console.log(response);
-  
-      const data = await response.json();
-
-      console.log(data);
-  
-      // Store the user ID and token in local storage or in-memory state
-      try {
-        console.log("USER_DEBUG " + data.userId);
-        await AsyncStorage.setItem('userId', data.userId);
-        await AsyncStorage.setItem('token', data.token);
-      } catch (error) {
-        console.error('Error setting data in AsyncStorage:', error);
-      }
-  
-      // Navigate to the next screen
+      await handleLogin(email, password);
       navigation.navigate(Tabs);
-  
     } catch (error) {
-      console.error(error);
       setErrorMessage('Invalid credentials, could not log in');
     }
   };
@@ -144,7 +75,7 @@ export default function LoginScreen() {
             </View>
             <ErrorMessage message={errorMessage} />
             <View style={styles.formAction}>
-              <TouchableOpacity onPress={handleLogin} >
+              <TouchableOpacity onPress={onLoginPress} >
                 <View style={styles.loginButton}>
                   <Text style={styles.buttonTxt}>LOGIN</Text>
                 </View>

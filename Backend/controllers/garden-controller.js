@@ -24,6 +24,10 @@ let DUMMY_GARDENS = [
           lastWateringDate: new Date('2024-03-01'),
           fertilizerLevel: 50,
           lastFertilizingDate: new Date('2024-03-02'),
+          wateringInterval: 3,
+          wateringFrequency: 'daily',
+          fertilizingInterval: 7,
+          fertilizingFrequency: 'weekly',
           journalEntries: [
             'je1', // These could be references to actual JournalEntry documents in a real application
           ],
@@ -38,6 +42,10 @@ let DUMMY_GARDENS = [
           lastWateringDate: new Date('2024-03-03'),
           fertilizerLevel: 40,
           lastFertilizingDate: new Date('2024-03-04'),
+          wateringInterval: 2,
+          wateringFrequency: 'daily',
+          fertilizingInterval: 2,
+          fertilizingFrequency: 'weekly',
           journalEntries: [
             'je2', // Another hypothetical journal entry reference
           ],
@@ -112,18 +120,23 @@ const getGardenByUserId = async (req, res, next) => {
     await mongoose.connect(uri, clientOptions);
     const garden = await GardenModel.find({userId: req.query.userId});
     
-    if(!garden) {
+    if(!garden || garden.length === 0) {
       return res.status(404).json({ message: "Garden not found" });
     } 
 
     let gardenPlantList = [];
     const gardenPlantIdList = garden[0].plants; 
-    for(let i = 0; i < gardenPlantIdList.length; i++){
-      const gardenPlant = await GardenPlantModel.findById(gardenPlantIdList[i]).lean(); 
-      if (gardenPlant) {
-        gardenPlantList.push(gardenPlant);
+
+    // Check if the garden has any plants before trying to access them
+    if (gardenPlantIdList && gardenPlantIdList.length > 0) {
+      for(let i = 0; i < gardenPlantIdList.length; i++){
+        const gardenPlant = await GardenPlantModel.findById(gardenPlantIdList[i]).lean(); 
+        if (gardenPlant) {
+          gardenPlantList.push(gardenPlant);
+        }
       }
     }
+
     res.status(200).json({
       garden: garden,
       gardenPlants: gardenPlantList});
@@ -131,7 +144,6 @@ const getGardenByUserId = async (req, res, next) => {
     console.log(`Failed to get_garden ${err}`);
     return next(new AppError('Fetching garden failed, please try again later', 500));
   }
-
 }
 
 const createGarden = async (req, res, next) => {
@@ -159,10 +171,11 @@ const createGarden = async (req, res, next) => {
       gardenHealthLevel: 100 // initial garden health level
     });
     
-    await createdGarden.save();
+    // await createdGarden.save();
     res.status(201).json({message: "Garden Created"});
   
   } catch (err) {
+    console.log("ERROR: " + err);
     return next(new AppError('Creating garden failed, please try again later', 500));
   }
 };
@@ -183,11 +196,14 @@ const addPlant = async (req, res, next) => {
       plantId: plantId, 
       water: req.body.gardenPlant.water,
       fertilize: req.body.gardenPlant.fertilize,
-      prune: req.body.gardenPlant.prune,
       waterLevel: req.body.gardenPlant.waterLevel,
       lastWateringDate: req.body.gardenPlant.date,
+      wateringInterval: req.body.gardenPlant.wateringInterval,
+      wateringFrequency: req.body.gardenPlant.wateringFrequency,
       fertilizerLevel: req.body.gardenPlant.fertilizerLevel,
       lastFertilizingDate: req.body.gardenPlant.lastFertilizingDate,
+      fertilizingFrequency: req.body.gardenPlant.fertilizingFrequency,
+      fertilizingInterval: req.body.gardenPlant.fertilizingInterval,
       notes: [req.body.gardenPlant.notes],
       imagesUrls: catalogPlant[0].image_urls,
       plantDetails: catalogPlant[0],

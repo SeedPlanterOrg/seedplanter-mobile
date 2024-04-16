@@ -8,6 +8,7 @@ const openai = new OpenAI({
     assistantId: process.env.OPENAI_ASSISTANT_ID
 });
 
+//System prompts to further tune AI
 const systemMessages = [
     {"role": "system", "content": "You are a helpful gardening assistant that has extensive knowledge about plants."},
     {"role": "system", "content": "Specifically, you will give information about watering schedule, amount of sunlight, nutrient schedule, and pruning schedule for a plant if asked for information about a plant"},
@@ -15,9 +16,12 @@ const systemMessages = [
     {"role": "system", "content": "Constraints: You will not provide information that is not related to gardening or plants. When asked more than one question, only answer the last question from the user"},
 ];
 
+//conversation map that holds users questions for the session
 const conversations = new Map();
 
+// Send a message to the chatbot
 const sendMessage = async (req, res, next) => {
+    // Extract the user ID, message, and startConversation flag from the request body
     const userId = req.body.userId;
     const message = req.body.message;
     const startConversation = req.body.startConversation;
@@ -26,10 +30,10 @@ const sendMessage = async (req, res, next) => {
     if (!startConversation && messages.length === 0) {
         messages = [...messages, ...systemMessages];
     }
-
-    // let messages = !startConversation ? [...systemMessages] : [];
+    // Add the user's message to the messages array
     messages.push({"role": "user", "content": message });
 
+    // Create a completion using the OpenAI API
     try {
         const completion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
