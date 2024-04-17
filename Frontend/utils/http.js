@@ -55,13 +55,13 @@ async function findPlantById(id) {
     }
 }
 
-async function getGarden(id) {
+async function getGarden(userId) {
     // ${EXPO_PUBLIC_DEPLOYMENT} or http://localhost:3000/
     const url = new URL(`${link}/garden/get_garden`);
 
     // If you have parameters to send, append them to the URL
     const params = {
-        userId: id, // Example parameter
+        userId: userId, // Example parameter
     };
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     try {

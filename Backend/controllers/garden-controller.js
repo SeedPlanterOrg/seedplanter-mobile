@@ -170,9 +170,10 @@ const createGarden = async (req, res, next) => {
       tasks: [],
       gardenHealthLevel: 100 // initial garden health level
     });
-    
+    //return to the signup function    
+    return createdGarden;
     // await createdGarden.save();
-    res.status(201).json({message: "Garden Created"});
+    // res.status(201).json({message: "Garden Created"});
   
   } catch (err) {
     console.log("ERROR: " + err);
