@@ -8,6 +8,8 @@ import PlanterPointContainer from '../components/PlanterPointContainer';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Image } from 'expo-image';
 import { useTheme, ThemeProvider } from 'styled-components/native';
+import { createJournalEntry,  updateJournalEntry, getJournal } from '../utils/http';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function JournalScreen() {
   const theme = useTheme();
@@ -57,8 +59,6 @@ const handleTagsChange = (text) => {
   });
 };
 
-  
-
   // Tag States
   const [tags, setTags] = useState({
     tag: '',
@@ -68,29 +68,95 @@ const handleTagsChange = (text) => {
   // Tag colors
   const tagColors = ['#F1C40F', '#E74C3C', '#2ECC71', '#3498DB'];
 
-  // Function to handle saving inputs from the modal and adding a new JournalCard
-  const createJournalCard = () => {
-    const formattedDate = `${date.getFullYear()} . ${(date.getMonth() + 1).toString().padStart(2, '0')} . ${date.getDate().toString().padStart(2, '0')}`;
-    const title = pageTitle.trim() === '' ? 'New Journal' : pageTitle;
+  const createJournalCard = async () => {
+    try {
+      const formattedDate = `${date.getFullYear()} . ${(date.getMonth() + 1).toString().padStart(2, '0')} . ${date.getDate().toString().padStart(2, '0')}`;
+      const title = pageTitle.trim() === '' ? 'New Journal' : pageTitle;
+  
+      const user = await AsyncStorage.getItem('userId');
+      console.log("CREATE_DEBUG_LOG: USER_ID: " + user);
+  
+      const entryObject = { 
+        userId: user,
+        date: formattedDate,
+        images: [],
+        notes: [],
+        waterLevel: 0,
+        fertilizerLevel: 0,
+        page_number: journalCardsData.length + 1,
+        subject: tags.tagsArray,
+        title: title
+      };
+  
+      const response = await createJournalEntry(entryObject);
+      console.log("RESPONSE_PROMISE: ", response);
+  
+      const newJournalCard = {
+        id: journalCardsData.length + 1, // id for the new card
+        date: formattedDate,
+        smallImages: [], 
+        title: title,
+        tags: tags.tagsArray,
+        _id: response._id // Assuming response._id contains the MongoDB _id
+      };
+  
+      console.log("CARD_DATA: ", newJournalCard);
+  
+      // Add to JournalCardData Array
+      setJournalCardsData([...journalCardsData, newJournalCard]);
+  
+      // Close modal and clear inputs
+      setCreatePageModalVisible(false);
+      setPageTitle('');
+      setTags({
+        tag: '',
+        tagsArray: []
+      });
+    } catch (error) {
+      console.error("Error when creating journal entry: ", error);
+    }
+  
+    //   const user = await AsyncStorage.getItem('userId');
+    //   console.log("CREATE_DEBUG_LOG: USER_ID: " + user);
 
-    const newJournalCard = {
-      id: journalCardsData.length + 1, // id for the new card
-      date: formattedDate,
-      smallImages: [], 
-      title: title,
-      tags: tags.tagsArray, 
-    };
+    //   const entryObject = { 
+    //     userId: user,
+    //     date: formattedDate,
+    //     images: [],
+    //     notes: [],
+    //     waterLevel: 0,
+    //     fertilizerLevel: 0,
+    //     page_number: journalCardsData.length + 1,
+    //     subject: tags.tagsArray,
+    //     title: title
+    //   };
 
-    // Add to JournalCardData Array
-    setJournalCardsData([...journalCardsData, newJournalCard]);
+    //   await createJournalEntry(entryObject)
+    //   console.log("RESPONSE_PROMISE: " + response);
+    //   const newJournalCard = {
+    //     id: journalCardsData.length + 1, // id for the new card
+    //     date: formattedDate,
+    //     smallImages: [], 
+    //     title: title,
+    //     tags: tags.tagsArray,
+    //     _id: response._id 
+    //   };
 
-    // Close modal and clear inputs
-    setCreatePageModalVisible(false);
-    setPageTitle('');
-    setTags({
-      tag: '',
-      tagsArray: []
-    });
+    //   console.log("CARD_DATA: " + newJournalCard);
+
+    //   // Add to JournalCardData Array
+    //   setJournalCardsData([...journalCardsData, newJournalCard]);
+
+    //   // Close modal and clear inputs
+    //   setCreatePageModalVisible(false);
+    //   setPageTitle('');
+    //   setTags({
+    //     tag: '',
+    //     tagsArray: []
+    //   });
+    // } catch (error) {
+    //   console.log(`Error deleteing plant: ${err}`);
+    // }
   };
 
 
@@ -141,48 +207,76 @@ const handleTagsChange = (text) => {
   );
 
   // Dummy data for Journal Cards
-  const [journalCardsData, setJournalCardsData] = useState([
-    {
-      id: 1,
-      date: "2023 . 02 . 13",
-      nutrientProgress: 0.9,
-      waterLevelProgress: 0.7,
-      points: 5,
-      smallImages: [
-        require('../assets/marigold.jpg'),
-        require('../assets/strawberry.jpg'),
-        require('../assets/lettuce.jpg'),
-      ],
-      title: "Title 1 - asdfa",
-      tags: ["tag1", "tag2", "tag3"],
-    },
-    {
-      id: 2,
-      date: "2024 . 04 . 15",
-      nutrientProgress: 0.4,
-      waterLevelProgress: 0.6,
-      points: 2,
-      smallImages: [
-        require('../assets/strawberry.jpg'),
-        require('../assets/lettuce.jpg'),
-      ],
-      title: "Title 2 - asdfa",
-      tags: ["tag1", "tag2", "tag3", "tag3"],
-    },
-    {
-      id: 3,
-      date: "2024 . 04 . 15",
-      nutrientProgress: 0.4,
-      waterLevelProgress: 0.6,
-      points: 7,
-      smallImages: [
-        require('../assets/strawberry.jpg'),
-        require('../assets/marigold.jpg'),
-      ],
-      title: "Title 3 - asdfa",
-      tags: ["tag1", "tag2"],
-    }
-  ]);
+  const [journalCardsData, setJournalCardsData] = useState([]);
+    // {
+    //   id: 1,
+    //   date: "2023 . 02 . 13",
+    //   nutrientProgress: 0.9,
+    //   waterLevelProgress: 0.7,
+    //   points: 5,
+    //   smallImages: [
+    //     require('../assets/marigold.jpg'),
+    //     require('../assets/strawberry.jpg'),
+    //     require('../assets/lettuce.jpg'),
+    //   ],
+    //   title: "Title 1 - asdfa",
+    //   tags: ["tag1", "tag2", "tag3"],
+    // },
+    // {
+    //   id: 2,
+    //   date: "2024 . 04 . 15",
+    //   nutrientProgress: 0.4,
+    //   waterLevelProgress: 0.6,
+    //   points: 2,
+    //   smallImages: [
+    //     require('../assets/strawberry.jpg'),
+    //     require('../assets/lettuce.jpg'),
+    //   ],
+    //   title: "Title 2 - asdfa",
+    //   tags: ["tag1", "tag2", "tag3", "tag3"],
+    // },
+    // {
+    //   id: 3,
+    //   date: "2024 . 04 . 15",
+    //   nutrientProgress: 0.4,
+    //   waterLevelProgress: 0.6,
+    //   points: 7,
+    //   smallImages: [
+    //     require('../assets/strawberry.jpg'),
+    //     require('../assets/marigold.jpg'),
+    //   ],
+    //   title: "Title 3 - asdfa",
+    //   tags: ["tag1", "tag2"],
+    // }
+  //]);
+  useEffect(() => {
+    const fetchJournalData = async () => {
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            if (!userId) {
+                console.error("No user ID found");
+                return;
+            }
+            const data = await getJournal(userId); // Call the function from http.js
+            const formattedData = data.map(entry => ({
+                id: entry.page_number,
+                date: entry.date.split('T')[0].replace(/-/g, ' . '), // Formatting the date as 'YYYY . MM . DD'
+                nutrientProgress: entry.fertilizerLevel / 10, // Assuming 0-10 scales down to 0-1
+                waterLevelProgress: entry.waterLevel / 10, // Assuming 0-10 scales down to 0-1
+                points: 5, // Example static value, adjust as necessary
+                smallImages: entry.images.map(url => ({ uri: url })), // Transform URLs to objects if needed
+                title: entry.title,
+                tags: entry.subject
+            }));
+
+            setJournalCardsData(formattedData);
+        } catch (error) {
+            console.error("Failed to fetch journal data:", error);
+        }
+    };
+
+    fetchJournalData();
+  }, []);
   
   const renderJournalCard = ({ item }) => (
     <JournalCard

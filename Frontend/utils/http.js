@@ -8,7 +8,11 @@ if(env == "production"){
   link = process.env.EXPO_PUBLIC_DEPLOYMENT
 }
 
-
+/**
+ * Gets a plant page based of a number
+ * @param {Number} page - page number. 
+ * @returns {Array} an array of plant objects 
+ */
 async function getPlantCatalogPage(page) {
     try {
 
@@ -35,6 +39,11 @@ async function getPlantCatalogPage(page) {
     }
 }
 
+/**
+ * Gets a plant based off a peranual id 
+ * @param {Number} ID - id number of API plant. 
+ * @returns {Object} a singular plant object 
+ */
 async function findPlantById(id) {
     try{
         const response = await fetch(`${link}/plantCatalog/plant/?id=${id}`, {
@@ -55,6 +64,11 @@ async function findPlantById(id) {
     }
 }
 
+/**
+ * Gets a a garden based off the userId
+ * @param {String} ID - mongoDB ID in form of 661fca981bfbf7709fa95cda. 
+ * @returns {Object} returns a complex garden obejct see postman or docs  
+ */
 async function getGarden(id) {
     // ${EXPO_PUBLIC_DEPLOYMENT} or http://localhost:3000/
     const url = new URL(`${link}/garden/get_garden`);
@@ -83,6 +97,12 @@ async function getGarden(id) {
 
 }
 
+/**
+ * Adds a garden plant to the user garden
+ * @param {Object} PlantObject - takes a gardenPlant object in form of mongoose schema. 
+ * @returns {Object} returns a response object from server  
+ */
+
 async function addPlant(gardenPlant) {
     // ${EXPO_PUBLIC_DEPLOYMENT} or http://localhost:3000/
     const url = new URL(`${link}/garden/add_plant`);
@@ -109,6 +129,11 @@ async function addPlant(gardenPlant) {
     });
 }
 
+/**
+ * Creates a garden for a user
+ * @param {String} ID - mongoDB ID in form of 661fca981bfbf7709fa95cda. 
+ * @returns {Object} returns a newly created garden for user   
+ */
 async function createGarden(userId) {
     // ${EXPO_PUBLIC_DEPLOYMENT} or http://localhost:3000/
     const url = new URL(`${link}/garden/create_garden`);
@@ -135,6 +160,12 @@ async function createGarden(userId) {
     });
 }
 
+/**
+ * Removes a garden plant from a user garden
+ * @param {String} userId - mongoDB userID in form of 661fca981bfbf7709fa95cda.
+ * @param {String} plantId - mongoDB plantID in form of 661fca981bfbf7709fa95cda.
+ * @returns {Object} returns a response object informing on success of operation   
+ */
 async function deleteGardenPlant(_userId, _plantId) {
     const url = new URL(`${link}/garden/remove_plant`);
     // const url = new URL(`http://localhost:3000/garden/remove_plant`); // unit testing 
@@ -165,32 +196,41 @@ async function deleteGardenPlant(_userId, _plantId) {
     }
 }
 
+/**
+ * Creates journal and associates it with a user
+ * @param {Object} entryObject - An entry object in the defined by mongoose entry schema.
+ * @returns {Object} returns a response object informing on success of operation   
+ */
 async function createJournalEntry(entryObject) {
     const url = new URL(`${link}/journal/create_entry`);
     //const url = new URL(`http://localhost:3000/journal/create_entry`);// for unit test
     console.log(entryObject);
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // Set Content-Type to application/json
-        },
-        body: JSON.stringify(entryObject),
-    })
-    .then(response => {
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Set Content-Type to application/json
+            },
+            body: JSON.stringify(entryObject),
+        });
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json();
-    })
-    .then(responseData => {
-        // Process the response data
-        console.log(responseData);
-    })
-    .catch(error => {
+
+        const responseData = await response.json();
+        console.log("Response from create journal entry:", responseData);
+        return responseData; // Optionally return this if you need to use the response data outside the function
+    } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
-    });
+    }
 }
 
+/**
+ * Deletes a journal entry for a user 
+ * @param {String} ID - mongoDB ID of entry in form of 661fca981bfbf7709fa95cda.
+ * @returns {Object} returns a response object informing on success of operation   
+ */
 async function deleteJournalEntry(_id) {
     const url = new URL(`${link}/journal/delete_entry_by_Id`);
     //const url = new URL(`http://localhost:3000/journal/delete_entry_by_Id`);// for unit test
@@ -216,6 +256,11 @@ async function deleteJournalEntry(_id) {
     });
 }
 
+/**
+ * Gets a specific journal entry from database
+ * @param {String} ID - mongoDB ID of entry in form of 661fca981bfbf7709fa95cda.
+ * @returns {Object} returns a journalEntry object   
+ */
 async function getJournalEntry(_id) {
     const url = new URL(`${link}/journal/get_entry_by_id`);
     //const url = new URL(`http://localhost:3000/journal/get_entry_by_id`);// for unit test
@@ -242,16 +287,21 @@ async function getJournalEntry(_id) {
     });
 }
 
-async function getJournal(_id) {
-    const url = new URL(`${link}/journal/get_journal`);
-    // const url = new URL(`http://localhost:3000/journal/get_journal`);// for unit test
-    const params = {
-       id: _id,
-    };
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+/**
+ * Updates a specific entry for a user 
+ * @param {object} entryObject - entry object with new data
+ * @returns {Object} returns a response object   
+ */
+async function updateJournalEntry(entryObject) {
+    // const url = new URL(`${link}/journal/update_entry`);
+    const url = new URL(`http://localhost:3000/journal/update_entry`);// for unit test
 
     fetch(url, {
-        method: 'GET'
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json' // Set Content-Type to application/json
+        },
+        body: JSON.stringify(entryObject),
     })
     .then(response => {
         if (!response.ok) {
@@ -268,6 +318,30 @@ async function getJournal(_id) {
     });
 }
 
+/**
+ * Gets a journal for a user 
+ * @param {String} ID - mongoDB ID for userId in form of 661fca981bfbf7709fa95cda.
+ * @returns {Array} array of entry objects for a user   
+ */
+async function getJournal(_id) {
+    const url = new URL(`${link}/journal/get_journal`);
+    // const url = new URL(`http://localhost:3000/journal/get_journal`);// for unit test
+    const params = { id: _id };
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+    try {
+        const response = await fetch(url, { method: 'GET' });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData); // Process the response data
+        return responseData; // Optionally return this if you need to use the response data outside the function
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
+}
+
 module.exports = {
     getPlantCatalogPage,
     findPlantById, 
@@ -278,6 +352,7 @@ module.exports = {
     deleteJournalEntry,
     getJournal,
     getJournalEntry,
-    deleteGardenPlant
+    deleteGardenPlant,
+    updateJournalEntry
 };
 
