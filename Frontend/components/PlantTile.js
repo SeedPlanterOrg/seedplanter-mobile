@@ -15,14 +15,20 @@ return(
     <ThemeProvider theme={theme}>
     <View style={styles.container}>
 
-      <TouchableOpacity onPress={() => onSelect(plant)} style={[styles.card, { borderColor: theme.catBorderColor }]}>
+      <TouchableOpacity onPress={() => onSelect(plant)} style={[styles.card, { backgroundColor: theme.catBorderColor, borderColor: theme.catBorderColor }]}>
         <View style={styles.cardContent}>
           <Image source={plant.image_urls && plant.image_urls[0] ? { uri: plant.image_urls[0] } : require('../resource/flower1.jpg')} style={[styles.cardImage, { borderColor: theme.catBorderColor }]} transition={300} />
+          {/*
           <View style={styles.textContent}>
             <Text style={[styles.plantName, { color: theme.text }]} numberOfLines={1} ellipsizeMode='tail'>{plant.name}</Text>
             <Text style={styles.scientificName} numberOfLines={1} ellipsizeMode='tail'>{plant.binomial_name}</Text>
           </View>
+        */}
         </View>
+          <View style={styles.shadeDet}> 
+            <Text style={[styles.plantName, { color: '#fff' }]} numberOfLines={1} ellipsizeMode='tail'>{plant.name}</Text>
+            <Text style={[styles.scientificName, {color: '#fff'}]} numberOfLines={1} ellipsizeMode='tail'>{plant.binomial_name}</Text>
+          </View>
       </TouchableOpacity>
     </View>
     </ThemeProvider>

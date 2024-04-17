@@ -107,37 +107,37 @@ export default function ProfileScreen() {
 
         <View style={{ borderWidth: 0.7, borderColor: theme.text, margin: 40, }} />
 
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 20, }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10, }}>
           <TouchableOpacity style={[styles.logOutButton, { borderColor: theme.catBorderColor }]}>
             <Text style={[styles.textSty2, { color: theme.text }]}>Name</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 20, }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10, }}>
           <TouchableOpacity onPress={openEmailModal} style={[styles.logOutButton, { borderColor: theme.catBorderColor }]}>
             <Text style={[styles.textSty2, { color: theme.text }]}>Email</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 45, }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 30, }}>
           <TouchableOpacity onPress={openPasswordModal} style={[styles.logOutButton, { borderColor: theme.catBorderColor }]}>
             <Text style={[styles.textSty2, { color: theme.text }]}>Password</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 20, }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10, }}>
           <TouchableOpacity onPress={openAboutModal} style={[styles.logOutButton, { borderColor: theme.catBorderColor }]}>
             <Text style={[styles.textSty2, { color: theme.text }]}>About</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 20, }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10, }}>
           <TouchableOpacity onPress={openHelpModal} style={[styles.logOutButton, { borderColor: theme.catBorderColor }]}>
             <Text style={[styles.textSty2, { color: theme.text }]}>Help</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 20, }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10, }}>
           <TouchableOpacity title="Logout" onPress={handleLogout} style={[styles.logOutButton2,]}>
             <Text style={[styles.textSty2, { color: '#fff' }]}>Log Out</Text>
           </TouchableOpacity>
