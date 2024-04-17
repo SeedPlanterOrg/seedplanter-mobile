@@ -8,7 +8,7 @@ const PlantModel = require('../models/plant-schema');
 // const tasks = require('../models/tasks-schema');
 const AppError = require('../middleware/appError');
 const Task = require('../models/tasks-schema');
-
+// const { updateGardenHealthLevel } = require('./gardenhealth-controller');
 const uri = process.env.PLANTDB_URL;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
@@ -137,6 +137,10 @@ const getGardenByUserId = async (req, res, next) => {
       }
     }
 
+    // if (gardenPlantList.length >= 1) {
+    //   updateGardenHealthLevel(gardenPlantList, garden);
+    }
+
     res.status(200).json({
       garden: garden,
       gardenPlants: gardenPlantList});
@@ -205,6 +209,7 @@ const addPlant = async (req, res, next) => {
       lastFertilizingDate: req.body.gardenPlant.lastFertilizingDate,
       fertilizingFrequency: req.body.gardenPlant.fertilizingFrequency,
       fertilizingInterval: req.body.gardenPlant.fertilizingInterval,
+      fertilizingFrequency: req.body.gardenPlant.fertilizingFrequency,
       notes: [req.body.gardenPlant.notes],
       imagesUrls: catalogPlant[0].image_urls,
       plantDetails: catalogPlant[0],

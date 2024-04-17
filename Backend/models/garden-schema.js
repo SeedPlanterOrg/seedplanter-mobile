@@ -53,6 +53,14 @@ const gardenPlantSchema = new mongoose.Schema({
   // nextFertilizingDate: {
   //   type: Date
   // },
+  // notifyWateringTask: {
+  //   type: Boolean,
+  //   default: false
+  // },
+  // notifyFertilizeTask: {
+  //   type: Boolean,
+  //   default: false
+  // },
   notes: [{
     // for now 
     //type: mongoose.Schema.Types.ObjectId, 
