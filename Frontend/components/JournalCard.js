@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, TextInput, Animated } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, Image, StyleSheet, Modal, TextInput, Animated } from 'react-native';
 import { useTheme, ThemeProvider } from 'styled-components/native';
 import * as Progress from 'react-native-progress';
 
 import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const JournalCard = ({ date, smallImages, title, tags, onDelete }) => {
     const theme = useTheme();
@@ -34,7 +36,10 @@ const JournalCard = ({ date, smallImages, title, tags, onDelete }) => {
         });
       
         return (
-          <RectButton style={[styles.deleteButton, { backgroundColor: 'red' }]} onPress={onDelete}>
+          <RectButton 
+            style={[styles.deleteButton, { backgroundColor: 'red' }]} 
+            onPress={onDelete}
+            >
             <Animated.View
               style={{
                 transform: [{ translateX: trans }],
@@ -46,7 +51,10 @@ const JournalCard = ({ date, smallImages, title, tags, onDelete }) => {
       };
 
     return (
-        <Swipeable renderRightActions={renderRightActions}>
+        <Swipeable 
+            renderRightActions={renderRightActions} 
+            leftThreshold={30}
+        >
         <ThemeProvider theme={theme}>
             <View style={styles.container}>
                 <TouchableOpacity onPress={toggleModal}>

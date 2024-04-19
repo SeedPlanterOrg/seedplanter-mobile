@@ -27,7 +27,10 @@ const JournalTaskCard = ({ icon, title, description, smallImage, onDelete }) => 
     };
     
     return (
-        <Swipeable renderRightActions={renderRightActions}>
+        <Swipeable 
+          renderRightActions={renderRightActions}
+          leftThreshold={30}
+          >
           <ThemeProvider theme={theme}>
             <View style={styles.container}>
                 <View style={[styles.card, {backgroundColor: theme.gardenCard}]}>

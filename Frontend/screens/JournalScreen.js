@@ -126,8 +126,8 @@ const handleTagsChange = (text) => {
     {
       id: 3,
       icon: require('../assets/leaf.png'),
-      title: "Fertilize",
-      description: "Marigolds",
+      title: "Water",
+      description: "Misc",
       smallImage: require('../assets/marigold.jpg')
     }
   ]);
@@ -340,7 +340,7 @@ const handleTagsChange = (text) => {
                 {/* Tags Container */}
                 <View style={styles.tagsContainer}>
                   {tags.tagsArray.map((tag, index) => (
-                    <View key={index} style={[styles.tagTextContainer, { backgroundColor: tagColors[index % tagColors.length] }]}>
+                    <View key={tag} style={[styles.tagTextContainer, { backgroundColor: tagColors[index % tagColors.length] }]}>
                       <Text style={styles.tagText}>{tag}</Text>
                     </View>
                   ))}
