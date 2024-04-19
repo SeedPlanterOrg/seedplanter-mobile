@@ -108,7 +108,7 @@ const handleTagsChange = (text) => {
   }
 
   // Dummy data for Journal Task Cards
-  const tasksData = [
+  const [tasksData, setTasksData] = useState([
     {
       id: 1,
       icon: require('../assets/rain.png'),
@@ -122,12 +122,19 @@ const handleTagsChange = (text) => {
       title: "Fertilize",
       description: "Marigolds",
       smallImage: require('../assets/marigold.jpg')
+    },
+    {
+      id: 3,
+      icon: require('../assets/leaf.png'),
+      title: "Water",
+      description: "Misc",
+      smallImage: require('../assets/marigold.jpg')
     }
-  ];
+  ]);
 
   const handleDeleteTask = (taskId) => {
     const updatedTasks = tasksData.filter(task => task.id !== taskId);
-    setTasksData(updatedTasks);
+    setTasksData(updatedTasks); 
   };
 
   const renderItem = ({ item }) => (
@@ -183,6 +190,11 @@ const handleTagsChange = (text) => {
       tags: ["tag1", "tag2"],
     }
   ]);
+
+  const handleDeleteJournalCard = (cardId) => {
+    const updatedJournalCards = journalCardsData.filter(card => card.id !== cardId);
+    setJournalCardsData(updatedJournalCards); 
+  };  
   
   const renderJournalCard = ({ item }) => (
     <JournalCard
@@ -193,6 +205,7 @@ const handleTagsChange = (text) => {
       smallImages={item.smallImages}
       title={item.title}
       tags={item.tags ? item.tags : []} // Check if item.tags is defined
+      onDelete={() => handleDeleteJournalCard(item.id)}
     />
   );
 
@@ -234,7 +247,6 @@ const handleTagsChange = (text) => {
             ListFooterComponent={<View style={{ height: 50 }} />} 
           />
         </View>
-
         <View style={styles.middleContainer}>
           <Text style={[styles.myJournalText, { color: theme.text }]}>
               My <Text style={styles.greenText}>Journal</Text>
@@ -328,7 +340,7 @@ const handleTagsChange = (text) => {
                 {/* Tags Container */}
                 <View style={styles.tagsContainer}>
                   {tags.tagsArray.map((tag, index) => (
-                    <View key={index} style={[styles.tagTextContainer, { backgroundColor: tagColors[index % tagColors.length] }]}>
+                    <View key={tag} style={[styles.tagTextContainer, { backgroundColor: tagColors[index % tagColors.length] }]}>
                       <Text style={styles.tagText}>{tag}</Text>
                     </View>
                   ))}
@@ -358,8 +370,6 @@ const handleTagsChange = (text) => {
             </View>
           </TouchableWithoutFeedback>
         </Modal>
-
-
       </View>
     </SafeAreaView>
     </ThemeProvider>
@@ -424,11 +434,12 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: '100%',
-    paddingHorizontal:15,
   },
   flatListContainer: {
     height: '35%', 
     width: '100%',
+    paddingTop: 15,
+    paddingBottom: 15,
   },
   planterContainer: {
     marginLeft: 'auto',
@@ -446,6 +457,8 @@ const styles = StyleSheet.create({
   journalCardsContainer: {
     width: '100%',
     height: '35%',
+    paddingTop: 15,
+    paddingBottom: 15,
   }, 
   plusButtonContainer: {
     marginLeft: 'auto',

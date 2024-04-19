@@ -10,6 +10,7 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import { ThemeProvider } from 'styled-components/native';
 import { darkTheme, lightTheme } from './styles/theme'
 import { AuthProvider } from './context/AuthContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ const App = () => {
   const colorScheme = useColorScheme() || 'light';
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <ThemeProvider theme={colorScheme === 'dark' ? darkTheme : lightTheme}>
       <AuthProvider>
         <NavigationContainer>
@@ -35,6 +37,7 @@ const App = () => {
         </NavigationContainer>
       </AuthProvider>
     </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 
