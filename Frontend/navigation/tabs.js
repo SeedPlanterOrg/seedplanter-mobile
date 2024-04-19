@@ -103,6 +103,7 @@ const Tabs = () => {
                         />
                     </View>
                 ),
+                headerShown: false,
                 headerStyle: {
                     backgroundColor: theme.navbar,
                     shadowColor: 'transparent',

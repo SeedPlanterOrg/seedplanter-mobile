@@ -290,7 +290,7 @@ const handleTagsChange = (text) => {
               keyExtractor={(item) => item.id.toString()}
               style={styles.scrollView}
               showsVerticalScrollIndicator={false}
-              ListFooterComponent={<View style={{ height: 50 }} />} 
+              ListFooterComponent={<View style={{ height: 100 }} />} 
             />
         </View>
 
@@ -456,9 +456,9 @@ const styles = StyleSheet.create({
   },
   journalCardsContainer: {
     width: '100%',
-    height: '35%',
-    paddingTop: 15,
-    paddingBottom: 15,
+    marginBottom: 15,
+    marginTop: 15,
+    height: '35%'
   }, 
   plusButtonContainer: {
     marginLeft: 'auto',
