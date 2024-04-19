@@ -43,7 +43,7 @@ const HomeCard = ({ imageSource, plantName, scientificName, waterLevelProgress, 
             renderRightActions={renderRightActions} 
             leftThreshold={30}
         >
-            <TouchableOpacity onPress={toggleModal} activeOpacity={1}>
+            <TouchableOpacity onPress={toggleModal} activeOpacity={0.2}>
                 <ThemeProvider theme={theme}>
                     <View style={styles.container}>
                         <View style={[styles.card, {backgroundColor: theme.gardenCard}]}>
