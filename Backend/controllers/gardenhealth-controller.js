@@ -1,58 +1,106 @@
 // const {getGardenByUserId, createGarden} = require('../controllers/garden-controller');
 // const mongoose = require("mongoose");
 // const PlantModel = require('../models/plant-schema');
-// const {GardenModel, GardenPlantModel} = require('../models/garden-schema');
+const {GardenModel, GardenPlantModel} = require('../models/garden-schema');
 // const { validationResult } = require('express-validator');
+const AppError = require('../middleware/appError');
+const mongoose = require('mongoose');
+const moment = require('moment'); // Ensure moment is installed
+const { generateTask } = require('./task-controller');
 // const AppError = require('../middleware/appError');
 
+const updateGardenHealth = async (garden, gardenPlants) => {
+  let totalWaterLevel = 0;
+  let totalFertilizerLevel = 0;
+  let count = 0;
+  const frequencyMultiplier = {
+    daily: 1,
+    weekly: 7,
+    monthly: 30,
+  };
 
-// const uri = process.env.PLANTDB_URL;
-// const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
+  const now = moment();
 
-// const updateGardenHealth = async (req, res, next) => {
-//     //send userId in req
-//     const data = getGardenByUserId(req, res, next);
-//     const garden = data.garden;
-//     const plants = data.gardenPlants;
+  console.log("------------------------------------------------------------------");
+  console.log("GARDEN PLANT LIST: " + gardenPlants);
+  console.log("------------------------------------------------------------------");
+  console.log("GARDEN : " + garden);
+  console.log("------------------------------------------------------------------");
 
-//     const daily = 1;
-//     const weekly = 7;
-//     const monthly = 30;
-//     const millisecondsInDay = 86400000;
+  await Promise.all(gardenPlants.map(async (plant) => {
+    const millisecondsInADay = 24 * 60 * 60 * 1000;
+  // Update and calculate watering details
+  if (plant.lastWateringDate && plant.wateringFrequency && plant.wateringInterval) {
+    const millisecondsToAdd = (frequencyMultiplier[plant.wateringFrequency] * millisecondsInADay) / plant.wateringInterval;
+    plant.nextWateringDate = moment(plant.lastWateringDate).add(millisecondsToAdd, 'milliseconds').toDate();
+  
+    const timeSinceLastWater = now.diff(moment(plant.lastWateringDate));
+    const timeUntilNextWater = moment(plant.nextWateringDate).diff(now);
+    plant.waterLevel = timeUntilNextWater / (timeUntilNextWater + timeSinceLastWater);
+    totalWaterLevel += plant.waterLevel;
 
-//     // find averages for all of the health levels for the garden health level
-//     // update the new garden health level
+    // if (plant.waterLevel < 0 && plant.notifyWater === false) {
+    //   console.log(`Plant ${plant._id} needs watering`);
+    //   plant.waterLevel = 0; 
+    //   plant.notifyWateringTask = true;
+    //   generateTask(plant, 'water');
+    // }
 
-//     // get the health level for all of the garden plants
-//     // calculate the new water level for the plant based on the last dates, interval, and frequency
+    // if (plant.fertilizerLevel < 0 && plant.notifyFertilize === false) {
+    //   console.log(`Plant ${plant._id} needs fertilizing`);
+    //   plant.fertilizerLevel = 0; 
+    //   plant.notifyFertilizingTask = true;
+    //   generateTask(plant, 'fertilize');
+    // }
+  
+    console.log(`Water Level for plant ${plant._id}: ${plant.waterLevel}`);
+  
+    count++;
+  }
+  
+  // Update and calculate fertilizing details
+  if (plant.lastFertilizingDate && plant.fertilizingFrequency && plant.fertilizingInterval) {
+    const millisecondsToAdd = (frequencyMultiplier[plant.fertilizingFrequency] * millisecondsInADay) / plant.fertilizingInterval;
+    plant.nextFertilizingDate = moment(plant.lastFertilizingDate).add(millisecondsToAdd, 'milliseconds').toDate();
+  
+    const timeSinceLastFertilize = now.diff(moment(plant.lastFertilizingDate));
+    const timeUntilNextFertilize = moment(plant.nextFertilizingDate).diff(now);
+    plant.fertilizerLevel = timeUntilNextFertilize / (timeUntilNextFertilize + timeSinceLastFertilize);
+    totalFertilizerLevel += plant.fertilizerLevel;
+  
+    console.log(`Fertilizer Level for plant ${plant._id}: ${plant.fertilizerLevel}`);
+  }
 
-//     /* 
-//         frequency: daily, weekly, monthly
-        
-//         Enum:
-//         daily: 1
-//         weekly: 7
-//         monthly: 30
+    // Save updated plant details to the database
+    try {
+        await mongoose.model('GardenPlantModel').findByIdAndUpdate(plant._id, plant);
+    } catch (err) {
+      console.log(err);
+      throw new AppError('Failed to update garden plant levels', 500);
+    }
 
-//         wateringInterval: any integer
-//         fertilizingInterval: any integer
+  }));
 
-//         lastWateringDate: date
-//         lastFertilizingDate: date 
+  // Calculate and update garden health level
+  if (count > 0) {
+    const averageWaterLevel = totalWaterLevel / count;
+    const averageFertilizerLevel = totalFertilizerLevel / count;
+    let gardenHealthLevel = (averageWaterLevel + averageFertilizerLevel) / 2;
+
+    // Clamp the gardenHealthLevel to be within 0 and 1
+    gardenHealthLevel = Math.max(0, Math.min(gardenHealthLevel, 1));
+
+    console.log(`Clamped Garden Health Level: ${gardenHealthLevel}`);
+
+    try {
+        await GardenModel.findOneAndUpdate(garden.userId, { gardenHealthLevel });
+    } catch (err) {
+        console.log(err);
+        throw new AppError('Failed to update garden health level', 500);
+    }
+}
+};
 
 
-//     */
 
-//     // calculate the new fertilizer level for the plant using the same method as above
-
-//     // update plants in DB
-
-//     // send back new garden and garden plants (data)
-
-
-
-//     //await updatePlantHealth();
-//     //await updateGardenHealth();
-// }
-
-// module.exports = { updateGardenHealth };
+module.exports = { updateGardenHealth };

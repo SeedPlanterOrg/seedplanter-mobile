@@ -7,6 +7,7 @@ var User = require('mongoose').model('User'); // load schema
 const AppError = require('../middleware/appError');
 require("dotenv").config();
 const jwt = require('jsonwebtoken');
+const { createGarden } = require('./garden-controller');
 
 
 const getUsers = async (req, res, next) => {
@@ -37,6 +38,7 @@ const signup = async (req, res, next) => {
     try {
         existingUser = await User.findOne({email: email})
     }catch {
+        console.log(err); // Add this line
         return next(new AppError('Signing up failed, please try again later.', 500));
     }
     // if user exists -> return next function and pass new error
@@ -58,21 +60,41 @@ const signup = async (req, res, next) => {
       password: hashedPassword,
     });
 
+  let createdGarden;
   try {
     await createdUser.save();
+
+    // Create a new request object for createGarden
+    const gardenReq = {
+      body: {
+        id: createdUser.id, // Pass the created user's id
+      },
+    };
+
+    // Call createGarden with the new request object, the original response object, and next
+    createdGarden = await createGarden(gardenReq);
+
   } catch (err) {
-    return next(new AppError('Sign Up failed, please try again.'));
+    console.log(err); // Add this line
+    return next(new AppError('Sign Up failed: createGarden(), please try again.'));
   }
 
   let token;
   //create token
   try{
     token = jwt.sign({userId: createdUser.id, email: createdUser.email}, process.env.JWT_SECRET, {expiresIn: '1h'});
+
   } catch (err) {
+    console.log(err); // Add this line
     return next(new AppError('Sign Up failed, please try again', 500));
   }
-
-  res.status(201).json({userId: createdUser.id, email: createdUser.email, token: token});
+  //send response
+  res.status(201).json({
+    userId: createdUser.id,
+    email: createdUser.email,
+    token: token,
+    gardenId: createdGarden.gardenId,
+  });
 };
 
 
