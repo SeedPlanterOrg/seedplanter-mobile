@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
+import React, { useState} from 'react';
 import { View, Text, Image, StyleSheet, useColorScheme, Animated } from 'react-native';
 import { useTheme, ThemeProvider } from 'styled-components/native';
 import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-const JournalTaskCard = ({ icon, title, description, smallImage }) => {
+const JournalTaskCard = ({ icon, title, description, smallImage, onDelete }) => {
     const theme = useTheme();
-    
 
     const renderRightActions = (progress, dragAnimatedValue) => {
       const trans = dragAnimatedValue.interpolate({
@@ -17,67 +15,65 @@ const JournalTaskCard = ({ icon, title, description, smallImage }) => {
       });
     
       return (
-        <View style={styles.swipedRow}>
-          <RectButton style={styles.deleteButton} onPress={() => console.log("Delete pressed")}>
-            <Animated.View
-              style={{
-                transform: [{ translateX: trans }],
-              }}>
-              <Text style={styles.deleteButtonText}>Delete</Text>
-            </Animated.View>
-          </RectButton>
-        </View>
+        <RectButton style={[styles.deleteButton, { backgroundColor: 'red' }]} onPress={onDelete}>
+          <Animated.View
+            style={{
+              transform: [{ translateX: trans }],
+            }}>
+            <Text style={styles.deleteButtonText}>Delete</Text>
+          </Animated.View>
+        </RectButton>
       );
     };
     
     return (
-      <GestureHandlerRootView style={{ flex: 1 }}>
-      <Swipeable renderRightActions={renderRightActions}>
-        <ThemeProvider theme={theme}>
-          <View style={styles.container}>
-              <View style={[styles.card, {backgroundColor: theme.gardenCard}]}>
-                  <View style={styles.content}>
-                      <View style={styles.iconContainer}>
-                          <View style={styles.iconBackground}>
-                              <Image 
-                                  source={icon} 
-                                  style={[styles.icon, {tintColor: theme.text}]}
-                              />
-                          </View>
-                      </View>
+        <Swipeable renderRightActions={renderRightActions}>
+          <ThemeProvider theme={theme}>
+            <View style={styles.container}>
+                <View style={[styles.card, {backgroundColor: theme.gardenCard}]}>
+                    <View style={styles.content}>
+                        <View style={styles.iconContainer}>
+                            <View style={styles.iconBackground}>
+                                <Image 
+                                    source={icon} 
+                                    style={[styles.icon, {tintColor: theme.text}]}
+                                />
+                            </View>
+                        </View>
 
-                      <View>
-                          <Text style={[styles.title, {color: theme.text}]}>{title}</Text>
-                          <View style={styles.middleContainer}>
-                              {smallImage && (
-                                  <View style={styles.smallImageContainer}>
-                                      <Image 
-                                          source={smallImage} 
-                                          style={styles.smallImage}
-                                      />
-                                  </View>
-                              )}
-                              <Text style={[styles.description, {color: theme.text}]}>{description}</Text>
-                          </View>
-                      </View>
-                      <View style={styles.endContainer}>
-                          <Text style={styles.taskTimeText}>2:00 PM</Text>
-                      </View>
-                  </View>
-              </View>
-          </View>
-        </ThemeProvider>
-      </Swipeable>
-    </GestureHandlerRootView>
-  );
-};
+                        <View>
+                            <Text style={[styles.title, {color: theme.text}]}>{title}</Text>
+                            <View style={styles.middleContainer}>
+                                {smallImage && (
+                                    <View style={styles.smallImageContainer}>
+                                        <Image 
+                                            source={smallImage} 
+                                            style={styles.smallImage}
+                                        />
+                                    </View>
+                                )}
+                                <Text style={[styles.description, {color: theme.text}]}>{description}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.endContainer}>
+                            <Text style={styles.taskTimeText}>2:00 PM</Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+          </ThemeProvider>
+        </Swipeable>
+    );
+  };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+    flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    paddingTop: 15,
+    paddingHorizontal: 15,
+    paddingBottom: 10,
+    paddingTop: 10,
     shadowOffset: { width: 1, height: 1 },
     shadowColor: '#333',
     shadowOpacity: 0.3,
@@ -90,7 +86,6 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
   },
   iconContainer: {
     justifyContent: 'flex-start',
@@ -147,25 +142,20 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: "#888",
   },
-  swipedRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingHorizontal: 15,
-    height: 20, // Adjust the height as needed
-    backgroundColor: '#ff0000', // Background color of the swiped row
-  },
   deleteButton: {
-    backgroundColor: '#ff0000', // Background color of the delete button
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    marginLeft: 10, // Adjust the margin as needed
-    borderRadius: 5,
+    width: 100,
+    borderRadius: 10, 
+    marginVertical: 10, 
+    marginLeft: 10, 
+    marginRight: 15,
+    overflow: 'hidden', 
   },
   deleteButtonText: {
-    color: '#ffffff', // Text color of the delete button
-    fontSize: 16,
+    fontSize: 17,
+    fontWeight: '500',
+    color: "#FFF",
   },
 });
 

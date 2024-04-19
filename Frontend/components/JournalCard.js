@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, TextInput, Animated } from 'react-native';
 import { useTheme, ThemeProvider } from 'styled-components/native';
 import * as Progress from 'react-native-progress';
 
-const JournalCard = ({ date, smallImages, title, tags }) => {
+import { RectButton } from 'react-native-gesture-handler';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+
+const JournalCard = ({ date, smallImages, title, tags, onDelete }) => {
     const theme = useTheme();
     const [modalVisible, setModalVisible] = useState(false);
     const [pageTitle, setPageTitle] = useState(title); 
@@ -23,7 +26,27 @@ const JournalCard = ({ date, smallImages, title, tags }) => {
         setUserNotes(text);
     };
 
+    const renderRightActions = (progress, dragAnimatedValue) => {
+        const trans = dragAnimatedValue.interpolate({
+          inputRange: [-150, 0],
+          outputRange: [0, 1],
+          extrapolate: 'clamp',
+        });
+      
+        return (
+          <RectButton style={[styles.deleteButton, { backgroundColor: 'red' }]} onPress={onDelete}>
+            <Animated.View
+              style={{
+                transform: [{ translateX: trans }],
+              }}>
+              <Text style={styles.deleteButtonText}>Delete</Text>
+            </Animated.View>
+          </RectButton>
+        );
+      };
+
     return (
+        <Swipeable renderRightActions={renderRightActions}>
         <ThemeProvider theme={theme}>
             <View style={styles.container}>
                 <TouchableOpacity onPress={toggleModal}>
@@ -120,6 +143,7 @@ const JournalCard = ({ date, smallImages, title, tags }) => {
                 </View>
             </Modal>
         </ThemeProvider>
+        </Swipeable>
     );
 };
 
@@ -128,7 +152,9 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        paddingTop: 15,
+        paddingHorizontal: 15,
+        paddingBottom: 10,
+        paddingTop: 10,
         shadowOffset: { width: 1, height: 1 },
         shadowColor: '#333',
         shadowOpacity: 0.3,
@@ -141,7 +167,6 @@ const styles = StyleSheet.create({
         padding: 15,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
     },
     content: {
         flexDirection: 'row',
@@ -299,7 +324,21 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
     },
-    
+    deleteButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 100,
+        borderRadius: 10, 
+        marginVertical: 10, 
+        marginLeft: 10, 
+        marginRight: 15,
+        overflow: 'hidden', 
+    },
+    deleteButtonText: {
+        fontSize: 17,
+        fontWeight: '500',
+        color: "#FFF",
+    },
 });
 
 export default JournalCard;
