@@ -11,102 +11,8 @@ const Task = require('../models/tasks-schema');
 // const { updateGardenHealthLevel } = require('./gardenhealth-controller');
 const uri = process.env.PLANTDB_URL;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
+const { updateGardenHealth } = require('./gardenhealth-controller');
 
-let DUMMY_GARDENS = [
-    {
-      gardenId: 'g1',
-      userId: 'u1',
-      plants: [
-        {
-          _id: 'p1', // Assuming an _id for each plant for identification
-          plantId: 'plant1', // Reference to a Plant model if applicable
-          waterLevel: 75,
-          lastWateringDate: new Date('2024-03-01'),
-          fertilizerLevel: 50,
-          lastFertilizingDate: new Date('2024-03-02'),
-          wateringInterval: 3,
-          wateringFrequency: 'daily',
-          fertilizingInterval: 7,
-          fertilizingFrequency: 'weekly',
-          journalEntries: [
-            'je1', // These could be references to actual JournalEntry documents in a real application
-          ],
-          imagesUrls: [
-            'http://example.com/image1.jpg',
-          ],
-        },
-        {
-          _id: 'p2',
-          plantId: 'plant2', // Reference to another Plant model if applicable
-          waterLevel: 60,
-          lastWateringDate: new Date('2024-03-03'),
-          fertilizerLevel: 40,
-          lastFertilizingDate: new Date('2024-03-04'),
-          wateringInterval: 2,
-          wateringFrequency: 'daily',
-          fertilizingInterval: 2,
-          fertilizingFrequency: 'weekly',
-          journalEntries: [
-            'je2', // Another hypothetical journal entry reference
-          ],
-          imagesUrls: [
-            'http://example.com/image2.jpg',
-          ],
-        }
-      ],
-      tasks: [
-        {
-          _id: 't1', // Assuming an _id for each task for identification
-          name: 'Water Plant',
-          description: 'Water all plants in the garden',
-          date: new Date('2024-03-05'),
-          completed: false, 
-        }
-      ],
-      gardenHealthLevel: 80,
-    }
-  ];
-
-// const getGardenById = async (req, res, next) => {
-//   const gardenId = req.body.gardenId; // { uid: 'v1' }
-
-//   let garden;
-//   try {
-//     place = await GardenModel.findById(gardenId); //find garden by uid
-//   } catch (err) {
-//     return next('Something went wrong, could not find a garden.',500);
-//   }
-
-//   if (!garden) {
-//     return next(new AppError('Could not find a garden for the provided id.', 404));
-//   }
-
-//   res.json({ garden: garden.toObject({ getters: true }) }); // => { place } => { place: place }
-// };
-
-// function getPlaceById() { ... }
-// const getPlaceById = function() { ... }
-
-// const getGardenByUserId = async (req, res, next) => {
-//   const userId = req.body.userId;
-
-//   let garden;
-//   try {
-//     garden = await GardenModel.find({ userId: userId });
-//   } catch (err) {
-//     return next(new AppError('Fetching garden failed, please try again later', 500));
-//   }
-
-//   if (!garden || garden.length === 0) {
-//     return next(
-//       new AppError('Could not find garden for the provided user id.', 404)
-//     );
-//   }
-
-//   res.json({ garden: garden .map(garden => garden.toObject({ getters: true })) });
-// };
-
-// const getGardenById
 
 const getGardenByUserId = async (req, res, next) => {
   console.log("Getting garden");
@@ -137,8 +43,8 @@ const getGardenByUserId = async (req, res, next) => {
       }
     }
 
-    // if (gardenPlantList.length >= 1) {
-    //   updateGardenHealthLevel(gardenPlantList, garden);
+    if (gardenPlantList.length >= 1) {
+      await updateGardenHealth(garden, gardenPlantList);
     }
 
     res.status(200).json({
@@ -149,6 +55,7 @@ const getGardenByUserId = async (req, res, next) => {
     return next(new AppError('Fetching garden failed, please try again later', 500));
   }
 }
+
 
 const createGarden = async (req, res, next) => {
   
@@ -172,7 +79,7 @@ const createGarden = async (req, res, next) => {
       gardenId: newGardenId,
       plants: [],
       tasks: [],
-      gardenHealthLevel: 100 // initial garden health level
+      gardenHealthLevel: 1 // initial garden health level
     });
     //return to the signup function    
     return createdGarden;
@@ -188,21 +95,22 @@ const createGarden = async (req, res, next) => {
 const addPlant = async (req, res, next) => {
   console.log(req.body);
   await mongoose.connect(uri, clientOptions);
-  const userId = req.body.gardenPlant.id;
-  const plantId = req.body.gardenPlant.plantId;
+  // const userId = req.body.gardenPlant.userId;
+  // const plantId = 
   
   // get static plant
-  const catalogPlant = await PlantModel.find({id: plantId});
+  const catalogPlant = await PlantModel.find({id: req.body.gardenPlant.plantId});
 
   try {
       // create new garden plant 
       const newGardenPlant = await GardenPlantModel.create({
-      gardenId: userId,
-      plantId: plantId, 
+      userId: req.body.gardenPlant.userId,
+      gardenId: req.body.gardenPlant.gardenId,
+      plantId: req.body.gardenPlant.plantId,
       water: req.body.gardenPlant.water,
       fertilize: req.body.gardenPlant.fertilize,
       waterLevel: req.body.gardenPlant.waterLevel,
-      lastWateringDate: req.body.gardenPlant.date,
+      lastWateringDate: req.body.gardenPlant.lastWateringDate,
       wateringInterval: req.body.gardenPlant.wateringInterval,
       wateringFrequency: req.body.gardenPlant.wateringFrequency,
       fertilizerLevel: req.body.gardenPlant.fertilizerLevel,
@@ -217,7 +125,8 @@ const addPlant = async (req, res, next) => {
 
     // find the garden by the user id they are the same
     console.log(`New Garden Plant Saved: ${newGardenPlant}`);
-    const updateGarden = await GardenModel.findById(req.body.gardenPlant._id);
+    const updateGarden = await GardenModel.findOne({userId: req.body.gardenPlant.userId});
+    console.log('updateGardenDUBUG: ' + updateGarden);
     if (!updateGarden) {
       return res.status(404).json({ message: "Garden not found" });
     }
@@ -264,6 +173,47 @@ const deletePlantById = async (req, res, next) => {
   }
 }
 
+// const getGardenById = async (req, res, next) => {
+//   const gardenId = req.body.gardenId; // { uid: 'v1' }
+
+//   let garden;
+//   try {
+//     place = await GardenModel.findById(gardenId); //find garden by uid
+//   } catch (err) {
+//     return next('Something went wrong, could not find a garden.',500);
+//   }
+
+//   if (!garden) {
+//     return next(new AppError('Could not find a garden for the provided id.', 404));
+//   }
+
+//   res.json({ garden: garden.toObject({ getters: true }) }); // => { place } => { place: place }
+// };
+
+// function getPlaceById() { ... }
+// const getPlaceById = function() { ... }
+
+// const getGardenByUserId = async (req, res, next) => {
+//   const userId = req.body.userId;
+
+//   let garden;
+//   try {
+//     garden = await GardenModel.find({ userId: userId });
+//   } catch (err) {
+//     return next(new AppError('Fetching garden failed, please try again later', 500));
+//   }
+
+//   if (!garden || garden.length === 0) {
+//     return next(
+//       new AppError('Could not find garden for the provided user id.', 404)
+//     );
+//   }
+
+//   res.json({ garden: garden .map(garden => garden.toObject({ getters: true })) });
+// };
+
+// const getGardenById
+
 // const deleteGarden = async (req, res, next) => {
 //   const placeId = req.params.pid;
 
@@ -290,6 +240,60 @@ const deletePlantById = async (req, res, next) => {
 
 //   res.status(200).json({ message: 'Deleted place.' });
 // };
+// let DUMMY_GARDENS = [
+//   {
+//     gardenId: 'g1',
+//     userId: 'u1',
+//     plants: [
+//       {
+//         _id: 'p1', // Assuming an _id for each plant for identification
+//         plantId: 'plant1', // Reference to a Plant model if applicable
+//         waterLevel: 75,
+//         lastWateringDate: new Date('2024-03-01'),
+//         fertilizerLevel: 50,
+//         lastFertilizingDate: new Date('2024-03-02'),
+//         wateringInterval: 3,
+//         wateringFrequency: 'daily',
+//         fertilizingInterval: 7,
+//         fertilizingFrequency: 'weekly',
+//         journalEntries: [
+//           'je1', // These could be references to actual JournalEntry documents in a real application
+//         ],
+//         imagesUrls: [
+//           'http://example.com/image1.jpg',
+//         ],
+//       },
+//       {
+//         _id: 'p2',
+//         plantId: 'plant2', // Reference to another Plant model if applicable
+//         waterLevel: 60,
+//         lastWateringDate: new Date('2024-03-03'),
+//         fertilizerLevel: 40,
+//         lastFertilizingDate: new Date('2024-03-04'),
+//         wateringInterval: 2,
+//         wateringFrequency: 'daily',
+//         fertilizingInterval: 2,
+//         fertilizingFrequency: 'weekly',
+//         journalEntries: [
+//           'je2', // Another hypothetical journal entry reference
+//         ],
+//         imagesUrls: [
+//           'http://example.com/image2.jpg',
+//         ],
+//       }
+//     ],
+//     tasks: [
+//       {
+//         _id: 't1', // Assuming an _id for each task for identification
+//         name: 'Water Plant',
+//         description: 'Water all plants in the garden',
+//         date: new Date('2024-03-05'),
+//         completed: false, 
+//       }
+//     ],
+//     gardenHealthLevel: 80,
+//   }
+// ];
 
 module.exports = { 
   getGardenByUserId,

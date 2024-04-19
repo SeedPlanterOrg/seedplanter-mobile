@@ -7,6 +7,7 @@ const taskSchema = new mongoose.Schema({
     plantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Plants' },
     description: String, // e.g., 'Watering', 'Fertilizing'
     date: Date,
+    image_urls: [String],
     completed: Boolean
   });
 

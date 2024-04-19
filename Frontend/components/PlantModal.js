@@ -1,5 +1,5 @@
 import { styles } from '../styles/CatalogStyles';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image } from 'expo-image';
 import { addPlant } from '../utils/http';
 import { Modal, View, Button, ScrollView, Text, TouchableOpacity, useColorScheme } from 'react-native';
@@ -15,6 +15,24 @@ const blurhash =
 const PlantModal = ({ plant, onClose, modalVisible }) => {
     console.log('Modal visible:', modalVisible);
     const theme = useTheme();
+
+    const [userId, setUserId] = useState(null);
+    const [gardenId, setGardenId] = useState(null);
+
+    useEffect(() => {
+        const fetchGardenId = async () => {
+            const userId = await AsyncStorage.getItem('userId');
+            const gardenId = await AsyncStorage.getItem('gardenId');
+            setUserId(userId);  
+            setGardenId(gardenId); 
+        };
+
+        fetchGardenId();
+    }, []);
+
+
+
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -44,22 +62,21 @@ const PlantModal = ({ plant, onClose, modalVisible }) => {
                         </View>
                         <View style={{ flexDirection: 'row', alignSelf: "flex-end", marginTop: -65, marginBottom: 20 }}>
                             <TouchableOpacity style={styles.plusButtonContainer} onPress={() => {
-                                let id = '65efc324a82682e507e38ebc' + 1;
+                                // let id = '65efc324a82682e507e38ebc' + 1;
                                 gardenPlant = {
-                                    _id: '66003bc6d48a27039a864f5b',
-                                    id: plant.id,
+                                    gardenId: gardenId, //async storage
+                                    userId: userId,     //async storage
                                     plantId: plant.id,
                                     water: true,
                                     fertilize: true,
-                                    prune: true,
-                                    waterLevel: 5,
-                                    lastWateringDate: "2024-03-21",
+                                    waterLevel: 0.5,
+                                    lastWateringDate: new Date(),
                                     wateringFrequency: "daily", //test
-                                    wateringInterval: 4, //test
-                                    fertilizerLevel: 3,
-                                    lastFertilizingDate: "2024-03-15",
-                                    fertilizeFrequency: "weekly", //test
-                                    fertilizeInterval: 1, //test
+                                    wateringInterval: 250, //test
+                                    fertilizerLevel: 0.5,
+                                    lastFertilizingDate: new Date(),
+                                    fertilizingFrequency: "weekly", //test
+                                    fertilizingInterval: 7, //test
                                     notes: "This is a test"
                                 }
                                 try {

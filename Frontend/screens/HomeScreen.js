@@ -24,6 +24,7 @@ import { useNavigation, useIsFocused } from '@react-navigation/native';
 import {deleteGardenPlant} from '../utils/http';
 
 
+
 export default function HomeScreen() {
   const [customPlantModalVisible, setCustomPlantModalVisible] = useState(false);
   const [addOptionsModalVisible, setAddOptionsModalVisible] = useState(false);
@@ -87,18 +88,19 @@ useEffect(() => {
           if (plant.plantDetails && plant.plantDetails.image_urls != null) {
             image = plant.plantDetails.image_urls[0];
           }
-          let waterRatio = plant.waterLevel / 10;
-          let nutrients = plant.fertilizerLevel / 10;
+          // let waterRatio = plant.waterLevel;
+          // let nutrientRatio = plant.fertilizerLevel;
+          setProgressValue(data.garden.gardenHealthLevel);
           let min = 100;
           let max = 1000;
-          let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+          // let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
           newPlant = {
-            id: randomInt.toString(), 
+            id: plant._id, 
             imageSource: image,
             plantName: plant.plantDetails.name,
             scientificName: plant.plantDetails.binomial_name,
-            waterLevelProgress: waterRatio,
-            nutrientProgress: nutrients,
+            waterLevelProgress: plant.waterLevel,
+            nutrientProgress: plant.fertilizerLevel,
           }
           displayData.push(newPlant);
         });
@@ -109,9 +111,9 @@ useEffect(() => {
     }
     fetchPlants();
     //  Then call fetchPlants every 5 seconds
-    const intervalId = setInterval(fetchPlants, 20000);
+    const intervalId = setInterval(fetchPlants, 10000);
 
-    // Clear interval on component unmount
+    // // Clear interval on component unmount
     return () => clearInterval(intervalId);
   });
 

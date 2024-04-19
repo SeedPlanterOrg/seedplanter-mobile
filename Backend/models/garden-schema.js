@@ -9,6 +9,11 @@ const gardenPlantSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "User",
+    required: true
+  },
   plantId: {
     type: Number, 
     required: true
@@ -23,7 +28,7 @@ const gardenPlantSchema = new mongoose.Schema({
   },
   waterLevel: {
     type: Number,
-    max: 100
+    max: 1,
   },
   lastWateringDate: {
     type: Date
@@ -39,28 +44,28 @@ const gardenPlantSchema = new mongoose.Schema({
   },
   fertilizerLevel: {
     type: Number,
-    max: 100
+    max: 1,
   },
   lastFertilizingDate: {
     type: Date
   },
-  // fertilizingInterval: {
-  //   type: Number
-  // },
-  // fertilizingFrequency: {
-  //   type: String
-  // },
-  // nextFertilizingDate: {
-  //   type: Date
-  // },
-  // notifyWateringTask: {
-  //   type: Boolean,
-  //   default: false
-  // },
-  // notifyFertilizeTask: {
-  //   type: Boolean,
-  //   default: false
-  // },
+  fertilizingInterval: {
+    type: Number
+  },
+  fertilizingFrequency: {
+    type: String
+  },
+  nextFertilizingDate: {
+    type: Date
+  },
+  notifyWateringTask: {
+    type: Boolean,
+    default: false
+  },
+  notifyFertilizeTask: {
+    type: Boolean,
+    default: false
+  },
   notes: [{
     // for now 
     //type: mongoose.Schema.Types.ObjectId, 
@@ -96,7 +101,7 @@ const GardenSchema = new mongoose.Schema({
 
   gardenHealthLevel: { //garden health level
     type: Number,
-    max: 100
+    max: 1,
   }
 
 });
