@@ -6,6 +6,7 @@ export const lightTheme = {
     navbar: 'white',
     catBorderColor: "#f2f3f5",
     aboutBack: "#b0fcac",
+    chatColor: "#f2f3f5",
   
     // Welcome and Login
     welcomeBG: ["#91f086", "#11823b", "#02231c"],
@@ -24,6 +25,7 @@ export const darkTheme = {
     navbar: '#000000',
     catBorderColor: "#383838",
     aboutBack: "#0b8704",
+    chatColor: "#000000",
   
     // Welcome and Login 
     welcomeBG: ["#4cbf4c", "#0a5228", "#002112"],
