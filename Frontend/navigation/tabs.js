@@ -128,8 +128,10 @@ const Tabs = () => {
                         ),
                         tabBarButton: () => (
                             <TouchableOpacity style={styles.buttonStyle} onPress={openChatModal}>
-                                <Entypo name="chat" size={30} style={{ color: theme.text, marginTop: 17}} />
-                                <ChatBotScreen onClose={closeChatModal} modalVisible={addChatModalVisible}/>
+                                <Entypo name="chat" size={30} style={{ color: theme.text }} />
+                                <View style={{ width: 0, height: 0, }}>
+                                    <ChatBotScreen onClose={closeChatModal} modalVisible={addChatModalVisible} />
+                                </View>
                             </TouchableOpacity>
                         ),
                         headerStyle: {
