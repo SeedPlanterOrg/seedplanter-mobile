@@ -64,18 +64,19 @@ async function findPlantById(id) {
     }
 }
 
+
 /**
  * Gets a a garden based off the userId
  * @param {String} ID - mongoDB ID in form of 661fca981bfbf7709fa95cda. 
  * @returns {Object} returns a complex garden obejct see postman or docs  
  */
-async function getGarden(id) {
+async function getGarden(userId) {
     // ${EXPO_PUBLIC_DEPLOYMENT} or http://localhost:3000/
     const url = new URL(`${link}/garden/get_garden`);
 
     // If you have parameters to send, append them to the URL
     const params = {
-        userId: id, // Example parameter
+        userId: userId, // Example parameter
     };
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     try {

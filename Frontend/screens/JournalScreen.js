@@ -174,7 +174,7 @@ const handleTagsChange = (text) => {
   }
 
   // Dummy data for Journal Task Cards
-  const tasksData = [
+  const [tasksData, setTasksData] = useState([
     {
       id: 1,
       icon: require('../assets/rain.png'),
@@ -188,12 +188,19 @@ const handleTagsChange = (text) => {
       title: "Fertilize",
       description: "Marigolds",
       smallImage: require('../assets/marigold.jpg')
+    },
+    {
+      id: 3,
+      icon: require('../assets/leaf.png'),
+      title: "Water",
+      description: "Misc",
+      smallImage: require('../assets/marigold.jpg')
     }
-  ];
+  ]);
 
   const handleDeleteTask = (taskId) => {
     const updatedTasks = tasksData.filter(task => task.id !== taskId);
-    setTasksData(updatedTasks);
+    setTasksData(updatedTasks); 
   };
 
   const renderItem = ({ item }) => (
@@ -277,6 +284,53 @@ const handleTagsChange = (text) => {
 
     fetchJournalData();
   }, []);
+//   const [journalCardsData, setJournalCardsData] = useState([
+//     {
+//       id: 1,
+//       date: "2023 . 02 . 13",
+//       nutrientProgress: 0.9,
+//       waterLevelProgress: 0.7,
+//       points: 5,
+//       smallImages: [
+//         require('../assets/marigold.jpg'),
+//         require('../assets/strawberry.jpg'),
+//         require('../assets/lettuce.jpg'),
+//       ],
+//       title: "Title 1 - asdfa",
+//       tags: ["tag1", "tag2", "tag3"],
+//     },
+//     {
+//       id: 2,
+//       date: "2024 . 04 . 15",
+//       nutrientProgress: 0.4,
+//       waterLevelProgress: 0.6,
+//       points: 2,
+//       smallImages: [
+//         require('../assets/strawberry.jpg'),
+//         require('../assets/lettuce.jpg'),
+//       ],
+//       title: "Title 2 - asdfa",
+//       tags: ["tag1", "tag2", "tag3", "tag3"],
+//     },
+//     {
+//       id: 3,
+//       date: "2024 . 04 . 15",
+//       nutrientProgress: 0.4,
+//       waterLevelProgress: 0.6,
+//       points: 7,
+//       smallImages: [
+//         require('../assets/strawberry.jpg'),
+//         require('../assets/marigold.jpg'),
+//       ],
+//       title: "Title 3 - asdfa",
+//       tags: ["tag1", "tag2"],
+//     }
+//   ]);
+
+  const handleDeleteJournalCard = (cardId) => {
+    const updatedJournalCards = journalCardsData.filter(card => card.id !== cardId);
+    setJournalCardsData(updatedJournalCards); 
+  };  
   
   const renderJournalCard = ({ item }) => (
     <JournalCard
@@ -287,6 +341,7 @@ const handleTagsChange = (text) => {
       smallImages={item.smallImages}
       title={item.title}
       tags={item.tags ? item.tags : []} // Check if item.tags is defined
+      onDelete={() => handleDeleteJournalCard(item.id)}
     />
   );
 
@@ -328,7 +383,6 @@ const handleTagsChange = (text) => {
             ListFooterComponent={<View style={{ height: 50 }} />} 
           />
         </View>
-
         <View style={styles.middleContainer}>
           <Text style={[styles.myJournalText, { color: theme.text }]}>
               My <Text style={styles.greenText}>Journal</Text>
@@ -372,7 +426,7 @@ const handleTagsChange = (text) => {
               keyExtractor={(item) => item.id.toString()}
               style={styles.scrollView}
               showsVerticalScrollIndicator={false}
-              ListFooterComponent={<View style={{ height: 50 }} />} 
+              ListFooterComponent={<View style={{ height: 100 }} />} 
             />
         </View>
 
@@ -452,8 +506,6 @@ const handleTagsChange = (text) => {
             </View>
           </TouchableWithoutFeedback>
         </Modal>
-
-
       </View>
     </SafeAreaView>
     </ThemeProvider>
@@ -518,11 +570,12 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: '100%',
-    paddingHorizontal:15,
   },
   flatListContainer: {
     height: '35%', 
     width: '100%',
+    paddingTop: 15,
+    paddingBottom: 15,
   },
   planterContainer: {
     marginLeft: 'auto',
@@ -539,7 +592,9 @@ const styles = StyleSheet.create({
   },
   journalCardsContainer: {
     width: '100%',
-    height: '35%',
+    marginBottom: 15,
+    marginTop: 15,
+    height: '35%'
   }, 
   plusButtonContainer: {
     marginLeft: 'auto',
