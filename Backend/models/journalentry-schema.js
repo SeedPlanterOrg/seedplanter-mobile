@@ -6,10 +6,6 @@ const journalEntryModel = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  plantId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "PlantModel",
-  },
   date: Date,
   images: {
     type: [String],
