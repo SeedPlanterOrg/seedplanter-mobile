@@ -214,3 +214,41 @@ async function testDeleteGardenPlant() {
 
 // Run the test driver
 testDeleteGardenPlant();
+
+async function testUpdateJournalEntry() {
+    const mockData = {
+        "_id": "661fca981bfbf7709fa95cda",
+        "userId": "66003bc6d48a27039a864f5b",
+        "plantId": "5fa123b4f0fcbef1dea34567",
+        "date": "2024-04-16T00:00:00Z",
+        "images": [
+            "https://example.com/image1.jpg",
+            "https://example.com/image2.jpg"
+        ],
+        "notes": [
+            "Noticed new growth on the lower branches.",
+            "Leaves have started to turn a darker shade of green."
+        ],
+        "waterLevel": 8,
+        "fertilizerLevel": 5,
+        "page_number": 1,
+        "subject": [
+            "Growth Observation",
+            "Leaf Color"
+        ],
+        "title": "April Plant Update"
+    };
+    console.log(mockData);
+
+    try {
+        console.log("Starting test for updating a journal entry...");
+        await updateJournalEntry(mockData);
+        console.log("Test completed successfully.");
+    } catch (error) {
+        console.error("Test failed:", error);
+    }
+}
+
+// Call the test function
+testUpdateJournalEntry();
+

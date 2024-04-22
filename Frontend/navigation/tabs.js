@@ -86,32 +86,31 @@ const Tabs = () => {
                     },
                     headerTitleAlign: 'left',
                 }} />
-
-                <Tab.Screen name="Journal" component={JournalScreen} options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View style={{ alignItems: 'center', justifyContent: 'center', }}>
-                            <Image source={require('../assets/book6.png')}
-                                resizeMode="contain"
-                                style={{
-                                    width: 25,
-                                    height: 25,
-                                    tintColor: focused ? '#1DB954' : theme.text
-                                }}
-                            />
-                        </View>
-                    ),
-                    headerStyle: {
-                        backgroundColor: theme.navbar,
-                        shadowColor: 'transparent',
-                    },
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                        fontSize: 23,
-                        color: theme.text,
-                    },
-                    headerTitleAlign: 'left',
-                }} />
-
+            <Tab.Screen name="Journal" component={JournalScreen} options={{
+                tabBarIcon: ({focused}) => (
+                    <View style={{alignItems: 'center', justifyContent: 'center',}}>
+                        <Image source={require('../assets/book6.png')}
+                            resizeMode="contain"
+                            style={{
+                                width: 25,
+                                height: 25,
+                                tintColor: focused ? '#1DB954' : theme.text
+                            }}
+                        />
+                    </View>
+                ),
+                headerShown: false,
+                headerStyle: {
+                    backgroundColor: theme.navbar,
+                    shadowColor: 'transparent',
+                },
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                    fontSize: 23, 
+                    color: theme.text, 
+                },
+                headerTitleAlign: 'left',
+            }}/>
                 <Tab.Screen
                     name="AI Plantbot"
                     component={ChatBotModal}
