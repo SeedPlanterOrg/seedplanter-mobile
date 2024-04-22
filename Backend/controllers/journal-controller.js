@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 
 /**
  * Route handler to retrieve a journal entry by its ID.
- * @param {Object} req - request object.
+ * @param {Object} req - request object, contatins query param of id.
  * @param {Object} res - response object.
  * @param {Function} next - next middleware function.
  */
@@ -40,7 +40,7 @@ const getEntryById = async (req, res, next) => {
 
 /**
  * Route handler to retrieve a journal entry by its ID.
- * @param {Object} req - request object.
+ * @param {Object} req - request object, contatins query param of id.
  * @param {Object} res - response object.
  * @param {Function} next - next middleware function.
  */
@@ -123,9 +123,35 @@ const createEntry = async (req, res, next ) => {
     }
 };
 
+const updateEntry = async (req, res, next) => {
+    try {
+        const updatedData = req.body;
+        const id = updatedData._id;
+
+        // Find the document by ID and update it with the new values.
+        // { new: true } returns the updated document.
+        console.log('Data to update: ' + updatedData);
+        let updatedEntry = await journalEntryModel.findByIdAndUpdate(id, updatedData, { new: true });
+
+        // Optionally, you might want to check if updatedEntry is not null (which means no document was found with that ID)
+        if (!updatedEntry) {
+            return res.status(404).send('Entry not found');
+        }
+
+        // Send back the updated entry or handle it otherwise
+        res.send(updatedEntry);
+    } catch (error) {
+        // Error handling
+        console.error('Failed to update the entry:', error);
+        next(error);
+    }
+};
+
+
 module.exports = {
     getEntryById,
     deleteEntryById,
     createEntry,
-    getAllEntries
+    getAllEntries,
+    updateEntry
 };
