@@ -28,6 +28,7 @@
 
 // const deleteTask = async (req, res, next) => {
 //     const taskId = req.params.id;
+//     const taskType = req.params.taskType;
 //     const gardenPlantId = req.params.plantId;
 //     // const userId = req.params.userId;
 //     //
@@ -44,22 +45,31 @@
 //         return next(new AppError('Plant not found', 404));
 //     }
 
-//     gardenPlant.waterLevel = 1;
-//     gardenPlant.fertilizerLevel = 1;
-//     gardenPlant.lastWateringDate = new Date();
-//     gardentPlant.lastFertilizingDate = new Date();
-//     gardenPlant.notifyWateringTask = false;
-//     gardenPlant.notifyFertilize = false;
-
-//     gardenPlant.save();
-  
-//     try {
-//       await Task.findByIdAndDelete(taskId);
-//       res.status(200).json({ message: 'Task deleted' });
-//     } catch (err) {
-//       console.log(err);
-//       return next(new AppError('Failed to delete task', 500));
+//     if (taskType === 'Water') {
+//         gardenPlant.waterLevel = 1;
+//         gardenPlant.lastWateringDate = new Date();
+//         gardenPlant.notifyWateringTask = false;
+//     } else if (taskType === 'Fertilize') {
+//         gardenPlant.fertilizerLevel = 1;
+//         gardenPlant.lastFertilizingDate = new Date();
+//         gardenPlant.notifyFertilize = false;
 //     }
-//   };
+
+    // gardenPlant.fertilizerLevel = 1;
+
+    // gardentPlant.lastFertilizingDate = new Date();
+    // gardenPlant.notifyWateringTask = false;
+    // gardenPlant.notifyFertilize = false;
+
+  //   gardenPlant.save();
+  
+  //   try {
+  //     await Task.findByIdAndDelete(taskId);
+  //     res.status(200).json({ message: 'Task deleted' });
+  //   } catch (err) {
+  //     console.log(err);
+  //     return next(new AppError('Failed to delete task', 500));
+  //   }
+  // };
   
 //   module.exports = { generateTask, deleteTask };
