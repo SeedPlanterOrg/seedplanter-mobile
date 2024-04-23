@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const AppError = require('../utils/app-error');
-const Task = require('../models/task-schema');
-const GardenPlant = require('../models/garden-plant-schema');
+const AppError = require('../middleware/appError');
+const Task = require('../models/tasks-schema');
+// const GardenPlant = require('../models/garden-plant-schema');
 const {GardenModel, GardenPlantModel} = require('../models/garden-schema');
 
 
@@ -76,4 +76,4 @@ const deleteTask = async (req, res, next) => {
     }
   };
   
-//   module.exports = { generateTask, deleteTask };
+  module.exports = { generateTask, deleteTask };

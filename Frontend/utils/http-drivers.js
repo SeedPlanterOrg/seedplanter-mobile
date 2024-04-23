@@ -1,6 +1,11 @@
-// import here as needed
+/*
+  * File: 
+    *http-drivers.js
 
-// drivers
+  * Description: 
+    * Contains drivers to test http calls to the backend use as needed
+    * Can be used in future for a suite of unit tests
+*/
 
 async function run() {
     try {
