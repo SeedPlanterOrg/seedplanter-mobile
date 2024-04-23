@@ -1,6 +1,6 @@
-import * as React from "react";
+import React, { useState, useEffect, memo } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, Text, View, Image, TouchableOpacity, useColorScheme} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, useColorScheme } from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import JournalScreen from '../screens/JournalScreen';
 import CatalogScreen from '../screens/CatalogScreen';
@@ -9,87 +9,83 @@ import ChatBotScreen from '../screens/ChatBotScreen';
 import { DefaultTheme } from '@react-navigation/native';
 import { useTheme, ThemeProvider } from 'styled-components/native';
 import { styled } from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
+import { Entypo } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
-const CustomTabBarButton = ({children, onPress}) => (
-    <TouchableOpacity
-        style={{
-            top: -20,
-            justifyContent: 'center',
-            alignItems: 'center',
-        }}
-        onPress={onPress}
-    >
-        <View style={{
-            width: 65,
-            height: 65,
-            borderRadius: 50,
-            backgroundColor: '#1DB954',
-            shadowColor: '#333',
-            shadowOpacity: 0.4,
-            shadowOffset: { width: 1, height: 1 },
-
-        }}>
-            {children}
-        </View>
-    </TouchableOpacity>
-);
-
 const Tabs = () => {
+    const [addChatModalVisible, setAddChatModalVisible] = useState(false);
     const theme = useTheme();
+    const navigation = useNavigation();
 
-    return(
+    const ChatBotModal = () => <View></View>
+
+    const closeChatModal = () => {
+        console.log('Close Modal:', addChatModalVisible);
+        setAddChatModalVisible(false);
+    };
+    const openChatModal = () => {
+        console.log('Open Modal:', addChatModalVisible);
+        setAddChatModalVisible(true);
+    };
+
+    //const CustomOpacity = ({onPress}) => (
+    //    <TouchableOpacity style={styles.buttonStyle} onPress={onPress}>
+    //        <Entypo name="chat" size={30} style={{ color: theme.text }} />
+    //    </TouchableOpacity>
+    //);
+
+    return (
         <ThemeProvider theme={theme}>
-        <Tab.Navigator 
-            screenOptions={{ 
-                tabBarShowLabel: false,
-                tabBarStyle: {
-                    flex: 1,
-                    position: 'absolute',
-                    height: 80,
-                    borderRadius: 50,
-                    elevation: 0,
-                    paddingBottom: 15,
-                    borderTopWidth: 0
-                },
-                tabBarBackground: () => (
-                    <BlurView 
-                        intensity={80} 
-                        style={{ 
-                            flex: 1, 
-                            overflow: "hidden", 
-                            backgroundColor: "transparent" 
-                        }}>
-                    </BlurView>
-                ),
-            }}>
-            <Tab.Screen name="My Garden" component={HomeScreen} options={{
-                tabBarIcon: ({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center',}}>
-                        <Image source={require('../assets/home3.png')}
-                            resizeMode="contain"
+            <Tab.Navigator
+                screenOptions={{
+                    tabBarShowLabel: false,
+                    tabBarStyle: {
+                        flex: 1,
+                        position: 'absolute',
+                        height: 80,
+                        borderRadius: 50,
+                        elevation: 0,
+                        paddingBottom: 15,
+                        borderTopWidth: 0
+                    },
+                    tabBarBackground: () => (
+                        <BlurView
+                            intensity={80}
                             style={{
-                                width: 25,
-                                height: 25,
-                                tintColor: focused ? '#1DB954' : theme.text
-                            }}
-                        />
-                    </View>
-                ),
-                headerStyle: {
-                    backgroundColor: theme.navbar,
-                    shadowColor: 'transparent',
-                },
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                    fontSize: 23, 
-                    color: theme.text, 
-                },
-                headerTitleAlign: 'left',
-            }}/>
-
+                                flex: 1,
+                                overflow: "hidden",
+                                backgroundColor: "transparent"
+                            }}>
+                        </BlurView>
+                    ),
+                }}>
+                <Tab.Screen name="My Garden" component={HomeScreen} options={{
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', }}>
+                            <Image source={require('../assets/home3.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 25,
+                                    height: 25,
+                                    tintColor: focused ? '#1DB954' : theme.text
+                                }}
+                            />
+                        </View>
+                    ),
+                    headerStyle: {
+                        backgroundColor: theme.navbar,
+                        shadowColor: 'transparent',
+                    },
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                        fontSize: 23,
+                        color: theme.text,
+                    },
+                    headerTitleAlign: 'left',
+                }} />
             <Tab.Screen name="Journal" component={JournalScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center',}}>
@@ -115,84 +111,91 @@ const Tabs = () => {
                 },
                 headerTitleAlign: 'left',
             }}/>
+                <Tab.Screen
+                    name="AI Plantbot"
+                    component={ChatBotModal}
+                    options={{
+                        tabBarIcon: ({ focused }) => (
+                            <Image source={require('../assets/chat6.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 30,
+                                    height: 30,
+                                    tintColor: focused ? '#1DB954' : theme.text
+                                }}
+                            />
+                        ),
+                        tabBarButton: () => (
+                            <TouchableOpacity style={styles.buttonStyle} onPress={openChatModal}>
+                                <Entypo name="chat" size={30} style={{ color: theme.text }} />
+                                <View style={{ width: 0, height: 0, }}>
+                                    <ChatBotScreen onClose={closeChatModal} modalVisible={addChatModalVisible} />
+                                </View>
+                            </TouchableOpacity>
+                        ),
+                        headerStyle: {
+                            backgroundColor: theme.navbar,
+                            shadowColor: 'transparent',
+                        },
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                            fontSize: 23,
+                            color: theme.text,
+                        },
+                        headerTitleAlign: 'left',
+                    }} />
 
-            <Tab.Screen name="AI Plantbot" component={ChatBotScreen} options={{
-                tabBarIcon: ({focused}) => (
-                    <Image source={require('../assets/chat6.png')}
-                        resizeMode="contain"
-                        style={{
-                            width: 30,
-                            height: 30,
-                            tintColor: focused ? '#1DB954' : theme.text
-                        }}
-                    />
-                ),
-                tabBarButton: (props) => (
-                    <CustomTabBarButton { ... props }/>
-                ),
-                headerStyle: {
-                    backgroundColor: theme.navbar,
-                    shadowColor: 'transparent',
-                },
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                    fontSize: 23, 
-                    color: theme.text, 
-                },
-                headerTitleAlign: 'left',
-            }}/>
-
-            <Tab.Screen name="Search Plants" component={CatalogScreen} options={{
-                tabBarIcon: ({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center',}}>
-                        <Image source={require('../assets/search6.png')}
-                            resizeMode="contain"
-                            style={{
-                                width: 25,
-                                height: 25,
-                                tintColor: focused ? '#1DB954' : theme.text
-                            }}
-                        />
-                    </View>
-                ),
+                <Tab.Screen name="Search Plants" component={CatalogScreen} options={{
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', }}>
+                            <Image source={require('../assets/search6.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 25,
+                                    height: 25,
+                                    tintColor: focused ? '#1DB954' : theme.text
+                                }}
+                            />
+                        </View>
+                    ),
                     headerStyle: {
-                    backgroundColor: theme.navbar,
-                    shadowColor: 'transparent',
-                },
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                    fontSize: 23, 
-                    color: theme.text, 
-                },
-                headerTitleAlign: 'left',
-            }}/>
+                        backgroundColor: theme.navbar,
+                        shadowColor: 'transparent',
+                    },
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                        fontSize: 23,
+                        color: theme.text,
+                    },
+                    headerTitleAlign: 'left',
+                }} />
 
-            <Tab.Screen name="My Profile" component={ProfileScreen} options={{
-                tabBarIcon: ({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center',}}>
-                        <Image source={require('../assets/profile6.png')}
-                            resizeMode="contain"
-                            style={{
-                                width: 25,
-                                height: 25,
-                                tintColor: focused ? '#1DB954' : theme.text
-                            }}
-                        />
-                    </View>
-                ),
-                headerStyle: {
-                    backgroundColor: theme.navbar,
-                    shadowColor: 'transparent',
-                },
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                    fontSize: 23, 
-                    color: theme.text, 
-                },
-                headerTitleAlign: 'left',
-            }}/>
+                <Tab.Screen name="My Profile" component={ProfileScreen} options={{
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', }}>
+                            <Image source={require('../assets/profile6.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 25,
+                                    height: 25,
+                                    tintColor: focused ? '#1DB954' : theme.text
+                                }}
+                            />
+                        </View>
+                    ),
+                    headerStyle: {
+                        backgroundColor: theme.navbar,
+                        shadowColor: 'transparent',
+                    },
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                        fontSize: 23,
+                        color: theme.text,
+                    },
+                    headerTitleAlign: 'left',
+                }} />
 
-        </Tab.Navigator>
+            </Tab.Navigator>
         </ThemeProvider>
     );
 }
@@ -209,5 +212,17 @@ const styles = StyleSheet.create({
         shadowOpacity: 5,
         shadowRadius: 5,
         elevation: 3,
-    }
+    },
+    buttonStyle: {
+        top: -20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 65,
+        height: 65,
+        borderRadius: 50,
+        backgroundColor: '#1DB954',
+        shadowColor: '#333',
+        shadowOpacity: 0.3,
+        shadowOffset: { width: 1, height: 1 },
+    },
 });
