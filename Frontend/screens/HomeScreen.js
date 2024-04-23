@@ -6,6 +6,7 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  TouchableWithoutFeedback, 
   Modal,
   TextInput,
   Button,
@@ -280,28 +281,24 @@ useEffect(() => {
           transparent={true}
           visible={addOptionsModalVisible}
           onRequestClose={() => setAddOptionsModalVisible(false)}>
-          <View style={styles.ModalView}>
-            <View style={[styles.selectModalContainer, { backgroundColor: theme.gardenBackground }]}>
+          <TouchableWithoutFeedback onPress={() => setAddOptionsModalVisible(false)}>
+            <View style={styles.ModalView}>
+              <View style={[styles.selectModalContainer, { backgroundColor: theme.gardenBackground }]}>
+                <View style={styles.selectModalButton}>
+                  <TouchableOpacity onPress={() => handleAddOptionSelection('Custom')}>
+                    <Text style={styles.addButtonText}>Add Custom Plant</Text>
+                  </TouchableOpacity>
+                </View>
 
-              {/* Backbutton */}
-              <View style={styles.Backbutton}>
-                <Button title="Close" color={theme.text} onPress={closeAddOptionsModal}></Button>
+                <View style={styles.selectModalButton}>
+                  <TouchableOpacity onPress={() => handleAddOptionSelection('Catalog')}>
+                    <Text style={styles.addButtonText}>Add from Catalog</Text>
+                  </TouchableOpacity>
+                </View>
+
               </View>
-
-              <View style={styles.selectModalButton}>
-                <TouchableOpacity onPress={() => handleAddOptionSelection('Custom')}>
-                  <Text style={styles.addButtonText}>Add Custom Plant</Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.selectModalButton}>
-                <TouchableOpacity onPress={() => handleAddOptionSelection('Catalog')}>
-                  <Text style={styles.addButtonText}>Add from Catalog</Text>
-                </TouchableOpacity>
-              </View>
-
             </View>
-          </View>
+          </TouchableWithoutFeedback>
         </Modal>
 
         {/* CustomPlantModal */}
