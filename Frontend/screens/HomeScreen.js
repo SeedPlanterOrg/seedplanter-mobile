@@ -29,7 +29,7 @@ import {deleteGardenPlant} from '../utils/http';
 export default function HomeScreen() {
   const [customPlantModalVisible, setCustomPlantModalVisible] = useState(false);
   const [addOptionsModalVisible, setAddOptionsModalVisible] = useState(false);
-  const [progressValue, setProgressValue] = useState(0.57);
+  const [progressValue, setProgressValue] = useState();
   const [wateringNotify, setWateringNotify] = useState(false); 
   const [nutrientsNotify, setNutrientsNotify] = useState(false); 
   const [image, setImage] = useState('');
@@ -91,7 +91,12 @@ useEffect(() => {
           }
           // let waterRatio = plant.waterLevel;
           // let nutrientRatio = plant.fertilizerLevel;
-          setProgressValue(data.garden.gardenHealthLevel);
+          if (data.garden[0] && !isNaN(data.garden[0].gardenHealthLevel)) {
+            setProgressValue(data.garden[0].gardenHealthLevel);
+          }
+
+          console.log("garden: " + JSON.stringify(data.garden));
+
           let min = 100;
           let max = 1000;
           // let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;

@@ -294,9 +294,9 @@ async function getJournalEntry(_id) {
  * @returns {Object} returns a response object   
  */
 async function updateJournalEntry(entryObject) {
-    // const url = new URL(`${link}/journal/update_entry`);
-    const url = new URL(`http://localhost:3000/journal/update_entry`);// for unit test
-
+    const url = new URL(`${link}/journal/update_entry`);
+    // const url = new URL(`http://localhost:3000/journal/update_entry`);// for unit test
+    console.log("OBJECT TO UPDATE: " + entryObject);
     fetch(url, {
         method: 'PUT',
         headers: {
