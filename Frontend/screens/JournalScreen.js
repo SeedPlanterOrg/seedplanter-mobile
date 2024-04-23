@@ -92,7 +92,7 @@ const handleTagsChange = (text) => {
       console.log("RESPONSE_PROMISE: ", response);
   
       const newJournalCard = {
-        id: journalCardsData.length + 1, // id for the new card
+        id: response._id, // id for the new card
         date: formattedDate,
         smallImages: [], 
         title: title,
@@ -266,14 +266,15 @@ const handleTagsChange = (text) => {
             }
             const data = await getJournal(userId); // Call the function from http.js
             const formattedData = data.map(entry => ({
-                id: entry.page_number,
+                id: entry._id,
                 date: entry.date.split('T')[0].replace(/-/g, ' . '), // Formatting the date as 'YYYY . MM . DD'
                 nutrientProgress: entry.fertilizerLevel / 10, // Assuming 0-10 scales down to 0-1
                 waterLevelProgress: entry.waterLevel / 10, // Assuming 0-10 scales down to 0-1
                 points: 5, // Example static value, adjust as necessary
                 smallImages: entry.images.map(url => ({ uri: url })), // Transform URLs to objects if needed
                 title: entry.title,
-                tags: entry.subject
+                tags: entry.subject,
+                notes: entry.notes
             }));
 
             setJournalCardsData(formattedData);
@@ -338,8 +339,10 @@ const handleTagsChange = (text) => {
       nutrientProgress={item.nutrientProgress}
       waterLevelProgress={item.waterLevelProgress}
       points={item.points}
+      id = {item.id}
       smallImages={item.smallImages}
       title={item.title}
+      notes={item.notes ? item.notes : []}
       tags={item.tags ? item.tags : []} // Check if item.tags is defined
       onDelete={() => handleDeleteJournalCard(item.id)}
     />

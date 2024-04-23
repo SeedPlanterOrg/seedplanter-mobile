@@ -37,22 +37,17 @@ const updateGardenHealth = async (garden, gardenPlants) => {
     const timeSinceLastWater = now.diff(moment(plant.lastWateringDate));
     const timeUntilNextWater = moment(plant.nextWateringDate).diff(now);
     plant.waterLevel = timeUntilNextWater / (timeUntilNextWater + timeSinceLastWater);
+
+
+    if (plant.waterLevel < 0 || plant.notifyWater === false) {
+      console.log(`Plant ${plant._id} needs watering`);
+      plant.waterLevel = 0; 
+      plant.notifyWateringTask = true;
+      // generateTask(plant, 'water');
+    }
+
     totalWaterLevel += plant.waterLevel;
-
-    // if (plant.waterLevel < 0 && plant.notifyWater === false) {
-    //   console.log(`Plant ${plant._id} needs watering`);
-    //   plant.waterLevel = 0; 
-    //   plant.notifyWateringTask = true;
-    //   generateTask(plant, 'water');
-    // }
-
-    // if (plant.fertilizerLevel < 0 && plant.notifyFertilize === false) {
-    //   console.log(`Plant ${plant._id} needs fertilizing`);
-    //   plant.fertilizerLevel = 0; 
-    //   plant.notifyFertilizingTask = true;
-    //   generateTask(plant, 'fertilize');
-    // }
-  
+    
     console.log(`Water Level for plant ${plant._id}: ${plant.waterLevel}`);
   
     count++;
@@ -66,7 +61,16 @@ const updateGardenHealth = async (garden, gardenPlants) => {
     const timeSinceLastFertilize = now.diff(moment(plant.lastFertilizingDate));
     const timeUntilNextFertilize = moment(plant.nextFertilizingDate).diff(now);
     plant.fertilizerLevel = timeUntilNextFertilize / (timeUntilNextFertilize + timeSinceLastFertilize);
+
+    if (plant.fertilizerLevel <= 0 || plant.notifyFertilize === false) {
+      console.log(`Plant ${plant._id} needs fertilizing`);
+      plant.fertilizerLevel = 0; 
+      plant.notifyFertilizingTask = true;
+      // generateTask(plant, 'fertilize');
+    }
+
     totalFertilizerLevel += plant.fertilizerLevel;
+
   
     console.log(`Fertilizer Level for plant ${plant._id}: ${plant.fertilizerLevel}`);
   }
@@ -88,7 +92,7 @@ const updateGardenHealth = async (garden, gardenPlants) => {
     let gardenHealthLevel = (averageWaterLevel + averageFertilizerLevel) / 2;
 
     // Clamp the gardenHealthLevel to be within 0 and 1
-    gardenHealthLevel = Math.max(0, Math.min(gardenHealthLevel, 1));
+    // gardenHealthLevel = Math.max(0, Math.min(gardenHealthLevel, 1));
 
     console.log(`Clamped Garden Health Level: ${gardenHealthLevel}`);
 

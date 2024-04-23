@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, Modal, TextInput, Animated } from 'react-native';
 import { useTheme, ThemeProvider } from 'styled-components/native';
 import * as Progress from 'react-native-progress';
@@ -7,25 +7,45 @@ import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import { updateJournalEntry } from '../utils/http';
 
-const JournalCard = ({ date, smallImages, title, tags, onDelete }) => {
+const JournalCard = ({ date, smallImages, title, tags, onDelete, id, notes}) => {
     const theme = useTheme();
     const [modalVisible, setModalVisible] = useState(false);
     const [pageTitle, setPageTitle] = useState(title); 
-    const [userNotes, setUserNotes] = useState('');
+    const [userNotes, setUserNotes] = useState(notes.toString());
+
+    console.log('notes: ' + notes);
+
+    // useEffect(() => {
+    //     console.log('notes: ' + notes);
+    //     setUserNotes(notes);
+    // }, [notes]);
 
     const colors = ['#F1C40F', '#E74C3C', '#2ECC71', '#3498DB'];
 
     const toggleModal = () => {
         setModalVisible(!modalVisible);
+
     };
 
-    const handlePageTitleChange = (text) => {
+    const handlePageTitleChange = async (text) => {
         setPageTitle(text);
+
+        console.log('id: ' + id);
+        await updateJournalEntry({
+            _id: id,
+            title: text,
+        });
     };
 
-    const handleUserNotesChange = (text) => {
+    const handleUserNotesChange = async (text) => {
         setUserNotes(text);
+        console.log('id: ' + id);
+        await updateJournalEntry({
+            _id: id,
+            notes: text,
+        });
     };
 
     const renderRightActions = (progress, dragAnimatedValue) => {

@@ -8,7 +8,7 @@ import { GiftedChat, InputToolbar, Composer, Bubble, Send } from 'react-native-g
 import { sendMessage } from '../utils/sendchat';
 import logo from '../assets/LogoActiveGreen.png';
 import { useTheme, ThemeProvider } from 'styled-components/native';
-import Tabs from '../navigation/tabs';
+// import Tabs from '../navigation/tabs';
 import { AntDesign } from '@expo/vector-icons';
 
 // import { Markdown } from 'react-native-markdown-display';
