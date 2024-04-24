@@ -1,13 +1,8 @@
-// const {getGardenByUserId, createGarden} = require('../controllers/garden-controller');
-// const mongoose = require("mongoose");
-// const PlantModel = require('../models/plant-schema');
 const {GardenModel, GardenPlantModel} = require('../models/garden-schema');
-// const { validationResult } = require('express-validator');
 const AppError = require('../middleware/appError');
 const mongoose = require('mongoose');
 const moment = require('moment'); // Ensure moment is installed
 const { generateTask } = require('./task-controller');
-// const AppError = require('../middleware/appError');
 
 const updateGardenHealth = async (garden, gardenPlants) => {
   let totalWaterLevel = 0;

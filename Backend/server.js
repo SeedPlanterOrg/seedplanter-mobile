@@ -6,7 +6,8 @@ const globalErrorhandler = require('./middleware/errorHandler');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const uri = process.env.PLANTDB_URL; //connect to mongo
+// opens database connection 
+const uri = process.env.PLANTDB_URL;
 console.log(uri);
 mongoose.connect(uri).then(con => {
     console.log(con.connections);

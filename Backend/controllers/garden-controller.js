@@ -1,19 +1,25 @@
 const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
 const mongoose = require("mongoose");
-// const HttpError = require('../models/http-error');
-// const getCoordsForAddress = require('../util/location');
 const {GardenModel, GardenPlantModel} = require('../models/garden-schema');
 const PlantModel = require('../models/plant-schema');
-// const tasks = require('../models/tasks-schema');
 const AppError = require('../middleware/appError');
 const Task = require('../models/tasks-schema');
-// const { updateGardenHealthLevel } = require('./gardenhealth-controller');
 const uri = process.env.PLANTDB_URL;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 const { updateGardenHealth } = require('./gardenhealth-controller');
 
-
+/**
+ * Retrieves a garden and its plants for a specific user by user ID from a query.
+ * Validates the input, connects to the database, and fetches the garden along with the plants in it.
+ * Handles errors and ensures valid input data. If no garden is found or if the garden has no plants,
+ * appropriate responses are returned.
+ * 
+ * @param {Object} req - The request object containing the user ID in query parameters.
+ * @param {Object} res - The response object used to send back the fetched garden data.
+ * @param {Function} next - The next middleware function in the stack.
+ * @returns {Promise} A promise that resolves with the response object containing the garden and its plants.
+ */
 const getGardenByUserId = async (req, res, next) => {
   console.log("Getting garden");
   const errors = validationResult(req);
@@ -56,7 +62,17 @@ const getGardenByUserId = async (req, res, next) => {
   }
 }
 
-
+/**
+ * Creates a new garden for a user with an initial set of empty properties and a base health level.
+ * Validates input data using a validation function and attempts to connect to the database to create a new garden record.
+ * Handles input validation errors and database errors by passing them to the next middleware function with an error response.
+ * If the garden is successfully created, it returns the created garden object.
+ *
+ * @param {Object} req - The request object containing user data in the body.
+ * @param {Object} res - The response object (unused in this function but typically used to send responses).
+ * @param {Function} next - The next middleware function in the stack to handle errors.
+ * @returns {Promise} A promise that resolves with the created garden object or an error.
+ */
 const createGarden = async (req, res, next) => {
   
   const errors = validationResult(req);
@@ -81,9 +97,9 @@ const createGarden = async (req, res, next) => {
       tasks: [],
       gardenHealthLevel: 1 // initial garden health level
     });
-    //return to the signup function    
+    
+    // return to the signup function    
     return createdGarden;
-    // await createdGarden.save();
     // res.status(201).json({message: "Garden Created"});
   
   } catch (err) {
@@ -92,11 +108,21 @@ const createGarden = async (req, res, next) => {
   }
 };
 
+/**
+ * Adds a new plant to a user's garden by creating a garden-specific plant instance with detailed care settings.
+ * Connects to the database to fetch a catalog plant by ID, creates a new garden plant with specific details and settings,
+ * and then adds this plant to the user's garden. Handles input validation internally and database errors by passing
+ * them to the next middleware function with an error response.
+ * On success, updates the garden record in the database and sends a success response indicating the plant has been added.
+ *
+ * @param {Object} req - The request object containing the plant data and user/garden identifiers in the body.
+ * @param {Object} res - The response object used to send back the success or error status.
+ * @param {Function} next - The next middleware function in the stack for error handling.
+ * @returns {Promise} A promise that resolves with a success response or an error handling function.
+ */
 const addPlant = async (req, res, next) => {
   console.log(req.body);
   await mongoose.connect(uri, clientOptions);
-  // const userId = req.body.gardenPlant.userId;
-  // const plantId = 
   
   // get static plant
   const catalogPlant = await PlantModel.find({id: req.body.gardenPlant.plantId});
@@ -143,12 +169,22 @@ const addPlant = async (req, res, next) => {
   }
 };
 
+/**
+ * Deletes a plant from a user's garden by its ID and updates the garden record by removing the plant reference.
+ * Attempts to find and delete the garden plant record in the database. If the plant is found and deleted,
+ * the function then updates the garden record to remove the reference to this plant. If the plant or garden is not found,
+ * it sends an appropriate error response. Handles errors during the database operations by sending an error response.
+ *
+ * @param {Object} req - The request object containing the userId and plantId in the body.
+ * @param {Object} res - The response object used to send back the success or error status.
+ * @param {Function} next - The next middleware function in the stack for error handling (unused in current implementation).
+ * @returns {Promise} A promise that resolves with a success response if the plant is deleted, or an error response if not.
+ */
 const deletePlantById = async (req, res, next) => {
   try {
     // (TODO: ) remove plant from garden plant array then delete plant
     const userId = req.body.userId;
     const plantId = req.body.plantId; // Get the ID from the request parameters
-    // Use the findByIdAndDelete method to remove the document
     const deletedEntry = await GardenPlantModel.findByIdAndDelete(plantId);
     if (!deletedEntry) {
       return res.status(404).json({ message: "Plant not found" });
@@ -173,132 +209,8 @@ const deletePlantById = async (req, res, next) => {
   }
 }
 
-// const getGardenById = async (req, res, next) => {
-//   const gardenId = req.body.gardenId; // { uid: 'v1' }
-
-//   let garden;
-//   try {
-//     place = await GardenModel.findById(gardenId); //find garden by uid
-//   } catch (err) {
-//     return next('Something went wrong, could not find a garden.',500);
-//   }
-
-//   if (!garden) {
-//     return next(new AppError('Could not find a garden for the provided id.', 404));
-//   }
-
-//   res.json({ garden: garden.toObject({ getters: true }) }); // => { place } => { place: place }
-// };
-
-// function getPlaceById() { ... }
-// const getPlaceById = function() { ... }
-
-// const getGardenByUserId = async (req, res, next) => {
-//   const userId = req.body.userId;
-
-//   let garden;
-//   try {
-//     garden = await GardenModel.find({ userId: userId });
-//   } catch (err) {
-//     return next(new AppError('Fetching garden failed, please try again later', 500));
-//   }
-
-//   if (!garden || garden.length === 0) {
-//     return next(
-//       new AppError('Could not find garden for the provided user id.', 404)
-//     );
-//   }
-
-//   res.json({ garden: garden .map(garden => garden.toObject({ getters: true })) });
-// };
-
-// const getGardenById
-
-// const deleteGarden = async (req, res, next) => {
-//   const placeId = req.params.pid;
-
-//   let place;
-//   try {
-//     place = await Place.findById(placeId);
-//   } catch (err) {
-//     const error = new HttpError(
-//       'Something went wrong, could not delete garden',
-//       500
-//     );
-//     return next(error);
-//   }
-
-//   try {
-//     await place.remove();
-//   } catch (err) {
-//     const error = new HttpError(
-//       'Something went wrong, could not delete place.',
-//       500
-//     );
-//     return next(error);
-//   }
-
-//   res.status(200).json({ message: 'Deleted place.' });
-// };
-// let DUMMY_GARDENS = [
-//   {
-//     gardenId: 'g1',
-//     userId: 'u1',
-//     plants: [
-//       {
-//         _id: 'p1', // Assuming an _id for each plant for identification
-//         plantId: 'plant1', // Reference to a Plant model if applicable
-//         waterLevel: 75,
-//         lastWateringDate: new Date('2024-03-01'),
-//         fertilizerLevel: 50,
-//         lastFertilizingDate: new Date('2024-03-02'),
-//         wateringInterval: 3,
-//         wateringFrequency: 'daily',
-//         fertilizingInterval: 7,
-//         fertilizingFrequency: 'weekly',
-//         journalEntries: [
-//           'je1', // These could be references to actual JournalEntry documents in a real application
-//         ],
-//         imagesUrls: [
-//           'http://example.com/image1.jpg',
-//         ],
-//       },
-//       {
-//         _id: 'p2',
-//         plantId: 'plant2', // Reference to another Plant model if applicable
-//         waterLevel: 60,
-//         lastWateringDate: new Date('2024-03-03'),
-//         fertilizerLevel: 40,
-//         lastFertilizingDate: new Date('2024-03-04'),
-//         wateringInterval: 2,
-//         wateringFrequency: 'daily',
-//         fertilizingInterval: 2,
-//         fertilizingFrequency: 'weekly',
-//         journalEntries: [
-//           'je2', // Another hypothetical journal entry reference
-//         ],
-//         imagesUrls: [
-//           'http://example.com/image2.jpg',
-//         ],
-//       }
-//     ],
-//     tasks: [
-//       {
-//         _id: 't1', // Assuming an _id for each task for identification
-//         name: 'Water Plant',
-//         description: 'Water all plants in the garden',
-//         date: new Date('2024-03-05'),
-//         completed: false, 
-//       }
-//     ],
-//     gardenHealthLevel: 80,
-//   }
-// ];
-
 module.exports = { 
   getGardenByUserId,
   createGarden, 
   addPlant,
   deletePlantById };
-// exports.updateGarden = updateGarden;
-// exports.deleteGarden = deleteGarden;

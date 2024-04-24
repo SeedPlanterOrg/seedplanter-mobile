@@ -14,6 +14,16 @@ const clientOptions = { serverApi: { version: '1', strict: true, deprecationErro
 // plant objects 
 const { PlantOBJ, Zone, Seasson } = require('../utils/plantObj');
 
+/**
+ * Route handler for fetching a specific page of plant data from a MongoDB database using Mongoose.
+ * This route expects a 'page' query parameter which is used to fetch a corresponding set of plant data.
+ * The function establishes a connection to the database, retrieves the specified page of plant data, and returns it to the client.
+ * It handles database connection errors and data fetching errors by logging the errors and sending appropriate HTTP status codes with error messages.
+ * The database connection is explicitly closed after the data fetching operation, regardless of its success or failure.
+ *
+ * @param {Object} req - The HTTP request object, expects a 'page' query parameter.
+ * @param {Object} res - The HTTP response object used for sending back the fetched data or error messages.
+ */
 router.get("/", async (req, res) => {
     const page = req.query.page;
 
@@ -38,6 +48,17 @@ router.get("/", async (req, res) => {
     }
 });
 
+/**
+ * Route handler for fetching a single plant's data from a MongoDB database using Mongoose based on a plant ID.
+ * This route expects an 'id' query parameter which specifies the plant ID to fetch from the database.
+ * The function connects to the database, queries for the plant using the provided ID, and returns the plant data if found.
+ * If no plant data is found, or if an error occurs during the database connection or the query process,
+ * it logs the error and returns an appropriate HTTP status code with an error message.
+ * The database connection is explicitly closed after attempting to fetch the data, ensuring clean resource management regardless of the outcome.
+ *
+ * @param {Object} req - The HTTP request object, expects an 'id' query parameter.
+ * @param {Object} res - The HTTP response object used for sending back the plant data or error messages.
+ */
 router.get("/plant", async (req, res) => {
     const id = req.query.id;
     try {
@@ -66,6 +87,17 @@ router.get("/plant", async (req, res) => {
     }
 });
 
+/**
+ * Route handler for receiving and processing a JSON object representing plant data.
+ * This POST route captures a JSON object from the request body, which includes plant information.
+ * The function logs the receipt of the data, specifically noting the name of the plant, and then attempts to process this data
+ * using a `build` function, which presumably handles the construction or storage of the plant data in a database.
+ * Errors during the `build` process are logged. Upon successful receipt and initiation of processing,
+ * the route sends back a 200 HTTP status code with a message confirming the receipt of the data.
+ *
+ * @param {Object} req - The HTTP request object, expects a JSON object in the body containing plant data.
+ * @param {Object} res - The HTTP response object used to confirm the receipt of data.
+ */
 router.post("/", (req, res) => {
     console.log("Posting in plantCatalog");
     console.log("name :" + req.body.name);  
@@ -74,6 +106,7 @@ router.post("/", (req, res) => {
     res.status(200).json({message: "recieved JSON file"});
 });
 
+// ping functions for put and delete
 router.put("/", (req, res) => {
     console.log("Puting in update");
     res.status(200).json({message: "recieved JSON file"});
@@ -84,7 +117,23 @@ router.delete("/", (req, res) => {
     res.status(200).json({message: "deleted"});
 });
 
-// 
+/**
+ * Route handler for updating plant data by fetching new information from an external API and updating the local database.
+ * This PATCH route expects a 'page' query parameter to fetch a specific page of plant data from the 'perenual' API.
+ * The function first retrieves the plant list from the external API, then for each plant, fetches detailed information,
+ * including care guides. It constructs an array of new plant objects with detailed attributes. These are then batch inserted into
+ * the MongoDB database. If any step fails, appropriate error handling is performed and an error message is returned.
+ *
+ * Steps:
+ * 1. Fetch the list of plants from the external API based on the page number.
+ * 2. Connect to the local MongoDB database.
+ * 3. For each plant, fetch detailed information and construct a plant object.
+ * 4. Insert the new plant data into the database.
+ * 5. Disconnect from the database and return the new plant data or an error message.
+ *
+ * @param {Object} req - The HTTP request object, expects a 'page' query parameter.
+ * @param {Object} res - The HTTP response object used for sending back either the list of updated plant data or an error message.
+ */
 router.patch("/", async (req, res) => {
     console.log("Inside plantCatalog /patch");
     try {
