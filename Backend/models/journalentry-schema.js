@@ -16,6 +16,7 @@ const mongoose = require('mongoose');
  *   subject: Array of strings, captures the subjects related to the journal entry; up to 4 subjects can be listed.
  *   title: String, provides a title for the journal entry, summarizing its content or theme.
  */
+
 const journalEntryModel = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,

@@ -1,3 +1,10 @@
+/*
+    *File: CatalogStyles.js
+    *Description: 
+        *Contains all the styling choices for the catalog screen
+        *The styling specifically for the plant modal and plant tile component
+    *Functions: n/a
+*/
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({

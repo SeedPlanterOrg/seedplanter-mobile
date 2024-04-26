@@ -1,3 +1,12 @@
+/*
+    *File: PlantModal.js
+    *Description: 
+        *This modal displays various plant information that the user needs to determine wether to add to the garden or not
+        *It has image view, text view, and web view to display hardiness map
+        *Fetches the data from the database
+    *Functions: n/a
+*/
+
 import { styles } from '../styles/CatalogStyles';
 import React, { useState, useEffect } from 'react';
 import { Image } from 'expo-image';
@@ -15,10 +24,11 @@ const blurhash =
 const PlantModal = ({ plant, onClose, modalVisible }) => {
     console.log('Modal visible:', modalVisible);
     const theme = useTheme();
-
+    // set and get
     const [userId, setUserId] = useState(null);
     const [gardenId, setGardenId] = useState(null);
 
+    // fetch plant data 
     useEffect(() => {
         const fetchGardenId = async () => {
             const userId = await AsyncStorage.getItem('userId');
@@ -51,12 +61,15 @@ const PlantModal = ({ plant, onClose, modalVisible }) => {
                     </View>
 
                     <ScrollView>
+                        {/* Image on the modal */}
                         <View style={styles.centerItems}>
                             <Image source={plant.image_urls && plant.image_urls[0] ? { uri: plant.image_urls[0] } : require('../resource/flower1.jpg')} style={[styles.modalImageSizing, { borderColor: theme.catBorderColor }]} transition={300} />
                         </View>
+                        {/* Plant name */}
                         <View style={styles.RightText}>
                             <Text style={styles.RightText}>{plant.name}</Text>
                         </View>
+                        {/* Scientific name */}
                         <View style={styles.sciNameText}>
                             <Text style={styles.sciNameText}>{plant.binomial_name}</Text>
                         </View>
@@ -181,6 +194,7 @@ const PlantModal = ({ plant, onClose, modalVisible }) => {
                             {/*</View>*/}
                         </View>
 
+                        {/* Webview to dislay the hardiness map */}
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                             <WebView source={{ uri: plant.hardiness_url }} style={styles.modalImageSizing2} />
                         </View>

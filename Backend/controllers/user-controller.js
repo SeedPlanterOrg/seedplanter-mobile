@@ -1,3 +1,13 @@
+/*
+  File: user-controller.js
+  Description:
+    *This file is responsible for handling user requests
+    *The file contains functions to get all users, sign up a user, and log in a user
+  Functions: getUsers() - Function used to get all users
+              signup()  - Function used to sign up a user
+              login()   - Function used to log in a user
+*/
+
 // const uuid = require('uuid/v4');
 const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
@@ -10,6 +20,7 @@ const jwt = require('jsonwebtoken');
 const { createGarden } = require('./garden-controller');
 
 
+// Function to get all users
 const getUsers = async (req, res, next) => {
     let users;
     try{
@@ -23,7 +34,7 @@ const getUsers = async (req, res, next) => {
     res.json({users: users.map(users => users.toObject({getters: true}))});
 };
 
-
+// Function to sign up a user
 const signup = async (req, res, next) => {
   const errors = validationResult(req); //validate req.body
   if (!errors.isEmpty()) {

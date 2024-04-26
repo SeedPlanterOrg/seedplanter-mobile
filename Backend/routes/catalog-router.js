@@ -24,6 +24,7 @@ const { PlantOBJ, Zone, Seasson } = require('../utils/plantObj');
  * @param {Object} req - The HTTP request object, expects a 'page' query parameter.
  * @param {Object} res - The HTTP response object used for sending back the fetched data or error messages.
  */
+
 router.get("/", async (req, res) => {
     const page = req.query.page;
 

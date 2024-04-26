@@ -1,3 +1,10 @@
+/*
+    File: server.js
+    Description:
+        *This file is responsible for starting the server
+        *The file contains the server configuration
+        *The file contains the routes for the server
+*/
 const mongoose = require("mongoose");
 const express = require('express');
 const AppError = require('./middleware/appError')
@@ -21,8 +28,8 @@ app.get("/", (req, res) => {
     res.status(200).json({message: "server pinged"});    // sends back a json object
 });
 
+// empty put request route
 app.put("/", (req, res) =>{
-
     console.log("Put request to server: no target route");
     res.status(200).json({message: "server pinged"});
 })
@@ -47,19 +54,23 @@ const plantCatalogRouter = require('./routes/catalog-router');
 // the route /plantCatalog is tied to ./routes/plantCatalog
 app.use('/plantCatalog', plantCatalogRouter);
 
+// declares a the router to the operations for the user
 const userRouter = require('./routes/user-routes');
 app.use('/user', userRouter);
 
+// declares a the router to the operations for the garden
 const gardenRouter = require('./routes/garden-router');
 app.use('/garden', gardenRouter);
 
+// declares a the router to the operations for the chat
 const chatRouter = require('./routes/chat-routes');
 app.use('/chat', chatRouter);
 
+// declares a the router to the operations for the journal
 const journalRouter = require('./routes/journal-router');
 app.use('/journal', journalRouter);
 
-
+// declares a the router to the operations for the journal
 app.all('*', (req, res, next)=> { 
     next(new AppError(`Can't find ${req.originalUrl}`, 404)); //throw error if using a non-existant route.
 });

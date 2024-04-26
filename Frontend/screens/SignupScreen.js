@@ -1,3 +1,10 @@
+/*
+    *File: SignupScreen.js
+    *Description: 
+        *This file is responsible for creating the styling and look of the signup screen
+    *Functions: onSignupPress()       - Used to handle sign up, ensuring all fields are entered and sign up is successful
+*/
+
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, SafeAreaView, Image, Touchable, Pressable, TouchableOpacity, TextInput } from 'react-native';
@@ -31,6 +38,7 @@ export default function SignupScreen() {
       link = process.env.EXPO_PUBLIC_DEPLOYMENT;
     }
 
+     // function to ensure sign up fields are entered
     const onSignupPress = async () => {
       setNameError(null);
       setEmailError(null);
@@ -88,7 +96,7 @@ export default function SignupScreen() {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4'}}>
             <View style={styles.container}>
-            
+                {/* logo, title, subtutle for the sign up page */}
                 <View style={styles.header}>
                     <Image 
                         source={require('../assets/LogoActiveGreen.png')}
@@ -99,7 +107,7 @@ export default function SignupScreen() {
                     <Text style={styles.subtitle}>Start planting your garden today!</Text>
                 </View>
                 <View style={styles.form}>
-
+                    {/* Input fields for the various fields required for signing up for an account*/}
                     <View style={styles.input}>
                         <Text style={styles.inputLabel}>Name</Text>
                             <TextInput
@@ -157,6 +165,7 @@ export default function SignupScreen() {
                     </View>
                     <ErrorMessage message={errorMessage} />
 
+                    {/* Sign up and on press send to home screen */}
                     <View style={styles.formAction}>
                         <TouchableOpacity onPress={onSignupPress} >
                          <View style={styles.loginButton}>
@@ -165,6 +174,7 @@ export default function SignupScreen() {
                         </TouchableOpacity>
                     </View>
 
+                    {/* Button to naviagte to login screen if you already have account */}
                     <View style={styles.inline}>
                         <Text style={styles.signupLabel}>Already have an account?</Text>
                         <Pressable onPress={() => navigation.navigate("Login")} >
@@ -178,6 +188,7 @@ export default function SignupScreen() {
     );
 }
 
+// style sheet for sign up page
 const styles = StyleSheet.create({
     container: {
       padding: 24,

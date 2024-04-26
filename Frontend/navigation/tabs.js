@@ -1,3 +1,12 @@
+/*
+    *File: tabs.js
+    *Description: 
+        *This file is responsible for creating the styling and look of the bottom bar
+        *This file is the primary mode of navigation going from screen to screen
+    *Functions: Tabs()                - this function returns the bottom bar to the screen
+
+*/
+
 import React, { useState, useEffect, memo } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View, Image, TouchableOpacity, useColorScheme } from 'react-native';
@@ -22,10 +31,12 @@ const Tabs = () => {
 
     const ChatBotModal = () => <View></View>
 
+    // close the chat modal
     const closeChatModal = () => {
         console.log('Close Modal:', addChatModalVisible);
         setAddChatModalVisible(false);
     };
+    // Open chat modal
     const openChatModal = () => {
         console.log('Open Modal:', addChatModalVisible);
         setAddChatModalVisible(true);
@@ -39,6 +50,7 @@ const Tabs = () => {
 
     return (
         <ThemeProvider theme={theme}>
+            {/* Creates the style for tab bar */}
             <Tab.Navigator
                 screenOptions={{
                     tabBarShowLabel: false,
@@ -62,6 +74,7 @@ const Tabs = () => {
                         </BlurView>
                     ),
                 }}>
+                {/* Tab bar for the home screen */}
                 <Tab.Screen name="My Garden" component={HomeScreen} options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: 'center', justifyContent: 'center', }}>
@@ -86,6 +99,7 @@ const Tabs = () => {
                     },
                     headerTitleAlign: 'left',
                 }} />
+            {/* tab bar for the journal screen */}
             <Tab.Screen name="Journal" component={JournalScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center',}}>
@@ -111,6 +125,7 @@ const Tabs = () => {
                 },
                 headerTitleAlign: 'left',
             }}/>
+            {/* tab bar for the PLant bot screen */}
                 <Tab.Screen
                     name="AI Plantbot"
                     component={ChatBotModal}
@@ -126,9 +141,11 @@ const Tabs = () => {
                             />
                         ),
                         tabBarButton: () => (
+                            // Touchable opacity to open chat bot 
                             <TouchableOpacity style={styles.buttonStyle} onPress={openChatModal}>
                                 <Entypo name="chat" size={30} style={{ color: theme.text }} />
                                 <View style={{ width: 0, height: 0, }}>
+                                    {/* Chatbot modal */}
                                     <ChatBotScreen onClose={closeChatModal} modalVisible={addChatModalVisible} />
                                 </View>
                             </TouchableOpacity>
@@ -144,7 +161,8 @@ const Tabs = () => {
                         },
                         headerTitleAlign: 'left',
                     }} />
-
+                
+                {/* search plants tab */}
                 <Tab.Screen name="Search Plants" component={CatalogScreen} options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: 'center', justifyContent: 'center', }}>
@@ -170,6 +188,7 @@ const Tabs = () => {
                     headerTitleAlign: 'left',
                 }} />
 
+                {/* profile tab */}
                 <Tab.Screen name="My Profile" component={ProfileScreen} options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: 'center', justifyContent: 'center', }}>
@@ -202,6 +221,7 @@ const Tabs = () => {
 
 export default Tabs;
 
+// style sheet for tabs scree
 const styles = StyleSheet.create({
     shadowing: {
         shadowColor: '#68b454',

@@ -1,15 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
+/*
+    *File: ChatBotScreen.js
+    *Description: 
+        *This file is responsible for creating and exporting the chatbot modal that can be utilized in other files
+        *The file contains multiple functions to render vital items that are used for displaying and sending chat messages
+    *Functions: useCallback()         - used for sending messages
+                renderInputToolbar()  - used fir rendering the input box
+                renderComposer()      - used for rendering the composer
+                renderChatFooter()    - used for rendering wether the chatbot is typing or not
+                renderSendButton()    - used for rendering the send button
+                renderBubble()        - used for rendering the chat bubble with text in it
+*/
+
 import { StyleSheet, Text, View, SafeAreaView, Keyboard, useColorScheme, Modal, Button, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState, useCallback } from 'react';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { GiftedChat, InputToolbar, Composer, Bubble, Send } from 'react-native-gifted-chat'
 import { sendMessage } from '../utils/sendchat';
 import logo from '../assets/LogoActiveGreen.png';
 import { useTheme, ThemeProvider } from 'styled-components/native';
-// import Tabs from '../navigation/tabs';
-import { AntDesign } from '@expo/vector-icons';
 
 // import { Markdown } from 'react-native-markdown-display';
 
@@ -22,8 +30,8 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
 
   const theme = useTheme();
 
-  //const navigation = useNavigation();
 
+  // sets message when clicking on the chatbot
   useEffect(() => {
     setMessages([
       {
@@ -39,31 +47,14 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
     ])
   }, [])
 
+  // gets message from bot
   const onSend = useCallback((messages = []) => {
     setIsBotTyping(true);
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, messages),
     )
-    // // Check if the message is a quick reply and the value is 'tutorial'
-    // if (messages[0].quickReply && messages[0].quickReply.value === 'tutorial') {
-    //   // Set the bot's response to your predefined tutorial
-    //   const tutorial = 'SeedPlanter is a gardening application that helps you keep track of your plants and their needs. You can add plants to your garden, view their details, and set reminders for watering, fertilizing, and pruning. You can also view the weather forecast for your location and get recommendations on what to plant based on the season. To get started, click on the plus button and follow the prompts to add a new plant to your garden. If you have any questions, feel free to ask!';
-
-    //   setMessages(previousMessages =>
-    //     GiftedChat.append(previousMessages, {
-    //       _id: Math.random(),
-    //       text: tutorial,
-    //       createdAt: new Date(),
-    //       user: {
-    //         _id: 2,
-    //         name: 'React Native',
-    //         avatar: logo,
-    //       },
-    //     }),
-    //   )
-
-    //   setIsBotTyping(false);
-    // } else {
+    
+    // Send the message to the chatbot
     sendMessage(messages[0].text, messages, startConversation)
       .then(response => {
         setIsBotTyping(false);
@@ -86,6 +77,7 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
     // }
   }, [startConversation]);
 
+  // various functions to render the different properties of the chat bot such as bubble, input, etc.
   const renderInputToolbar = (props) => (
     <InputToolbar {...props} containerStyle={[styles.inputToolbar, { backgroundColor: theme.gardenCard }]} />
   );
@@ -93,6 +85,8 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
   const renderComposer = (props) => (
     <Composer {...props} textInputStyle={[styles.composer, { color: theme.text }]} />
   );
+
+  // renders the footer of the chatbot
   const renderChatFooter = (props) => {
     if (isBotTyping) {
       return (
@@ -104,6 +98,7 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
     return null;
   };
 
+  // renders the send button
   const renderSendButton = (props) => {
     return (
       <Send {...props}>
@@ -122,6 +117,8 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
       </Send>
     );
   };
+
+  // renders the message text in Markdown format
   // const renderMessageText = (props) => {
   //   const { currentMessage } = props;
   //   return (
@@ -131,7 +128,7 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
   //   );
   // };
 
-
+  // renders the bubble for the chatbot
   const renderBubble = (props) => {
     return (
       <Bubble
@@ -153,24 +150,14 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
     );
   };
 
-  //useEffect(() => {
-  //  navigation.setOptions({
-  //    tabBarStyle: {
-  //      display: 'none',
-  //    }
-  //  });
-  //  return () => navigation.setOptions({
-  //    tabBarStyle: undefined
-  //  });
-  //}, [navigation]);
-
   // backgroundColor: theme.gardenBackground
 
   return (
+    // ThemeProvider is used to change the theme of the chatbot
     <ThemeProvider theme={theme}>
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.gardenBackground }}>
 
-        {/* aboutModal */}
+        {/* Modal for the chatbot */}
         <Modal
           animationType="slide"
           presentationStyle='pageSheet'
@@ -184,6 +171,7 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
                 <View style={[styles.Backbutton, { width: 100, height: 100 }]}>
                   <Button title="Close" color={theme.text} onPress={onClose}></Button>
                 </View>
+                {/* Designed to look like iMessage contact */}
                 <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'center', width: 100, height: 100, marginRight: 10, }}>
                   <View style={styles.circlesty}>
                     <Image style={styles.ImgSize} source={require('../assets/LogoActiveGreen.png')} tintColor={theme.navbar}></Image>
@@ -196,6 +184,7 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
               </View>
             </View>
 
+            {/* Chatbot - uses react-native-gifted-chat library to render the chatbot interface*/}
             <GiftedChat
               messages={messages}
               onSend={messages => onSend(messages)}
@@ -221,6 +210,7 @@ const ChatBotScreen = ({ onClose, modalVisible }) => {
 
 export default ChatBotScreen;
 
+// chatbot style screen
 const styles = StyleSheet.create({
   container: {
     padding: 24,

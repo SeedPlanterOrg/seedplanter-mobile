@@ -1,3 +1,15 @@
+/*
+    *File: CatalogScreen.js
+    *Description: 
+        *This file is responsible fetching plants for the catalog
+        *The file also allows a query to search for plants
+        *Contains the flatlist to display the plant tiles
+    *Functions: plantSearch()         - Function used to query through and return list of plants based on search input
+                contains()            - Used to ensure capital letters dont affect search
+                handleSelectPlant()   - Used to handle opening the plant modal and selecting a certain plant
+                handleCloseModal()    - Used to close the plant modal
+*/
+
 import React, { useState, useEffect, memo } from 'react';
 import {View, SafeAreaView, FlatList, TextInput, useColorScheme} from 'react-native';
 import {getPlantCatalogPage,
@@ -11,6 +23,7 @@ import { useTheme, ThemeProvider } from 'styled-components/native';
 
 
 export default function CatalogScreen() {
+  // various values for setting and getting
   const [modalVisible, setModalVisible] = useState(false);
   const [plantsData, setPlantsData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,6 +36,7 @@ export default function CatalogScreen() {
   const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
+  // function used to fetch the plants
   useEffect(() => {
     async function fetchPlants(page) {
       try {
@@ -37,7 +51,7 @@ export default function CatalogScreen() {
     fetchPlants(currentPage);
   }, [currentPage]);
 
-
+// function to query and filter plants 
   const plantSearch = (query) => {
     setSearchQuery(query);
     const filterData = filter(fullPlantsData, (plant) => {
@@ -46,6 +60,7 @@ export default function CatalogScreen() {
     setPlantsData(filterData);
   }
 
+  // function to return the plants searched for
   const contains = ({name, binomial_name}, query) => {
     if (name.toLowerCase().includes(query.toLowerCase()) || binomial_name.toLowerCase().includes(query.toLowerCase())) {
       return true;
@@ -53,12 +68,14 @@ export default function CatalogScreen() {
     return false;
   }
 
+  // function for handling plant modal
   const handleSelectPlant = (plant) => {
     console.log('Plant selected:', plant);
     setSelectedPlant(plant);
     setModalVisible(true);
   };
 
+  // functon for closing plant modal
   const handleCloseModal = () => {
     setModalVisible(false);
   };
@@ -67,6 +84,7 @@ export default function CatalogScreen() {
     <ThemeProvider theme={theme}>
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.gardenBackground }}>
       <View style={styles.container}>
+        {/* Used for creating a text bar for searching for plants */ }
         <TextInput 
           style={[styles.searchingbar, {color: theme.text}]}
           placeholderTextColor="#888" 
@@ -78,12 +96,14 @@ export default function CatalogScreen() {
           onChangeText={(query) => plantSearch(query)}
         />
 
+        {/* Flatlist for generating the plant tiles based on database information */ }
         <FlatList
           columnWrapperStyle={{ gap: -20  }}
           contentContainerStyle={{ alignItems: 'center', gap: -20}}
           data={plantsData}
           numColumns={2}
           keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()} // Ensure item.id is a string
+          // infinite scroll
           onEndReached={() => {
             if (currentPage < PAGE_LIMIT) {
               setCurrentPage(prevPage => prevPage + 1);
