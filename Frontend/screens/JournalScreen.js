@@ -1,5 +1,43 @@
+/*
+    *File: JournalScreen.js
+    *Description: 
+      JournalScreen.js is the main screen where users will handle tasks and journaling. At the top, users can see the tasks they currently have to complete. The percentage bar
+      will adjust as tasks are completed. To mark a task as complete, simply swipe left and delete. 
+
+      In the My Journal section of the screen, users can filter their journal entries by date. Eventually users should also be able to just search for the entry title as well. 
+      The streak container is also on this screen like before. 
+
+      Tapping the plus button brings up the add journal modal. Users can set the page title as well as up to 4 subjects, comma separated, The current date is listed at the bottom 
+      left. Tapping the plus button in the modal will then add the journal entry. 
+
+      Inside the journal page, users can tap the title to rename the entry. At the bottom, users can type whatever they want. 
+
+    *Functions:
+      _keyboardDidShow()            - These functions track whether the on screen keyboard is visable. The add journal modal will move accordingly. 
+      _keyboardDidHide()
+
+      handlePageTitleChange()       - Function handles any changes to the title and updates accordingly
+
+      handleTagsChange()            - Updates tags shown in the modal and updates as well
+
+      createJournalCard()           - Creates a new jounral entry. Updates in the backend as well
+
+      handleDelete Functions        - They handle the deletion of cards in the same way as the homescreen does 
+*/
+
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal, TouchableWithoutFeedback, TextInput, Keyboard } from 'react-native';
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  SafeAreaView, 
+  FlatList, 
+  TouchableOpacity, 
+  Modal, 
+  TouchableWithoutFeedback, 
+  TextInput, 
+  Keyboard 
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as Progress from 'react-native-progress';
 import JournalTaskCard from '../components/JournalTaskCard';
@@ -46,18 +84,18 @@ export default function JournalScreen() {
   };
 
   // Updates tags shown in the modal
-const handleTagsChange = (text) => {
-  // Split comma-separated tags and filter out empty strings
-  const tagsArray = text.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+  const handleTagsChange = (text) => {
+    // Split comma-separated tags and filter out empty strings
+    const tagsArray = text.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
 
-  if (tagsArray.length > 4) {
-    return;
-  }
-  setTags({
-    tag: text,
-    tagsArray: tagsArray
-  });
-};
+    if (tagsArray.length > 4) {
+      return;
+    }
+    setTags({
+      tag: text,
+      tagsArray: tagsArray
+    });
+  };
 
   // Tag States
   const [tags, setTags] = useState({
@@ -115,57 +153,12 @@ const handleTagsChange = (text) => {
     } catch (error) {
       console.error("Error when creating journal entry: ", error);
     }
-  
-    //   const user = await AsyncStorage.getItem('userId');
-    //   console.log("CREATE_DEBUG_LOG: USER_ID: " + user);
-
-    //   const entryObject = { 
-    //     userId: user,
-    //     date: formattedDate,
-    //     images: [],
-    //     notes: [],
-    //     waterLevel: 0,
-    //     fertilizerLevel: 0,
-    //     page_number: journalCardsData.length + 1,
-    //     subject: tags.tagsArray,
-    //     title: title
-    //   };
-
-    //   await createJournalEntry(entryObject)
-    //   console.log("RESPONSE_PROMISE: " + response);
-    //   const newJournalCard = {
-    //     id: journalCardsData.length + 1, // id for the new card
-    //     date: formattedDate,
-    //     smallImages: [], 
-    //     title: title,
-    //     tags: tags.tagsArray,
-    //     _id: response._id 
-    //   };
-
-    //   console.log("CARD_DATA: " + newJournalCard);
-
-    //   // Add to JournalCardData Array
-    //   setJournalCardsData([...journalCardsData, newJournalCard]);
-
-    //   // Close modal and clear inputs
-    //   setCreatePageModalVisible(false);
-    //   setPageTitle('');
-    //   setTags({
-    //     tag: '',
-    //     tagsArray: []
-    //   });
-    // } catch (error) {
-    //   console.log(`Error deleteing plant: ${err}`);
-    // }
   };
 
 
   // Functions to open and close the createPageModal
   const openCreatePageModal = () => {
     setCreatePageModalVisible(true);
-  };
-  const closeCreatePageModal = () => {
-    setCreatePageModalVisible(false);
   };
 
   // Date picker
@@ -213,49 +206,9 @@ const handleTagsChange = (text) => {
     />
   );
 
-  // Dummy data for Journal Cards
+  // Data for Journal Cards
   const [journalCardsData, setJournalCardsData] = useState([]);
-    // {
-    //   id: 1,
-    //   date: "2023 . 02 . 13",
-    //   nutrientProgress: 0.9,
-    //   waterLevelProgress: 0.7,
-    //   points: 5,
-    //   smallImages: [
-    //     require('../assets/marigold.jpg'),
-    //     require('../assets/strawberry.jpg'),
-    //     require('../assets/lettuce.jpg'),
-    //   ],
-    //   title: "Title 1 - asdfa",
-    //   tags: ["tag1", "tag2", "tag3"],
-    // },
-    // {
-    //   id: 2,
-    //   date: "2024 . 04 . 15",
-    //   nutrientProgress: 0.4,
-    //   waterLevelProgress: 0.6,
-    //   points: 2,
-    //   smallImages: [
-    //     require('../assets/strawberry.jpg'),
-    //     require('../assets/lettuce.jpg'),
-    //   ],
-    //   title: "Title 2 - asdfa",
-    //   tags: ["tag1", "tag2", "tag3", "tag3"],
-    // },
-    // {
-    //   id: 3,
-    //   date: "2024 . 04 . 15",
-    //   nutrientProgress: 0.4,
-    //   waterLevelProgress: 0.6,
-    //   points: 7,
-    //   smallImages: [
-    //     require('../assets/strawberry.jpg'),
-    //     require('../assets/marigold.jpg'),
-    //   ],
-    //   title: "Title 3 - asdfa",
-    //   tags: ["tag1", "tag2"],
-    // }
-  //]);
+
   useEffect(() => {
     const fetchJournalData = async () => {
         try {
@@ -285,48 +238,6 @@ const handleTagsChange = (text) => {
 
     fetchJournalData();
   }, []);
-//   const [journalCardsData, setJournalCardsData] = useState([
-//     {
-//       id: 1,
-//       date: "2023 . 02 . 13",
-//       nutrientProgress: 0.9,
-//       waterLevelProgress: 0.7,
-//       points: 5,
-//       smallImages: [
-//         require('../assets/marigold.jpg'),
-//         require('../assets/strawberry.jpg'),
-//         require('../assets/lettuce.jpg'),
-//       ],
-//       title: "Title 1 - asdfa",
-//       tags: ["tag1", "tag2", "tag3"],
-//     },
-//     {
-//       id: 2,
-//       date: "2024 . 04 . 15",
-//       nutrientProgress: 0.4,
-//       waterLevelProgress: 0.6,
-//       points: 2,
-//       smallImages: [
-//         require('../assets/strawberry.jpg'),
-//         require('../assets/lettuce.jpg'),
-//       ],
-//       title: "Title 2 - asdfa",
-//       tags: ["tag1", "tag2", "tag3", "tag3"],
-//     },
-//     {
-//       id: 3,
-//       date: "2024 . 04 . 15",
-//       nutrientProgress: 0.4,
-//       waterLevelProgress: 0.6,
-//       points: 7,
-//       smallImages: [
-//         require('../assets/strawberry.jpg'),
-//         require('../assets/marigold.jpg'),
-//       ],
-//       title: "Title 3 - asdfa",
-//       tags: ["tag1", "tag2"],
-//     }
-//   ]);
 
   const handleDeleteJournalCard = (cardId) => {
     const updatedJournalCards = journalCardsData.filter(card => card.id !== cardId);
@@ -499,12 +410,8 @@ const handleTagsChange = (text) => {
                       style={[styles.plusButton, {tintColor: theme.gardenBackground}]}
                     />
                   </TouchableOpacity>
+
                 </View>
-
-                {/* Inner view to prevent closing when touched 
-                <TouchableOpacity onPress={() => {}} style={{ flex: 1, width: '100%'}} />
-                */}
-
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -515,6 +422,10 @@ const handleTagsChange = (text) => {
   );
 }
 
+/* 
+Everything listed in the style sheet is related to the styling 
+for any containers or UI elements present in the JournalScreen.js file
+*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,
