@@ -422,10 +422,6 @@ export default function JournalScreen() {
   );
 }
 
-/* 
-Everything listed in the style sheet is related to the styling 
-for any containers or UI elements present in the JournalScreen.js file
-*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,

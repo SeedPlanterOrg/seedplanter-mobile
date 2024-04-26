@@ -1,11 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+/*
+    *File: JournalCard.js
+    *Description: 
+        JournalCard.js serves as the card component for the journal entries as mentioned in JournalScreen.js 
+        Inside the journal page, users can tap the title to rename the entry. At the bottom, users can type whatever they want. 
+        Swipe left to delete the JournalCard 
+    *Functions:
+        toggleModal()          - Toggles the modal visability
+        renderRightActions()   - Used for the swipe to delete functionality 
+*/
+
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, Modal, TextInput, Animated } from 'react-native';
 import { useTheme, ThemeProvider } from 'styled-components/native';
-import * as Progress from 'react-native-progress';
-
 import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import { updateJournalEntry } from '../utils/http';
 
@@ -17,21 +25,14 @@ const JournalCard = ({ date, smallImages, title, tags, onDelete, id, notes}) => 
 
     console.log('notes: ' + notes);
 
-    // useEffect(() => {
-    //     console.log('notes: ' + notes);
-    //     setUserNotes(notes);
-    // }, [notes]);
-
     const colors = ['#F1C40F', '#E74C3C', '#2ECC71', '#3498DB'];
 
     const toggleModal = () => {
         setModalVisible(!modalVisible);
-
     };
 
     const handlePageTitleChange = async (text) => {
         setPageTitle(text);
-
         console.log('id: ' + id);
         await updateJournalEntry({
             _id: id,
@@ -165,8 +166,6 @@ const JournalCard = ({ date, smallImages, title, tags, onDelete, id, notes}) => 
                             />
                         </View>
                     </View>
-
-
                     
                 </View>
             </Modal>
