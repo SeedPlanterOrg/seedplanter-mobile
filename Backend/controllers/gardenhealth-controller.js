@@ -1,11 +1,10 @@
 /*
   File: gardenhealth-controller.js
   Description:
-    *This file is responsible for updating the health of the garden
-    *The file contains functions to update the health of the garden
+    *This file is responsible for updating the health level of the garden 
+    *The file contains a function to the water and fertilizer levels of each plant in the users garden
   Functions: updateGardenHealth() - Function used to update the health of the garden
 */
-
 const {GardenModel, GardenPlantModel} = require('../models/garden-schema');
 const AppError = require('../middleware/appError');
 const mongoose = require('mongoose');
@@ -15,22 +14,23 @@ const { generateTask } = require('./task-controller');
 // Function to update the health of the garden
 const updateGardenHealth = async (garden, gardenPlants) => {
 
-  // Initialize variables to store total water and fertilizer levels
+  // Initialize the variables needed to calculate the average garden health level
   let totalWaterLevel = 0;
   let totalFertilizerLevel = 0;
   let count = 0;
 
-  // Object to store frequency multipliers for watering and fertilizing
+  // Object to store frequency multipliers for watering and fertilizing (used to manipulate dates)
   const frequencyMultiplier = {
     daily: 1,
     weekly: 7,
     monthly: 30,
   };
 
-  // Get the current date and time
+  // Get the current date and time -> this function is called when the getGarden function is called in the frontend
   const now = moment();
 
-
+  // Log the garden and garden plant details
+  // Debugging
   // console.log("------------------------------------------------------------------");
   // console.log("GARDEN PLANT LIST: " + gardenPlants);
   // console.log("------------------------------------------------------------------");
@@ -39,15 +39,17 @@ const updateGardenHealth = async (garden, gardenPlants) => {
 
   await Promise.all(gardenPlants.map(async (plant) => {
     const millisecondsInADay = 24 * 60 * 60 * 1000;
+
   // Update and calculate watering details
   if (plant.lastWateringDate && plant.wateringFrequency && plant.wateringInterval) {
+    
     // Calculate the number of milliseconds to add to the last watering date to get the next watering date
     const millisecondsToAdd = (frequencyMultiplier[plant.wateringFrequency] * millisecondsInADay) / plant.wateringInterval;
     plant.nextWateringDate = moment(plant.lastWateringDate).add(millisecondsToAdd, 'milliseconds').toDate();
   
     // Calculate the water level of the plant
-    const timeSinceLastWater = now.diff(moment(plant.lastWateringDate));
-    const timeUntilNextWater = moment(plant.nextWateringDate).diff(now);
+    const timeSinceLastWater = now.diff(moment(plant.lastWateringDate)); // Difference between now and the last watering date = time since last water
+    const timeUntilNextWater = moment(plant.nextWateringDate).diff(now); // Difference between the next watering date and now = time until next water
     plant.waterLevel = timeUntilNextWater / (timeUntilNextWater + timeSinceLastWater);
 
     // If the water level is less than or equal to 0, the plant needs watering
@@ -55,10 +57,10 @@ const updateGardenHealth = async (garden, gardenPlants) => {
       console.log(`Plant ${plant._id} needs watering`);
       plant.waterLevel = 0; 
       plant.notifyWateringTask = true;
-      // generateTask(plant, 'water');
+      // generateTask(plant, 'water'); //pending
     }
 
-    // Add the water level to the total water level
+    // Add the plants water level to the total water level
     totalWaterLevel += plant.waterLevel;
     
     // Log the water level of the plant
@@ -85,7 +87,7 @@ const updateGardenHealth = async (garden, gardenPlants) => {
       console.log(`Plant ${plant._id} needs fertilizing`);
       plant.fertilizerLevel = 0; 
       plant.notifyFertilizingTask = true;
-      // generateTask(plant, 'fertilize');
+      // generateTask(plant, 'fertilize'); //pending
     }
 
     // Add the fertilizer level to the total fertilizer level
@@ -120,14 +122,14 @@ const updateGardenHealth = async (garden, gardenPlants) => {
 
     // Update the garden health level in the database
     try {
+        //find garden by userId and update the garden health level
         await GardenModel.findOneAndUpdate(garden.userId, { gardenHealthLevel });
     } catch (err) {
         console.log(err);
+        //throw an error if the garden health level cannot be updated
         throw new AppError('Failed to update garden health level', 500);
     }
 }
 };
-
-
 
 module.exports = { updateGardenHealth };
