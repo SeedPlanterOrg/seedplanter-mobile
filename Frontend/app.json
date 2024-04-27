@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "plant-app",
-    "slug": "plant-app",
+    "name": "SeedPlanter",
+    "slug": "SeedPlanter",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/LogoActiveGreenIcon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/FullLogoDarkGreen.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1DB954"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,8 +19,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/FullLogoDarkGreen.png",
+        "backgroundColor": "#1DB954"
       }
     },
     "web": {
