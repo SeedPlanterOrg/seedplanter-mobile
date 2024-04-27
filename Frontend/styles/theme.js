@@ -1,3 +1,10 @@
+/*
+  File: theme.js
+  Description:
+      *This file is responsible for setting the theme for the app
+      *The file contains the light and dark theme settings
+*/
+
 export const lightTheme = {
     background: '#e8ecf4',
     gardenCard: '#FFFFFF',

@@ -1,3 +1,11 @@
+/*
+    File: chat-completion.js
+    Description:
+        *This file is responsible for sending messages to the chatbot
+        *The file contains a function that is used to send messages to the chatbot
+    Function: sendMessage() - Function used to send messages to the chatbot
+*/
+
 const { OpenAI } = require('openai');
 const AppError = require('../../middleware/appError');
 require("dotenv").config({ path: '../../.env' })

@@ -1,5 +1,15 @@
-import React, { useState} from 'react';
-import { View, Text, Image, StyleSheet, useColorScheme, Animated } from 'react-native';
+/*
+    *File: JournalTaskCard.js
+    *Description: 
+        JournalTaskCard.js serves as the card component for the tasks in JournalScreen.js 
+        To mark a task as complete, simply swipe left and delete. 
+
+    *Functions: 
+        renderRightActions()   - Used for the swipe to delete functionality 
+*/
+
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, Animated } from 'react-native';
 import { useTheme, ThemeProvider } from 'styled-components/native';
 import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';

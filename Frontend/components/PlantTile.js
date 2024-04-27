@@ -1,3 +1,11 @@
+/*
+    *File: PlantTile.js
+    *Description: 
+        *This file is responsible for creating and exporting the plant tile component
+        *These are touchable opacities that display plant name, scientific name, and display a full size picture behind
+    *Functions: n/a
+*/
+
 import React, { useState, memo } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, useColorScheme} from 'react-native';
 import * as Progress from 'react-native-progress';
@@ -17,6 +25,7 @@ return(
 
       <TouchableOpacity onPress={() => onSelect(plant)} style={[styles.card, { backgroundColor: theme.catBorderColor, borderColor: theme.catBorderColor }]}>
         <View style={styles.cardContent}>
+          {/* Display image as the full size of the card */}
           <Image source={plant.image_urls && plant.image_urls[0] ? { uri: plant.image_urls[0] } : require('../resource/flower1.jpg')} style={[styles.cardImage, { borderColor: theme.catBorderColor }]} transition={300} />
           {/*
           <View style={styles.textContent}>
@@ -24,6 +33,7 @@ return(
             <Text style={styles.scientificName} numberOfLines={1} ellipsizeMode='tail'>{plant.binomial_name}</Text>
           </View>
         */}
+        {/* Design that is a transparent bar over the full picture */}
         </View>
           <View style={styles.shadeDet}> 
             <Text style={[styles.plantName, { color: '#fff' }]} numberOfLines={1} ellipsizeMode='tail'>{plant.name}</Text>

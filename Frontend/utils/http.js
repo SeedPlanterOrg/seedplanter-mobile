@@ -1,6 +1,12 @@
-// needs to be your ip to run 
-// const DEPLOYMENT = process.env.EXPO_PUBLIC_DEPLOYMENT;
-// const PORT = process.env.EXPO_PUBLIC_PORT;
+
+/*
+  * File: 
+    *http.js
+
+  * Description: 
+    * Contains all the http requests to the backend endpoints, 
+    * with the exception of chatbot requests 
+*/
 let link = process.env.EXPO_PUBLIC_IP
 const env = process.env.EXPO_PUBLIC_ENV;
 
@@ -103,7 +109,6 @@ async function getGarden(userId) {
  * @param {Object} PlantObject - takes a gardenPlant object in form of mongoose schema. 
  * @returns {Object} returns a response object from server  
  */
-
 async function addPlant(gardenPlant) {
     // ${EXPO_PUBLIC_DEPLOYMENT} or http://localhost:3000/
     const url = new URL(`${link}/garden/add_plant`);

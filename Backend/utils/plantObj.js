@@ -1,3 +1,4 @@
+// JS class describing a plant object
 class PlantOBJ {
     constructor({id, page, binomial_name, 
         name, daily_watering, zone,

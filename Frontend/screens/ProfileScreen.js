@@ -1,3 +1,20 @@
+/*
+    *File: ProfileScreen.js
+    *Description: 
+        *This file is responsible for the styling and looks of the profile screen
+        *This file includes modals for various operations
+        *File allows user to logout of there account
+    *Functions: handleLogout()        - Used to handle logging the user out
+                openAboutModal()      - Used to handle opening the about modal
+                closeAboutModal()     - Used to handle closing the about modal
+                openHelpModal()       - Used to handle opening the help modal
+                closeHelpModal()      - Used to handle closing the help modal
+                openEmailModal()      - Used to handle opening the email modal
+                closeEmailModal()     - Used to handle closing the email modal
+                openPasswordModal()   - Used to handle opening the password modal
+                closePasswordModal()  - Used to handle closing the password modal
+*/
+
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Image, Modal, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,6 +28,7 @@ export default function ProfileScreen() {
   const theme = useTheme();
   const navigation = useNavigation();
 
+  {/* Open / Close Modal  */ }
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [addModalVisible2, setAddModalVisible2] = useState(false);
   const [addModalVisible3, setAddModalVisible3] = useState(false);
@@ -39,30 +57,38 @@ export default function ProfileScreen() {
     navigation.navigate('Login');
   };
 
+  // Open the modal
   const openAboutModal = () => {
     setAddModalVisible(true);
   };
+  // Close the modal
   const closeAboutModal = () => {
     setAddModalVisible(false);
   };
 
+  // Open the modal
   const openHelpModal = () => {
     setAddModalVisible2(true);
   };
+  // Close the modal
   const closeHelpModal = () => {
     setAddModalVisible2(false);
   };
 
+  // Open the modal
   const openEmailModal = () => {
     setAddModalVisible3(true);
   };
+  // Close the modal
   const closeEmailModal = () => {
     setAddModalVisible3(false);
   };
 
+  // Open the modal
   const openPasswordModal = () => {
     setAddModalVisible4(true);
   };
+  // Close the modal
   const closePasswordModal = () => {
     setAddModalVisible4(false);
   };
@@ -72,16 +98,20 @@ export default function ProfileScreen() {
       <View style={styles.container}>
         {/* {errorMessage && <Text style={styles.error}>{errorMessage}</Text>} */}
 
+        {/* Logo styled like a profile image - made a touchable opacity for potential future updates */}
         <View style={{ justifyContent: 'center', flexDirection: 'row', }}>
           <TouchableOpacity style={styles.card3}>
             <Image style={styles.ImgSize} source={require('../assets/LogoActiveGreen.png')}></Image>
           </TouchableOpacity>
         </View>
 
+        {/* Various counts styles like social media followers, following */}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={[styles.conCounter, { borderColor: theme.catBorderColor }]}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+              {/* Num of plants in garden */}
               <Text style={[styles.textSty2, { color: theme.text }]}>0</Text>
+              {/* Text for plan count */}
               <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
                 <Text style={[styles.textSty]}>Plant Count</Text>
               </View>
@@ -89,15 +119,19 @@ export default function ProfileScreen() {
           </View>
           <View style={[styles.conCounter, { borderColor: theme.catBorderColor }]}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+              {/* Num of journal entries */}
               <Text style={[styles.textSty2, { color: theme.text }]}>0</Text>
               <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                {/* Journal count text */}
                 <Text style={[styles.textSty]}>Journal Count</Text>
               </View>
             </View>
           </View>
           <View style={[styles.conCounter, { borderColor: theme.catBorderColor }]}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+              {/* Num of streak that the user has */}
               <Text style={[styles.textSty2, { color: theme.text }]}>0</Text>
+              {/* Highest streak text */}
               <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
                 <Text style={[styles.textSty]}>Highest Streak</Text>
               </View>
@@ -107,36 +141,42 @@ export default function ProfileScreen() {
 
         <View style={{ borderWidth: 0.7, borderColor: theme.text, margin: 40, }} />
 
+        {/* Name field made to touchable opacity for future update */}
         <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10, }}>
           <TouchableOpacity style={[styles.logOutButton, { borderColor: theme.catBorderColor }]}>
             <Text style={[styles.textSty2, { color: theme.text }]}>Name</Text>
           </TouchableOpacity>
         </View>
 
+        {/* Email field made to touchable opacity to change email */}
         <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10, }}>
           <TouchableOpacity onPress={openEmailModal} style={[styles.logOutButton, { borderColor: theme.catBorderColor }]}>
             <Text style={[styles.textSty2, { color: theme.text }]}>Email</Text>
           </TouchableOpacity>
         </View>
 
+        {/* Password field made to touchable opacity to change password */}
         <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 30, }}>
           <TouchableOpacity onPress={openPasswordModal} style={[styles.logOutButton, { borderColor: theme.catBorderColor }]}>
             <Text style={[styles.textSty2, { color: theme.text }]}>Password</Text>
           </TouchableOpacity>
         </View>
 
+        {/* About touchable opacity to open about modal */}  
         <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10, }}>
           <TouchableOpacity onPress={openAboutModal} style={[styles.logOutButton, { borderColor: theme.catBorderColor }]}>
             <Text style={[styles.textSty2, { color: theme.text }]}>About</Text>
           </TouchableOpacity>
         </View>
 
+        {/* Help touchable opacity to give help options */}
         <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10, }}>
           <TouchableOpacity onPress={openHelpModal} style={[styles.logOutButton, { borderColor: theme.catBorderColor }]}>
             <Text style={[styles.textSty2, { color: theme.text }]}>Help</Text>
           </TouchableOpacity>
         </View>
 
+        {/* Logout button to log out of your account on the app */}
         <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10, }}>
           <TouchableOpacity title="Logout" onPress={handleLogout} style={[styles.logOutButton2,]}>
             <Text style={[styles.textSty2, { color: '#fff' }]}>Log Out</Text>
@@ -335,6 +375,7 @@ export default function ProfileScreen() {
   );
 }
 
+// style sheet for the about page
 const styles = StyleSheet.create({
   container: {
     padding: 24,

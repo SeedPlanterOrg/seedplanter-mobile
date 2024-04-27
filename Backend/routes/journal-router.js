@@ -10,12 +10,14 @@ const { getEntryById,
 require("dotenv").config();
 
 // router.use(authenticate); // makes routes accessible by only the user
+// routes to handle various journal interactions
 router.get('/get_entry_by_id', getEntryById);
 router.get('/get_journal', getAllEntries);
 router.delete('/delete_entry_by_Id', deleteEntryById);
 router.post('/create_entry', createEntry);
 router.put('/update_entry', updateEntry);
 
+// ping routes 
 router 
     .route("/")
     .get((req, res) => {

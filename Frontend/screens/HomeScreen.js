@@ -1,3 +1,43 @@
+/*
+    *File: HomeScreen.js
+    *Description: 
+      HomeScreen.js houses the main collection of plants the user has added either from the catalog, or from their own custom plants. 
+      Based on the plants in their garden, the garden health bar will reflect the overall nutritonal health for all plants. 
+
+      The streak container houses the current planter streak the user has. This will update depending on the tasks the user completes for 
+      their plants overall. 
+
+      The add button brings up the add options modal. Users will select either a custom plant or a plant from the catalog. The first option 
+      will open up the add custom plant modal. This screen allows users to select a custom plant image from their photo gallery. The plant 
+      and scientific names are also adjustable. As for notifications, users can set notifications intervals for watering and nutritional care. 
+      Users can then add the plant to their homescreen. If the second option is selected from the options modal, the user is redirected to the 
+      catalog screen. 
+
+      In the "My Plants" section of the home screen, users can see their custom plants or plants from the catalog, presented in a card format. 
+      These cards come from the HomeCard.js component that I created for ease of use. The plant cards include images of the plant, the plant name, 
+      the scientifc name, progress circles which correlate with the plant's current water level and nutrient level. 
+
+      Tapping the cards will result in a modal popup that gives the user a more in-depth view of their plant with information that comes from the 
+      catalog screen (Perenual database to be exact). 
+
+      If a user decides they do not want the plant on the home screen anymore, they may swipe left to delete the card. 
+
+    *Functions:
+        handlePlantNameChange()         - Functions to update plant names and scientific names when users add a custom plant
+        handleScientificNameChange()
+
+        handleAddOptionSelection()      - Function handles the redirect to either the custom plant modal or catalog base on the AddOptionsModal selection
+
+        handleImagePickerPress()        - Functions handles image selection within the custom plant modal
+
+        toggleWateringNotify()          - oggle Functions will handle the state of the toggles in the custom plant modal
+        toggleNutrientsNotify()
+
+        handleAddPlant()                - Adds custom plant card to homescreen when the user selects "Add Plant" in the custom plant modal
+
+        deletePlant()                   - Function deletes a plant card from the home screen. This will also update in the database. 
+*/
+
 import React, { useState, useEffect } from 'react';
 import {
   FlatList,
@@ -10,7 +50,6 @@ import {
   Modal,
   TextInput,
   Button,
-  useColorScheme
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Progress from 'react-native-progress';
@@ -24,8 +63,6 @@ import { Image } from 'expo-image';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import {deleteGardenPlant} from '../utils/http';
 
-
-
 export default function HomeScreen() {
   const [customPlantModalVisible, setCustomPlantModalVisible] = useState(false);
   const [addOptionsModalVisible, setAddOptionsModalVisible] = useState(false);
@@ -33,98 +70,66 @@ export default function HomeScreen() {
   const [wateringNotify, setWateringNotify] = useState(false); 
   const [nutrientsNotify, setNutrientsNotify] = useState(false); 
   const [image, setImage] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
   const theme = useTheme();
   const [plantName, setPlantName] = useState('');
   const [scientificName, setScientificName] = useState('');
   const navigation = useNavigation();
-  // const [plantData, setPlantData] = useState([
-  //   {
-  //     id: 1,
-  //     imageSource: require('../assets/marigold.jpg'),
-  //     plantName: 'Marigold',
-  //     scientificName: 'Scientific Name',
-  //     waterLevelProgress: 0.7,
-  //     nutrientProgress: 0.8,
-  //   },
-  //   {
-  //     id: 2,
-  //     imageSource: require('../assets/lettuce.jpg'),
-  //     plantName: 'Lettuce',
-  //     scientificName: 'Scientific Name',
-  //     waterLevelProgress: 0.9,
-  //     nutrientProgress: 0.2,
-  //   },
-  //   {
-  //     id: 3,
-  //     imageSource: require('../assets/strawberry.jpg'),
-  //     plantName: 'Strawberry',
-  //     scientificName: 'Scientific Name',
-  //     waterLevelProgress: 0.6,
-  //     nutrientProgress: 0.2,
-  //   },
-  //   //This can be replaced with API later
-  // ]);
-  
-
-
-  // let user = '65efc324a82682e507e38ebc';
   const [plantData, setPlantData] = useState([]);
   const isFocused = useIsFocused();
 
-useEffect(() => {
-  const unsubscribe = navigation.addListener('focus', async () => {
-    async function fetchPlants() {
-      try {
-        const user = await AsyncStorage.getItem('userId');
-        const data = await getGarden(user);
-        let displayData = [];
-        let image;
-        data.gardenPlants.forEach(plant => {
-          if(Array.isArray(plant.plantDetails)){
-            plant.plantDetails.forEach(detail => {
-              // Access other properties as needed
-            });
-          }
-          if (plant.plantDetails && plant.plantDetails.image_urls != null) {
-            image = plant.plantDetails.image_urls[0];
-          }
-          // let waterRatio = plant.waterLevel;
-          // let nutrientRatio = plant.fertilizerLevel;
-          if (data.garden[0] && !isNaN(data.garden[0].gardenHealthLevel)) {
-            setProgressValue(data.garden[0].gardenHealthLevel);
-          }
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      async function fetchPlants() {
+        try {
+          const user = await AsyncStorage.getItem('userId');
+          const data = await getGarden(user);
+          let displayData = [];
+          let image;
+          data.gardenPlants.forEach(plant => {
+            if(Array.isArray(plant.plantDetails)){
+              plant.plantDetails.forEach(detail => {
+                // Access other properties as needed
+              });
+            }
+            if (plant.plantDetails && plant.plantDetails.image_urls != null) {
+              image = plant.plantDetails.image_urls[0];
+            }
+            // let waterRatio = plant.waterLevel;
+            // let nutrientRatio = plant.fertilizerLevel;
+            if (data.garden[0] && !isNaN(data.garden[0].gardenHealthLevel)) {
+              setProgressValue(data.garden[0].gardenHealthLevel);
+            }
 
-          console.log("garden: " + JSON.stringify(data.garden));
+            console.log("garden: " + JSON.stringify(data.garden));
 
-          let min = 100;
-          let max = 1000;
-          // let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
-          newPlant = {
-            id: plant._id, 
-            imageSource: image,
-            plantName: plant.plantDetails.name,
-            scientificName: plant.plantDetails.binomial_name,
-            waterLevelProgress: plant.waterLevel,
-            nutrientProgress: plant.fertilizerLevel,
-          }
-          displayData.push(newPlant);
-        });
-        setPlantData(displayData);
-      } catch (error) {
-        console.error('Error fetching plants:', error);
+            let min = 100;
+            let max = 1000;
+            // let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+            newPlant = {
+              id: plant._id, 
+              imageSource: image,
+              plantName: plant.plantDetails.name,
+              scientificName: plant.plantDetails.binomial_name,
+              waterLevelProgress: plant.waterLevel,
+              nutrientProgress: plant.fertilizerLevel,
+            }
+            displayData.push(newPlant);
+          });
+          setPlantData(displayData);
+        } catch (error) {
+          console.error('Error fetching plants:', error);
+        }
       }
-    }
-    fetchPlants();
-    //  Then call fetchPlants every 5 seconds
-    const intervalId = setInterval(fetchPlants, 10000);
+      fetchPlants();
+      //  Then call fetchPlants every 5 seconds
+      const intervalId = setInterval(fetchPlants, 10000);
 
-    // // Clear interval on component unmount
-    return () => clearInterval(intervalId);
-  });
+      // // Clear interval on component unmount
+      return () => clearInterval(intervalId);
+    });
 
-  return unsubscribe;
-}, [navigation]);
+    return unsubscribe;
+  }, [navigation]);
 
   // Functions to update plant names and scientific names
   const handlePlantNameChange = (text) => {
@@ -147,12 +152,9 @@ useEffect(() => {
     setAddOptionsModalVisible(false);
   };
 
-  // Functions to open and close the AddOptionsModal
+  // This function opens AddOptionsModal
   const openAddOptionsModal = () => {
     setAddOptionsModalVisible(true);
-  };
-  const closeAddOptionsModal = () => {
-    setAddOptionsModalVisible(false);
   };
 
   // This functions handles image selection 

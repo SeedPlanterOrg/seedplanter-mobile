@@ -1,3 +1,13 @@
+/*
+    *File: WelcomeScreen.js
+    *Description: 
+        *This file is responsible for creating the styling and look of the welcome screen
+        *Includes animated features for styling
+        *This is the screen that the user sees when they first open the app
+    *Functions: n/a
+
+*/
+
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, 
@@ -22,10 +32,12 @@ import { useTheme } from 'styled-components/native';
 import { ThemeProvider } from 'styled-components/native';
 
 export default function WelcomeScreen() {
+  
+  // use navigation to send to login screen
   const navigation = useNavigation()
   const theme = useTheme();
 
-
+  // return the welcome screen
   return (
     <ThemeProvider theme={theme}>
       <LinearGradient
@@ -35,8 +47,10 @@ export default function WelcomeScreen() {
         style={styles.container}
       >
         <SafeAreaView style={{ flex: 1 }}>
+          {/* whole screen touchable opacity to tap anywhere to send to login screen */}
           <TouchableOpacity onPress={() => navigation.navigate("Login")} >
             <View style={styles.header}>
+              {/* Takes the logo and animates it to fade in from the top*/}
               <Animatable.Image
                 source={require('../assets/FullLogoWhite.png')}
                 style={styles.headerImg}
@@ -46,11 +60,13 @@ export default function WelcomeScreen() {
                 animation="fadeInDown">
               </Animatable.Image>
 
+              {/* Animate text to fade from the bottom up */}
               <Animatable.Text style={styles.subtitle} animation="fadeInUp" duration={3000} iterationCount={1} iterationDelay={1000}>
                 Gardening App
               </Animatable.Text>
             </View>
 
+            {/* Fade text in */}
             <View style={styles.formAction}>
               <Animatable.Text style={styles.buttonTxt} animation="fadeIn" duration={2000} iterationCount={1} iterationDelay={1000}>Tap To Continue</Animatable.Text>
             </View>
@@ -64,6 +80,7 @@ export default function WelcomeScreen() {
   );
 }
 
+// style sheet for welcome screen
 const styles = StyleSheet.create({
   container: {
     padding: 24,

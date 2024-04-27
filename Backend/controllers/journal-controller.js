@@ -1,8 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
 const mongoose = require("mongoose");
-// const HttpError = require('../models/http-error');
-// const getCoordsForAddress = require('../util/location');
 const journalEntryModel = require('../models/journalentry-schema');
 const bodyParser = require('body-parser');
 
@@ -123,6 +121,17 @@ const createEntry = async (req, res, next ) => {
     }
 };
 
+/**
+ * Updates a journal entry with new data provided in the request body. 
+ * The function locates an existing journal entry using its ID, updates it with new values, and returns the updated document.
+ * It handles cases where the journal entry is not found by sending a 404 status response.
+ * Any errors during the update process are passed to the next error handling middleware.
+ *
+ * @param {Object} req - The request object containing the updated data for the entry.
+ * @param {Object} res - The response object used to send back the updated entry or an error message.
+ * @param {Function} next - The next middleware function in the stack for error handling.
+ * @returns {Promise} A promise that resolves with the updated entry or an error.
+ */
 const updateEntry = async (req, res, next) => {
     try {
         const updatedData = req.body;
@@ -146,7 +155,6 @@ const updateEntry = async (req, res, next) => {
         next(error);
     }
 };
-
 
 module.exports = {
     getEntryById,

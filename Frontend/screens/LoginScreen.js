@@ -1,3 +1,10 @@
+/*
+    *File: LoginScreen.js
+    *Description: 
+        *This file is responsible for creating the styling and look of the login screen
+    *Functions: onLoginPress()        - used to handle the login process
+*/
+
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, SafeAreaView, Image, Touchable, Pressable} from 'react-native';
@@ -15,12 +22,15 @@ import { useAuth } from '../context/AuthContext';
 
 export default function LoginScreen() {
   const navigation = useNavigation()
+
+  // states to deal with various values 
   const { handleLogin } = useAuth();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const theme = useTheme();
   
+  // function to handle the login credentials process
   const onLoginPress = async () => {
     try {
       await handleLogin(email, password);
@@ -40,6 +50,7 @@ export default function LoginScreen() {
     >
       <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.header}>
+            {/* header image, title, subtitle */}
             <Image 
               source={require('../assets/LogoActiveGreen.png')}
               style={styles.headerImg}
@@ -50,6 +61,7 @@ export default function LoginScreen() {
           </View>
           <View style={styles.form}>
             <View style={styles.input}>
+              {/* various input fields required to cause the user to login */}
               <Text style={[styles.inputLabel, {color: theme.text}]}>Email address</Text>
               <TextInput
                 autoCapitalize="none"
@@ -74,6 +86,8 @@ export default function LoginScreen() {
               />
             </View>
             <ErrorMessage message={errorMessage} />
+
+            {/* Button that logs the user in */}
             <View style={styles.formAction}>
               <TouchableOpacity onPress={onLoginPress} >
                 <View style={styles.loginButton}>
@@ -82,6 +96,7 @@ export default function LoginScreen() {
               </TouchableOpacity>
             </View>
 
+            {/* Button to naviagte user to signup page if they dont have an account*/}
             <View style={styles.inline}>
               <Text style={[styles.signupLabel, {color: theme.text}]}>Don't have an account?</Text>
               <Pressable onPress={() => navigation.navigate("Signup")} >
@@ -98,6 +113,7 @@ export default function LoginScreen() {
   );
 }
 
+// style sheet for login screen
 const styles = StyleSheet.create({
   container: {
     padding: 24,
