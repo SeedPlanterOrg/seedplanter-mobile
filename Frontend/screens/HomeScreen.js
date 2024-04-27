@@ -23,25 +23,19 @@
       If a user decides they do not want the plant on the home screen anymore, they may swipe left to delete the card. 
 
     *Functions:
-        // Functions to update plant names and scientific names when users add a custom plant
-        handlePlantNameChange()
+        handlePlantNameChange()         - Functions to update plant names and scientific names when users add a custom plant
         handleScientificNameChange()
 
-        // This function handles the redirect to either the custom plant modal or catalog base on the AddOptionsModal selection
-        handleAddOptionSelection()
+        handleAddOptionSelection()      - Function handles the redirect to either the custom plant modal or catalog base on the AddOptionsModal selection
 
-        // This functions handles image selection within the custom plant modal
-        handleImagePickerPress()
+        handleImagePickerPress()        - Functions handles image selection within the custom plant modal
 
-        // Toggle Functions will handle the state of the toggles in the custom plant modal
-        toggleWateringNotify()
+        toggleWateringNotify()          - oggle Functions will handle the state of the toggles in the custom plant modal
         toggleNutrientsNotify()
 
-        // Adds custom plant card to homescreen when the user selects "Add Plant" in the custom plant modal
-        handleAddPlant()
+        handleAddPlant()                - Adds custom plant card to homescreen when the user selects "Add Plant" in the custom plant modal
 
-        // Function to delete a plant card from the home screen. This will also update in the database. 
-        deletePlant(plantObj)
+        deletePlant()                   - Function deletes a plant card from the home screen. This will also update in the database. 
 */
 
 import React, { useState, useEffect } from 'react';
@@ -426,10 +420,6 @@ export default function HomeScreen() {
   );
 }
 
-/* 
-Everything listed in the style sheet is related to the styling 
-for any containers or UI elements present in the HomeScreen.js file
-*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,

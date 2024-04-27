@@ -1,3 +1,11 @@
+/*
+    *File: PlanterPointContainer.js
+    *Description: 
+      Houses current plant streak, that's it
+    *Functions:
+        N/A
+*/
+
 import React from 'react';
 import { View, Text, Image, StyleSheet, useColorScheme } from 'react-native';
 import { useTheme, ThemeProvider } from 'styled-components/native';
