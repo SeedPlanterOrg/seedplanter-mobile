@@ -2,6 +2,22 @@
 
 Seedplanter is a gardening application made by 4 UML students. Giving gardeners an all in one solution to journal, garden, and keep track of their plants
 
+## Screenshots
+
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/bb94a975-07f8-419c-879f-ec642ba769bc)
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/ffffd3b1-d006-42d2-9a35-491ac2536e39)
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/f9245b17-873c-44d9-acb6-a52f4c2279f6)
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/8d35e7d9-cc3d-4987-b652-42e649a88da8)
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/701842e5-2463-48e4-a1a1-d47ca40c7648)
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/12339876-0050-4511-aa57-2894ec5a4e47)
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/e0d4691d-016e-40f0-84f4-b7328a66ac89)
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/f3f94668-9dcd-48ed-a2ea-0ad68400f90d)
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/90d79703-2ec3-4825-8c0b-fec36523c4af)
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/a0e5a381-1d7b-4209-8954-7b376760d712)
+![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/8c681d2a-826e-42c9-b024-b9a7eeab7c3b)
+
+
+
 ## Installation
 
 Use the package manager [npm](https://www.npmjs.com/) to install dependencies.\
