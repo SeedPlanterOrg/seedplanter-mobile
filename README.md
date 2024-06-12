@@ -72,22 +72,6 @@ example usage:
 `require("dotenv").config();`<br>
 `const PORT process.env.PORT`
 
-## Protecting Sensitive Information on GitHub
-It is important that we do not expose privileged information on GitHub by way hard coded strings containing important information such as:  
-* API keys   
-* User names and passwords
-* and anything else in our code that would allow user to gain access to sensitive information 
-<br />
-Due to this we will be using a `.env` files to create environmental variables.
-`.env` files are files we add to the `.gitignore` files, that contain all our sensitive hardcoded texts. In the file we create environmental variables and assign them to out text. Then in the code only the environmental variables appear, not our strings. When we push changes to GitHub the .env file will be ignored.\
-Use `require("dotenv").config();` to use environmental variables created in the `.env`.
 
-See the following (https://codeburst.io/how-to-easily-set-up-node-environment-variables-in-your-js-application-d06740f9b9bd)
-
-for more information
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
 
 
