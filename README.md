@@ -1,6 +1,6 @@
 # SeedPlanter - Gardening Application
 
-Seedplanter is a gardening application giving planters an all in one solution to journal, garden, and keep track of their plants
+Seedplanter is a gardening application that gives planters an all in one solution to journal, garden, and keep track of their plants
 
 ## Screenshots
 
