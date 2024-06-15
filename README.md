@@ -4,27 +4,19 @@ Seedplanter is a gardening application made by 4 UML students. Giving gardeners 
 
 ## Screenshots
 
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/6f95472e-46bc-4001-836f-0a95151e3889)
-
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/a72cfeab-bb9f-4f67-9474-be4b04339da3)
-
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/3873f216-2e05-446d-ae3d-65d6437d1515)
-
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/58a6ee53-1e76-4c7d-9a23-18ef6e20a88a)
-
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/a704905e-17c4-49c1-8aaf-a751a700eaf6)
-
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/0e077756-8cd3-45d4-8ed3-357d1e5f05be)
-
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/1cff81f9-424c-46d4-ac9e-2e044d4821b0)
-
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/190bca39-e3d7-4839-8aaf-5c491e69cba7)
-
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/ea275e73-b653-435e-af06-c647b820b13f)
-
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/dabddd34-f806-4e91-bfd1-eb8828d04fac)
-
-![Image](https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/af0dbca5-2e4f-4f87-8989-44bb682bb79d)
+<p align="center">
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/6f95472e-46bc-4001-836f-0a95151e3889" alt="Image 1" width="200"/>
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/a72cfeab-bb9f-4f67-9474-be4b04339da3" alt="Image 2" width="200"/>
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/3873f216-2e05-446d-ae3d-65d6437d1515" alt="Image 3" width="200"/>
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/58a6ee53-1e76-4c7d-9a23-18ef6e20a88a" alt="Image 4" width="200"/>
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/a704905e-17c4-49c1-8aaf-a751a700eaf6" alt="Image 5" width="200"/>
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/0e077756-8cd3-45d4-8ed3-357d1e5f05be" alt="Image 6" width="200"/>
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/1cff81f9-424c-46d4-ac9e-2e044d4821b0" alt="Image 7" width="200"/>
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/190bca39-e3d7-4839-8aaf-5c491e69cba7" alt="Image 8" width="200"/>
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/ea275e73-b653-435e-af06-c647b820b13f" alt="Image 9" width="200"/>
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/dabddd34-f806-4e91-bfd1-eb8828d04fac" alt="Image 10" width="200"/>
+  <img src="https://github.com/SeedPlanterOrg/seedplanter-mobile/assets/67339817/af0dbca5-2e4f-4f87-8989-44bb682bb79d" alt="Image 11" width="200"/>
+</p>
 
 
 
